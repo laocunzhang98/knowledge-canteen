@@ -16,6 +16,14 @@ export const mixin = {
     ...mapMutations(['setShow']),
     adapt(){
       let isShow = true
+      this.clientWidth = document.body.clientWidth
+      if(this.clientWidth<1100){
+        isShow = false
+      }
+      else{
+        isShow = true
+      }
+      this.setShow(isShow)
       window.onresize = ()=>{
         this.clientWidth = document.body.clientWidth
         if(this.clientWidth<1100){
@@ -28,4 +36,7 @@ export const mixin = {
       } 
     }
   }
+}
+export const selectFocus = {
+  
 }

@@ -22,11 +22,15 @@ import ArticleView from './components/ArticleView'
       handleClick(tab, event) {
         console.log(tab, event);
       }
+      
     }
   };
 </script>
 
 <style lang="scss">
+  .el-tabs__header{
+    margin: 0 !important;
+  }
   .is-active,.is-top,.el-tabs__item{
     padding: 0 10px;
   }

@@ -1,7 +1,7 @@
 <template>
   <div class="navbar">
     <div class="navbar-label" v-show="isShow">
-      <div class="navbar-label-item" v-for="(labelitem,index) in labelList" :key="index"><a href="#">{{labelitem}}</a></div>
+      <div class="navbar-label-item" v-for="(labelitem,index) in labelList" :key="index"><a href="#" @click="focusLbael(index)" :style="{color:index==active?'rgb(64,158,255)':''}">{{labelitem}}</a></div>
     </div>
     <div class="navbar-labelFold" v-show="!isShow">
       <el-dropdown trigger="click">
@@ -27,11 +27,16 @@ export default {
   computed:{
     ...mapGetters(['isShow'])
   },
-  
+  methods:{
+    focusLbael(index){
+      this.active = index
+    }
+  },
   data() {
     return {
       input: '',
-      labelList:['全民食堂','茶余饭后','私房菜','黑暗料理','活动']
+      active:0,
+      labelList:['全民食堂','茶余饭后','私房菜','黑暗料理','饭友圈']
     }
   }
 }
@@ -46,9 +51,6 @@ export default {
       flex: 1;
       display: flex;
       justify-content: space-around;
-      .navbar-label-item{
-        flex:1
-      }
     }
     .navbar-labelFold{
       flex: 1;

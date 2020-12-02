@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <headers></headers>
     <div class="centerall">
       <div class="center">
         <div class="labels"><labels></labels></div>
@@ -12,21 +11,21 @@
   </div>
 </template>
 
+
 <script>
-import Headers from '../components/header/Header'
 import Labels from '../components/label/Label'
 import Label from '../components/label/Label'
 import Contents from '../components/content/Content'
-
 export default {
   name: 'Home',
   components: {
-    Headers,
     Labels,
     Contents
   }
 }
 </script>
+
+
 <style lang="scss" scoped>
   .home{
     .centerall{

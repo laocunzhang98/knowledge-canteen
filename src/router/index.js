@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-
+import Pins from '../views/Pins.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -10,6 +10,11 @@ const routes = [
     name: 'Home',
     component: Home
   },
+  {
+    path:'/pins',
+    name:'Pins',
+    component:Pins
+  }
 ]
 
 const router = new VueRouter({

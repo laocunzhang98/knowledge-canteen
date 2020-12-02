@@ -4,15 +4,18 @@
       class="list"
       v-infinite-scroll="load"
       infinite-scroll-disabled="disabled">
-      <li v-for="(i,index) in count" class="list-item" :key="index">{{ i }}</li>
+      <li v-for="(i,index) in count" class="list-item" :key="index"><article-card></article-card></li>
     </ul>
-    <p v-if="loading">加载中...</p>
-    <p v-if="noMore">没有更多了</p>
+
   </div>
 </template>
 
 <script>
+  import ArticleCard from './ArticleCard'
   export default {
+    components:{
+      ArticleCard
+    },
     data () {
       return {
         count: 10,
