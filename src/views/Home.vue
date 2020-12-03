@@ -5,6 +5,7 @@
         <div class="labels"><labels></labels></div>
       </div>
     </div>
+    <div class="zbox"></div>
     <div class="contents">
       <div class="contents-swiper"><contents></contents></div>
     </div>
@@ -28,18 +29,23 @@ export default {
 
 <style lang="scss" scoped>
   .home{
+    .zbox{
+      height: 34px;
+    }
     .centerall{
     width: 100%;
     background-color: #fff;
-    margin-top: 1px;
+    border-top: 1px solid rgba(240,243,248,1);
+    position: fixed;
+    z-index: 99;
     .center{
-      width: 50%;
+      width: 60%;
       margin: auto;
       }
     }
     .contents{
       background-color: #fff;
-      width: 50%;
+      width: 60%;
       margin: 10px auto;
       border-radius: 5px;
     }

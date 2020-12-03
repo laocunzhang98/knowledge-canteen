@@ -1,7 +1,16 @@
 <template>
   <div class="navbar">
     <div class="navbar-label" v-show="isShow">
-      <div class="navbar-label-item" v-for="(labelitem,index) in labelList" :key="index"><a href="#" @click="focusLbael(index)" :style="{color:index==active?'rgb(64,158,255)':''}">{{labelitem}}</a></div>
+      <div class="navbar-label-item" 
+        v-for="(labelitem,index) in labelList" 
+        :key="index">
+        <a href="#" 
+          @click="focusLbael(index);goPage(index)"
+          :style="{color:index==headerIndex?'rgb(64,158,255)':''}"
+          
+          >{{labelitem}}
+        </a>
+      </div>
     </div>
     <div class="navbar-labelFold" v-show="!isShow">
       <el-dropdown trigger="click">
@@ -22,20 +31,36 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import {mixin} from '../../../mixin/mixin'
+import {mapGetters, mapMutations} from 'vuex'
 export default {
+  mixins:[mixin],
   computed:{
-    ...mapGetters(['isShow'])
+    ...mapGetters(['isShow','headerIndex'])
+  },
+  mounted(){
+    let index = this.$storage.get('headerIndex')
+    this.focusLbael(index)
   },
   methods:{
+    ...mapMutations(['setHeaderIndex']),
     focusLbael(index){
-      this.active = index
+      this.setHeaderIndex(index)
+      this.$storage.set('headerIndex',index)
+    },
+    goPage(index){
+      if(index ===0){
+        this.$router.push('/')
+      }
+      else if(index === 1){
+        this.$router.push('/pins')
+      }
+      
     }
   },
   data() {
     return {
       input: '',
-      active:0,
       labelList:['全民食堂','茶余饭后','私房菜','黑暗料理','饭友圈']
     }
   }

@@ -1,19 +1,28 @@
 <template>
-  <div>
-    <dynamic-input></dynamic-input>
+  <div class="dynamic">
+    <div class="dynamic-swiper">
+      <dynamic-input></dynamic-input>
+      <dynamic-content></dynamic-content>
+    </div>
   </div>
 </template>
 
 
 <script>
+import dynamicContent from './dynamicContent'
 import dynamicInput from './dynamicInput'
 export default {
   components:{
-    dynamicInput
+    dynamicInput,
+    dynamicContent
   }
 }
 </script>
 
-<style lang="scss">
-  
+<style lang="scss" scoped>
+  .dynamic{
+    .dynamic-swiper{
+
+    }
+  }
 </style>

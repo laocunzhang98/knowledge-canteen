@@ -1,11 +1,15 @@
 <template>
-  <div class="header-container">
-    <div class="logo"><a href="#"><img src="../../assets/header/logo.png" alt=""></a></div>
-    <div class="search"><search-box></search-box></div>
-    <div class="person"><person-box></person-box></div>
+  <div class="content">
+    <div class="header-container clearfix">
+      <div class="logo"><a href="#"><img src="../../assets/header/logo.png" alt=""></a></div>
+      <div class="search"><search-box></search-box></div>
+      <div class="person"><person-box></person-box></div>
+    </div>
+    <div class="box"></div>
   </div>
 </template>
 <script>
+
 import SearchBox from './components/Search'
 import PersonBox from './components/Person'
 export default {
@@ -16,24 +20,31 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.box{
+  height: 50px;
+  width: 100%;
+}
   .header-container{
+    position: fixed;
+    z-index: 99;
     height: 50px;
     width: 100%;
     background-color:#fff;
     display: flex;
     align-items: center;
+    
     .logo{
-      flex:0 0 25%;
+      flex:0 0 20%;
       img{
         padding-top: 6px;
         margin-left: 10px;
       }
     }
     .search{
-      flex: 0 0 50%;
+      flex: 0 0 60%;
     }
     .person{
-      flex: 0 0 25%;
+      flex: 0 0 20%;
     }
   }
 </style>

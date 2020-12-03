@@ -1,3 +1,4 @@
 export default {
-  'isShow': state=>state.isShow
+  'isShow': state=>state.isShow,
+  'headerIndex':state=>state.headerIndex
 }

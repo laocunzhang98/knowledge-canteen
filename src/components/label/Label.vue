@@ -1,16 +1,17 @@
 <template>
-  <div class="label">
-    <div class="label-swiper"><div class="label-item" v-for="(labelitem,index) in labelList" :key="index" ><a href="#" @click="focusLbael(index)" :style="{color:index==active?'rgb(64,158,255)':''}">{{labelitem}}</a></div></div>
-      
-    <div class="label-manage" v-show="isShow"><a href="#" class="label-manage-item">标签管理</a></div>
-  </div>
+    <div class="label">
+      <div class="label-swiper"><div class="label-item" v-for="(labelitem,index) in labelList" :key="index" ><a href="#" @click="focusLbael(index)" :style="{color:index==active?'rgb(64,158,255)':''}">{{labelitem}}</a></div></div>
+      <div class="label-manage" v-show="isShow"><a href="#" class="label-manage-item">标签管理</a></div>
+    </div>
 </template>
 
 
 <script>
-import {mixin} from '../../mixin/mixin'
+import {mapGetters} from 'vuex'
 export default {
-  mixins:[mixin],
+  computed:{
+    ...mapGetters(['isShow'])
+  },
   data() {
     return {
       active:0,
@@ -28,6 +29,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+//占位
+
   .label{
     height: 34px;
     display: flex;
