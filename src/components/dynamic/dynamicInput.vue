@@ -20,7 +20,7 @@
           <div>表情</div>
           <div>表情</div>
           <div>表情</div></div>
-        <div class="btn"><el-button>发布</el-button></div>
+        <div class="btn"><el-button type="primary">发布</el-button></div>
       </div>
     </el-card>
   </div>
@@ -38,9 +38,9 @@ export default {
 </script>
 
 
-<style lang="scss">
-.el-card__body{
-  padding-bottom: 10px !important;
+<style lang="scss" scoped>
+/deep/.el-card__body{
+  padding-bottom: 10px;
 }
 .iconfont{
   color: skyblue;
@@ -51,7 +51,7 @@ export default {
   .dynamic-swiper {
     // padding: 15px 15px;
     .dynamic-input {
-      .el-textarea__inner {
+      /deep/.el-textarea__inner {
         border-radius: 4px 4px 0 0;
         border-bottom: none;
         &:focus {
@@ -63,7 +63,7 @@ export default {
           border-color: #dcdfe6;
         }
       }
-      .el-input__count {
+      /deep/.el-input__count {
         position: absolute;
         bottom: -20px;
         z-index: 99;
@@ -88,9 +88,6 @@ export default {
     .topic{
       display: flex;
       justify-content: flex-start;
-    }
-    .btn{
-
     }
   }
 }

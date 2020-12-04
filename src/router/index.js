@@ -2,7 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Pins from '../views/Pins.vue'
-
+import User from '../views/User.vue'
+import Organize from "../views/Organize.vue"
 //获取原型对象上的push函数
 const originalPush = VueRouter.prototype.push
 //修改原型对象中的push方法
@@ -22,6 +23,20 @@ const routes = [
     name:'Pins',
     component:Pins
   },
+  {
+    path:'/user',
+    name:'User',
+    component:User
+  },
+  {
+    path:'/organize',
+    name:'Organize',
+    component:Organize
+  },
+  {
+    path:'/follow',
+    name:'Follow'
+  }
 
 ]
 

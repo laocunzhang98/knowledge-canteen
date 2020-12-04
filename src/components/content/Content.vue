@@ -3,8 +3,12 @@
     <el-tab-pane label="热门" name="first">
       <article-view></article-view>
     </el-tab-pane>
-    <el-tab-pane label="最新" name="second"></el-tab-pane>
-    <el-tab-pane label="热榜" name="third"></el-tab-pane>
+    <el-tab-pane label="最新" name="second">
+      <article-view></article-view>
+    </el-tab-pane>
+    <el-tab-pane label="热榜" name="third">
+      <article-view></article-view>
+    </el-tab-pane>
   </el-tabs>
 </template>
 <script>

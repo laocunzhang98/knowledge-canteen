@@ -4,9 +4,10 @@
       class="list"
       v-infinite-scroll="load"
       infinite-scroll-disabled="disabled">
-      <li v-for="(i,index) in count" class="list-item" :key="index"><article-card></article-card></li>
+      <li v-for="(i,index) in count" class="list-item" :key="index">
+        <article-card></article-card>
+      </li>
     </ul>
-
   </div>
 </template>
 

@@ -5,6 +5,8 @@ import store from './store'
 import './plugin/ElementUI'
 import './common/css/initStyle.css'
 import './common/css/globelStyle.scss'
+import 'element-ui/lib/theme-chalk/display.css';
+
 import WebStorageCache from "web-storage-cache";
 
 Vue.config.productionTip = false

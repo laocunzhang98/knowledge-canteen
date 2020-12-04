@@ -1,14 +1,19 @@
 <template>
   <div class="person">
-    <div class="person-info"><img src="" alt=""></div>
+    <div class="person-info" @click="JumpUserInfo"><img src="" alt=""></div>
     <div class="person-news"><a href="#"><span class="iconfont icon-xiaoxi"></span></a></div>
   </div>
 </template>
 
 
 <script>
+import { createLogger } from 'vuex'
 export default {
-
+  methods:{
+    JumpUserInfo(){
+    this.$router.push('/user')
+  }
+  }
 }
 </script>
 

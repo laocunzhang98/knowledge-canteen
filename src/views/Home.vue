@@ -7,7 +7,9 @@
     </div>
     <div class="zbox"></div>
     <div class="contents">
-      <div class="contents-swiper"><contents></contents></div>
+      <div class="contents-swiper">
+        <contents></contents>
+      </div>
     </div>
   </div>
 </template>
@@ -15,7 +17,6 @@
 
 <script>
 import Labels from '../components/label/Label'
-import Label from '../components/label/Label'
 import Contents from '../components/content/Content'
 export default {
   name: 'Home',
