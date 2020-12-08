@@ -43,5 +43,9 @@ export default {
   .el-menu{
     background-color: #f0f3f8!important;
     margin-top: 15px;
+    /deep/.el-menu-item{
+      padding-left: 30px!important;
+      min-width: 100px!important;
+    }
   }
 </style>

@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import {
   Input, Button, Row, Col, Tabs, TabPane, Menu, Submenu, MenuItemGroup, MenuItem, Dropdown, DropdownMenu, DropdownItem
-  ,Card,InfiniteScroll
+  ,Card,InfiniteScroll,Upload,Dialog
 } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
@@ -19,4 +19,6 @@ Vue.use(Dropdown)
 Vue.use(DropdownMenu)
 Vue.use(DropdownItem)
 Vue.use(Card)
+Vue.use(Upload)
+Vue.use(Dialog)
 Vue.use(InfiniteScroll)

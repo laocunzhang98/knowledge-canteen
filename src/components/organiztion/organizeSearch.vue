@@ -50,6 +50,10 @@ export default {
       align-items: center;
     }
   }
+  /deep/.el-input__inner:focus{
+    border-color: #fff;
+    outline: 0;
+  }
 }
 .el-dropdown-link {
   cursor: pointer;
