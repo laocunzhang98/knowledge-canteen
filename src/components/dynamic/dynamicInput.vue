@@ -32,9 +32,9 @@
             <div class="emoji-btn" @click="emojiSelect()" @click.stop="emojiActive=!emojiActive">
               <i class="iconfont icon-A"></i>
               <span style="font-size:14px;color:blue">表情</span>
-            </div>
-            <div class="triangle"></div>
+            </div>   
             <div class="emoji-list" v-show="emojiActive" @click.stop="emojiActive=true">
+              <div class="triangle"></div>
               <ul>
                 <li class="emoji-item" v-for="(item,index) in emojiLists.srcs" :key="index">
                   <img :src="item" class="emoji" alt />
@@ -54,7 +54,7 @@
           </div>
         </div>
         <div class="btn">
-          <el-button type="primary">发布</el-button>
+          <el-button type="primary" ref="btn">发布</el-button>
         </div>
       </div>
     </el-card>
@@ -81,7 +81,7 @@ export default {
   methods: {
     //处理文件上传
     uploadimg() {
-      console.log(this.$refs.upload);
+      this.visibileimg = !this.visibileimg
     },
     handleSuccess() {
       this.visibileimg = true;
@@ -153,6 +153,7 @@ export default {
   width: 300px;
   height: 200px;
   position: absolute;
+  top: 175px;
   border-radius: 4px;
   box-shadow: 0 5px 18px 0 rgba(0, 0, 0, 0.16);
   background-color: #fff;
@@ -252,22 +253,27 @@ export default {
         color: skyblue;
         display: flex;
         align-items: center;
+        min-width: 50px;
       }
       #topic-emoji {
         box-sizing: border-box;
         .emoji-btn {
           display: flex;
           align-items: center;
+          width:50px;
           cursor: pointer;
         }
+        
       }
       .triangle {
         width: 0;
         height: 0;
         border-style: solid;
-        border-width: 10px;
-        border-color: transparent transparent red transparent;
-        position: fixed;
+        border-width: 8px;
+        border-color: transparent transparent #fff transparent;
+        position: absolute;
+        top: -15px;
+        left: 15px;
         z-index: 99;
       }
     }
