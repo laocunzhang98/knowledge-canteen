@@ -16,6 +16,9 @@ export default {
   components:{
     SearchBox,
     PersonBox
+  },
+  methods:{
+    
   }
 }
 </script>

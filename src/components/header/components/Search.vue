@@ -55,6 +55,8 @@ export default {
         this.$router.push("/pins");
       } else if (index === 4) {
         this.$router.push("/organize");
+      }else if (index===2){
+        this.$router.push("/yunstorage");
       }
     },
   },

@@ -1,7 +1,7 @@
 <template>
   <div class="nav-card">
     <el-card class="box-card">
-      <li v-for="(item,index) in navList" 
+      <li v-for="(item,index) in headerIndex===1?navList:yunlabel" 
         :key="index" class="item-list" 
         :title="item" 
         @click="addNavBgc(index)"
@@ -15,12 +15,24 @@
 
 
 <script>
+import {mapGetters} from 'vuex'
 export default {
+  props:{
+    navList:{
+      type:Array,
+    },
+    yunlabel:{
+      type:Array,
+    },
+  },
   data() {
     return {
       activeIndex:0,
-      navList : ["推荐","关注","热门","上班摸鱼","一图胜千言","今天学到了","树洞一下","每日算法","开发工具","更多话题+"]
+      headerIndex:0
     }
+  },
+  mounted(){
+    this.headerIndex = this.$storage.get("headerIndex")
   },
   methods:{
     addNavBgc(index){

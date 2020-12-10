@@ -39,7 +39,7 @@ export default {
 };
 </script>>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .el-menu{
     background-color: #f0f3f8!important;
     margin-top: 15px;

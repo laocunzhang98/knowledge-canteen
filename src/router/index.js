@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import Pins from '../views/Pins.vue'
 import User from '../views/User.vue'
 import Organize from "../views/Organize.vue"
+import Yun from "../views/Yun.vue"
 //获取原型对象上的push函数
 const originalPush = VueRouter.prototype.push
 //修改原型对象中的push方法
@@ -36,6 +37,11 @@ const routes = [
   {
     path:'/follow',
     name:'Follow'
+  },
+  {
+    path:'/yunstorage',
+    component:Yun,
+    name:"Yunstorage"
   }
 
 ]
