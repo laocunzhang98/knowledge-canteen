@@ -1,10 +1,9 @@
 <template>
   <div>
     <el-row class="el-row">
-      <el-col :span="6"><organize-nav></organize-nav></el-col>
-      <el-col :span="18">
+      <el-col :span="6" :xs="0"><organize-nav></organize-nav></el-col>
+      <el-col :span="18" :xs="24">
         <dynamic-input></dynamic-input>
-        
         <div class="article-view">
           <organize-search></organize-search>
           <article-view></article-view>

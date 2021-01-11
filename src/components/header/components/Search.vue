@@ -39,6 +39,18 @@ export default {
     ...mapGetters(["isShow", "headerIndex"]),
   },
   mounted() {
+    if(this.$route.path === '/'){
+      this.$storage.set("headerIndex", 0);
+    }
+    if(this.$route.path === '/pins'){
+      this.$storage.set("headerIndex", 1);
+    }
+    if(this.$route.path === '/yunstorage'){
+      this.$storage.set("headerIndex", 2);
+    }
+    if(this.$route.path === '/organize'){
+      this.$storage.set("headerIndex", 4);
+    }
     let index = this.$storage.get("headerIndex");
     this.focusLbael(index);
   },
@@ -49,6 +61,7 @@ export default {
       this.$storage.set("headerIndex", index);
     },
     goPage(index) {
+
       if (index === 0) {
         this.$router.push("/");
       } else if (index === 1) {
@@ -58,6 +71,7 @@ export default {
       }else if (index===2){
         this.$router.push("/yunstorage");
       }
+      
     },
   },
   data() {

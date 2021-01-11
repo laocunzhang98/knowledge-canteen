@@ -1,5 +1,5 @@
 <template>
-  <div class="dynamic-card" @click.stop="emojiActive=false">
+  <div class="dynamic-card" @click.stop="emojiActive=false;showTopic=false">
     <el-card>
       <div class="dynamic-swiper">
         <div class="dynamic-input">
@@ -29,14 +29,14 @@
       <div class="dynamic-menu">
         <div class="topic">
           <div id="topic-emoji" @click="fontCount()">
-            <div class="emoji-btn" @click="emojiSelect()" @click.stop="emojiActive=!emojiActive">
+            <div class="emoji-btn"  @click.stop="emojiActive=!emojiActive">
               <i class="iconfont icon-A"></i>
               <span style="font-size:14px;color:blue">表情</span>
             </div>   
             <div class="emoji-list" v-show="emojiActive" @click.stop="emojiActive=true">
               <div class="triangle"></div>
               <ul>
-                <li class="emoji-item" v-for="(item,index) in emojiLists.srcs" :key="index">
+                <li class="emoji-item" v-for="(item,index) in emojiLists.srcs" :key="index" @click="emojiSelect(index)">
                   <img :src="item" class="emoji" alt />
                 </li>
               </ul>
@@ -48,9 +48,28 @@
               <span style="font-size:14px;color:blue">图片</span>
             </div>
           </div>
-          <div class="top-btn">
-            <i class="iconfont icon-huati"></i>
-            <span style="font-size:14px;color:blue">话题</span>
+          <div class="topic-list">
+            <div class="top-btn" @click.stop="showTopic=!showTopic">
+              <i class="iconfont icon-huati"></i>
+              <span style="font-size:14px;color:blue">话题</span>
+            </div>
+            
+            <div class="topic-item" v-show="showTopic" @click.stop="showTopic=true">
+              <div class="triangle"></div>
+              <div class="topic-search">
+                <el-input
+                  placeholder="请输入内容"
+                  size="small"
+                  >
+                  <i slot="suffix" class="el-input__icon el-icon-search"></i>
+                </el-input>
+              </div>
+              <div class="topic-itemlist">
+                <div v-for="(item,index) in 10" :key="index" class="topic-detail">
+                  <li>xxxxxxxxxxxxxx</li>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="btn">
@@ -76,9 +95,11 @@ export default {
       dialogVisible: false,
 
       visibileimg: false,
+      showTopic:false
     };
   },
   methods: {
+
     //处理文件上传
     uploadimg() {
       this.visibileimg = !this.visibileimg
@@ -115,10 +136,15 @@ export default {
         );
       }
     },
-    emojiSelect() {
+    // 表情选择
+    emojiSelect(index) {
       document.getElementById("textarea").innerHTML +=
-        '<img class="emoji" draggable="false" alt="😏" src="https://gold-cdn.xitu.io/asset/twemoji/2.6.0/svg/1f60f.svg">';
+        `<img class="emoji" draggable="false" alt="" src="${this.emojiLists.srcs[index]}">`;
     },
+    // 话题选择
+    topicSelect(){
+
+    }
   },
 };
 </script>
@@ -151,16 +177,17 @@ export default {
 }
 .emoji-list {
   width: 300px;
-  height: 200px;
+  height: 190px;
   position: absolute;
   top: 175px;
   border-radius: 4px;
   box-shadow: 0 5px 18px 0 rgba(0, 0, 0, 0.16);
   background-color: #fff;
+  z-index: 999;
   ul {
     display: flex;
     flex-wrap: wrap;
-    padding: 10px;
+    padding: 15px;
     li {
       margin: 2px;
     }
@@ -247,14 +274,49 @@ export default {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      .pic-upload,
-      .top-btn {
-        cursor: pointer;
+      .pic-upload{
         color: skyblue;
-        display: flex;
-        align-items: center;
-        min-width: 50px;
+        .pic-btn{
+          display: flex;
+          align-items: center;
+        }
       }
+      .topic-list{
+        .top-btn {
+          cursor: pointer;
+          color: skyblue;
+          display: flex;
+          align-items: center;
+          min-width: 50px;
+        }
+        .topic-item{
+          position: absolute;
+          height: 400px;
+          width: 280px;
+          background-color: #fff;
+          box-shadow: 0 5px 18px 0 rgba(0,0,0,.16);
+          margin-left: -20px;
+          margin-top: 10px;
+          // overflow: scroll;
+          // overflow-x: hidden;
+          .topic-search{
+            margin: auto;
+            margin-top: 15px;
+            width: 220px;
+          }
+          .topic-itemlist{
+            overflow: scroll;
+            overflow-x: hidden;
+            height: 353px;
+            .topic-detail{
+              height: 60px;
+              width: 80%;
+              margin: auto;
+            }
+          }
+        }
+      }
+      
       #topic-emoji {
         box-sizing: border-box;
         .emoji-btn {

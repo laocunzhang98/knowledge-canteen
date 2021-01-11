@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import {
   Input, Button, Row, Col, Tabs, TabPane, Menu, Submenu, MenuItemGroup, MenuItem, Dropdown, DropdownMenu, DropdownItem
-  ,Card,InfiniteScroll,Upload,Dialog
+  ,Card,InfiniteScroll,Upload,Dialog,Calendar,DatePicker,Table,TableColumn,Tag
 } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
@@ -21,4 +21,9 @@ Vue.use(DropdownItem)
 Vue.use(Card)
 Vue.use(Upload)
 Vue.use(Dialog)
+Vue.use(Calendar)
+Vue.use(DatePicker)
+Vue.use(Table)
+Vue.use(TableColumn)
+Vue.use(Tag)
 Vue.use(InfiniteScroll)

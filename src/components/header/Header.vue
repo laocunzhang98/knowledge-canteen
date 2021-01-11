@@ -41,6 +41,7 @@ export default {
       img{
         padding-top: 6px;
         margin-left: 10px;
+        color: red;
       }
     }
     .search{

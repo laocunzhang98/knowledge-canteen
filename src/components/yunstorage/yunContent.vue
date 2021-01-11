@@ -5,7 +5,7 @@
         <el-menu default-active="1"
           class="el-menu-demo"
           mode="horizontal" 
-          @select="menuSelect">
+          >
           <el-menu-item index="1">我的云盘</el-menu-item>
         </el-menu>
       </div>
@@ -13,13 +13,71 @@
         <div class="commit"><el-button type="primary" size="small"><i class="el-icon-upload" style="margin-right:5px"></i>上传</el-button></div>
         <div><el-button size="small"><i class="el-icon-folder-add" style="margin-right:5px"></i> 新建文件夹</el-button></div>
       </div>
+      <div class="content">
+        <el-table
+          :data="tableData"
+          style="width: 100%">
+          <el-table-column
+            type="selection"
+            width="55">
+          </el-table-column>
+          <el-table-column
+            label="文件名"
+            min-width="60%">
+            <template slot-scope="scope">
+              <img :key="editFileNameKey" :src="getPng(scope.row)"
+                style="vertical-align: middle;margin-right: 10px;"/>
+              <span style="padding-left: 1px; text-align: center; cursor: pointer;">{{scope.row.name}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="prop"
+            label="大小"
+            min-width="20%">
+          </el-table-column>
+          <el-table-column
+            prop="prop"
+            label="修改日期"
+            min-width="20%">
+          </el-table-column>
+        </el-table>
+      </div>
     </el-card>
   </div>
 </template>
 
 <script>
 export default {
-
+  data(){
+    return {
+      tableData: [{
+          date: '2016-05-02',
+          name: '王小虎',
+          extName:'dir',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-04',
+          name: '王小虎',
+          extName:'dir',
+          address: '上海市普陀区金沙江路 1517 弄'
+        }, {
+          date: '2016-05-01',
+          name: '王小虎',
+          extName:'dir',
+          address: '上海市普陀区金沙江路 1519 弄'
+        }, {
+          date: '2016-05-03',
+          name: '王小虎',
+          extName:'dir',
+          address: '上海市普陀区金沙江路 1516 弄'
+        }]
+    }
+  },
+  methods:{
+    getPng(row) {
+      return require("../../assets/header/" + row.extName + ".png")
+    }
+  }
 }
 </script>
 
