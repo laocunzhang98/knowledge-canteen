@@ -11,7 +11,11 @@
 
 <script>
 import OrganizeCircle from '../components/organiztion/organizeCircle'
+import {getAticle} from '../api/classic'
 export default {
+  mounted(){
+    
+  },
   components:{
     OrganizeCircle
   }

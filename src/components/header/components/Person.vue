@@ -1,18 +1,31 @@
 <template>
   <div class="person">
-    <div class="person-info" @click="JumpUserInfo"><img src="" alt=""></div>
+    <div class="person-info" @click="JumpUserInfo" v-show="showLogin"><img src="" alt=""></div>
+    <div class="login-btn" @click="jumpLogin" v-show="!showLogin"><el-button type="primary" size="small">登录</el-button></div>
     <div class="person-news"><a href="#"><span class="iconfont icon-xiaoxi"></span></a></div>
   </div>
 </template>
 
 
 <script>
-import { createLogger } from 'vuex'
 export default {
+  data(){
+    return {
+      showLogin:false
+    }
+  },
+  mounted(){
+    if(localStorage.getItem('token')){
+      this.showLogin = true
+    }
+  },
   methods:{
     JumpUserInfo(){
-    this.$router.push('/user')
-  }
+      this.$router.push('/user')
+    },
+    jumpLogin(){
+      this.$router.push('/user')
+    }
   }
 }
 </script>
@@ -29,6 +42,9 @@ export default {
       width: 40px;
       background-color: red;
       border-radius: 20px;
+      margin-right: 30px;
+    }
+    .login-btn{
       margin-right: 30px;
     }
     .person-news{

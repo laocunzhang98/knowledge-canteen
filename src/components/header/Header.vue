@@ -38,9 +38,11 @@ export default {
     
     .logo{
       flex:0 0 20%;
+      
       img{
         padding-top: 6px;
         margin-left: 10px;
+        height: 50px;
         color: red;
       }
     }

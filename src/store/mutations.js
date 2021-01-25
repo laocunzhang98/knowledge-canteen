@@ -4,5 +4,8 @@ export default {
   },
   setHeaderIndex:(state,headerIndex)=>{
     state.headerIndex = headerIndex
+  },
+  setVerifyToken:(state,verifyToken)=>{
+    state.verifyToken = verifyToken
   }
 }

@@ -1,44 +1,69 @@
 <template>
   <div class="infinite-list-wrapper" style="overflow:auto">
-    <ul
-      class="list"
-      v-infinite-scroll="load"
-      infinite-scroll-disabled="disabled">
-      <li v-for="(i,index) in count" class="list-item" :key="index">
-        <article-card></article-card>
+    <ul class="list" v-infinite-scroll="load" infinite-scroll-disabled="disabled">
+      <li v-for="(item,index) in result" class="list-item" :key="index">
+        <el-card class="box-card">
+          <article-card :result="item"></article-card>
+        </el-card>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
-  import ArticleCard from './ArticleCard'
-  export default {
-    components:{
-      ArticleCard
+import { getAticle } from "../../../api/classic";
+import ArticleCard from "./ArticleCard"
+export default {
+  mounted() {
+    getAticle()
+      .then((res) => {
+        console.log(res);
+        this.result = res.data;
+      })
+      .catch();
+  },
+  components:{
+    ArticleCard
+  },
+  data() {
+    return {
+      count: 10,
+      loading: false,
+      result: [],
+    };
+  },
+  computed: {
+    noMore() {
+      return this.count >= 20;
     },
-    data () {
-      return {
-        count: 10,
-        loading: false
-      }
+    disabled() {
+      return this.loading || this.noMore;
     },
-    computed: {
-      noMore () {
-        return this.count >= 20
-      },
-      disabled () {
-        return this.loading || this.noMore
-      }
+  },
+  methods: {
+    load() {
+      this.loading = true;
+      setTimeout(() => {
+        this.count += 2;
+        this.loading = false;
+      }, 2000);
     },
-    methods: {
-      load () {
-        this.loading = true
-        setTimeout(() => {
-          this.count += 2
-          this.loading = false
-        }, 2000)
-      }
-    }
-  }
+  },
+};
 </script>
+
+<style lang="scss" scoped>
+  .text {
+    font-size: 14px;
+  }
+
+  .item {
+    padding: 5px 0;
+  }
+
+  .box-card {
+    box-sizing: border-box;
+    height: 150px;
+    width: 100%;
+  }
+</style>

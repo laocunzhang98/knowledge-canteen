@@ -1,15 +1,13 @@
 <template>
   <div id="app">
-    <headers></headers>
+    
     <router-view/>
   </div>
 </template>
 <script>
-import Headers from './components/header/Header'
+
 export default {
-  components:{
-    Headers
-  }
+  
 }
 </script>
 <style lang="scss">
@@ -20,6 +18,7 @@ export default {
     height: 100%;
     background-color: #f0f3f8;
     border:none;
+    overflow: hidden;
 }
 
 </style>
