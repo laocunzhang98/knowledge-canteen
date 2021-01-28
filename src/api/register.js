@@ -7,3 +7,10 @@ export function Register(data){
     data
   })
 }
+export function GetCode(data){
+  return request({
+    url:"/user/sendmail",
+    method:"POST",
+    data
+  })
+}

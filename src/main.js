@@ -21,14 +21,12 @@ Vue.use(mavonEditor)
 
 Vue.config.productionTip = false
 Vue.prototype.$storage = new WebStorageCache()
-router.beforeEach((to,from,next)=>{
-  if(to.meta.title){
-    document.title = to.meta.title
-  }
-  next()
-})
-new Vue({
+
+const vue = new Vue({
   router,
   store,
   render: h => h(App)
 }).$mount('#app')
+
+export default vue
+

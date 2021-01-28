@@ -17,7 +17,7 @@
           </div>
           <div class="check">
             <div class="code"><el-input v-model="code" placeholder="4位邮箱验证码" size="small"></el-input></div>
-            <div class="getcode"><el-button type="primary" size="small">获取验证码</el-button></div>
+            <div class="getcode" ><el-button type="primary" size="small" @click="getCode">获取验证码</el-button></div>
           </div>
           <div class="register"><el-button type="success" @click="register()">立即注册</el-button></div>
         </div>
@@ -34,7 +34,7 @@
 
 <script>
 import LoginTemp from "../common/components/LoginTemp"
-import {Register} from "../api/register"
+import {Register,GetCode} from "../api/register"
 export default {
   data(){
     return {
@@ -59,11 +59,18 @@ export default {
         code:this.code
       }
       Register(data).then((res)=>{
-        console.log(res.data)
+        if(res.code === 200){
+          this.$router.push("/home")
+        }
       })
     },
     jumpLogin(){
       this.$router.push("/login")
+    },
+    getCode(){
+      GetCode({email:this.email}).then((res)=>{
+        console.log(res)
+      })
     }
   }
 }

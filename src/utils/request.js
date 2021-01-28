@@ -1,6 +1,8 @@
 import axios from "axios"
 import {Base64} from 'js-base64'
 import router from '../router/index'
+import vue from "../main"
+
 const service = axios.create({
   baseURL:"/api",
   timeout:5000
@@ -9,7 +11,6 @@ const service = axios.create({
 service.interceptors.request.use(
   config=>{
     let token = localStorage.getItem('token')
-    // localStorage.setItem("token")
     let Authorization = "Basic "+Base64.encode(token+":")
     const headers = {
       "Authorization" :Authorization,
@@ -29,10 +30,22 @@ service.interceptors.response.use(
       localStorage.removeItem('token')
       router.push('/login')
     }
+    if(response.data.code !=200){
+      if(response.data.message instanceof Array){
+        vue.$message.warning(response.data.message[0])
+      }
+      else{
+        vue.$message.warning(response.data.message)
+      }
+    }else{
+      if(response.data.message !=="success"){
+        vue.$message.success(response.data.message)
+      }
+    }
     return response.data
   },
   error=>{
-    console.log(error)
+    vue.$message.error("服务器内部错误！请尽快联系管理员！")
     return Promise.reject(error)
   }
 )

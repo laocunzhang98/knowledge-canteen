@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div class="content" @click="Aticledetail">
     <div class="info-box">
       <div class="meta-row">
         <div class="nickname">{{result.name}} <span>·</span></div>
@@ -8,7 +8,7 @@
       </div>
       <div class="title-row">{{result.title}}</div>
       <div class="action-row">
-        <div class="favor" @click="favor"><img src="../../../assets/home/favorActive.png" alt=""><span>{{result.fav_nums}}</span></div>
+        <div class="favor" @click.stop="favor"><img src="../../../assets/home/favorActive.png" alt=""><span>{{result.fav_nums}}</span></div>
         <div class="comment"><img src="../../../assets/home/common.png" alt=""><span>{{result.com_nums}}</span></div>
       </div>
     </div>
@@ -18,6 +18,7 @@
 
 <script>
 import TimeDiff from '@/utils/TimeDiff'
+import {Favor} from "@/api/classic"
  export default {
    data(){
      return {
@@ -25,7 +26,7 @@ import TimeDiff from '@/utils/TimeDiff'
      }
    },
    mounted(){
-     console.log(this.result)
+     console.log(this.result.id)
    },
    components:{
      TimeDiff
@@ -37,7 +38,20 @@ import TimeDiff from '@/utils/TimeDiff'
    },
    methods:{
      favor(){
-       this.favorImg = "../../../assets/home/favorActive.png"
+      //  this.favorImg = "../../../assets/home/favorActive.png"
+      Favor({article_id:this.result.id}).then((res)=>{
+        if(res.code ===200){
+          this.result.fav_nums += 1
+        }
+      })
+     },
+     Aticledetail(){
+       this.$router.push({
+         name:"Article",
+         params:{
+           id:this.result.id
+         }
+       })
      }
    }
  }
@@ -50,6 +64,7 @@ import TimeDiff from '@/utils/TimeDiff'
     display: flex;
     align-items: center;
     justify-content: space-between;
+    cursor: pointer;
     .info-box{
       margin-left:30px;
       .meta-row{

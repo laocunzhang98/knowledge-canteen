@@ -27,6 +27,9 @@
         <el-button slot="append" icon="el-icon-search" class="btn"></el-button>
       </el-input>
     </div>
+    <div class="edit" @click="addedit">
+      <el-button type="primary" size="small">写文章</el-button>
+    </div>
   </div>
 </template>
 
@@ -61,7 +64,6 @@ export default {
       this.$storage.set("headerIndex", index);
     },
     goPage(index) {
-
       if (index === 0) {
         this.$router.push("/");
       } else if (index === 1) {
@@ -73,6 +75,9 @@ export default {
       }
       
     },
+    addedit(){
+      this.$router.push("/edit")
+    }
   },
   data() {
     return {
@@ -108,6 +113,9 @@ export default {
       font-weight: 700;
       color: #000;
     }
+  }
+  .edit{
+    margin-left: 10px;
   }
 }
 </style>

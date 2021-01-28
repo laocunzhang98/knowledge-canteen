@@ -23,9 +23,6 @@ import ArticleView from './components/ArticleView'
       };
     },
     methods: {
-      handleClick(tab, event) {
-        console.log(tab, event);
-      }
       
     }
   };

@@ -59,6 +59,11 @@ const routes = [
         component:Yun,
         name:"Yunstorage"
       },
+      {
+        path:"/post/:id",
+        component:()=>import("../views/ArticleDetail.vue"),
+        name:"Article"
+      },
     ]
   },
   {
@@ -88,7 +93,9 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to,from,next)=>{
-  console.log(to)
+  if(to.meta.title){
+    document.title = to.meta.title
+  }
   if(!localStorage.getItem('token')){
     if(to.path !=='/login' && to.path !=='/register'){
       next(

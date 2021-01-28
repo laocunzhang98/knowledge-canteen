@@ -41,11 +41,12 @@ export default {
         type:101
       }
       Login(data).then((res)=>{
-        console.log(res)
-        if(res.data.code===200){
+        console.log(res.code)
+        if(res.code===200){
           console.log(this.$route)
-          this.$message.success("登录成功")
-          localStorage.setItem('token',res.data.token)
+          console.log(res)
+          localStorage.setItem('token',res.data)
+          console.log(localStorage.getItem('token'))
           let path ="/home"
           if (this.$route.query.redirect) {
               path = this.$route.query.redirect   // 跳到之前的页面
@@ -56,7 +57,6 @@ export default {
           });
         }
       }).catch((err)=>{
-        console.log(err.response)
       })
     },
     jumpRegister(){

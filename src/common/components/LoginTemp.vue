@@ -1,6 +1,6 @@
 <template>
   <div class="login-box">
-    <div class="logo"><img src="../../assets/header/xxx.jpg" alt=""></div>
+    <div class="logo"><img src="../../assets/header/avator.jpg" alt=""></div>
     <div class="name">知 食</div>
     <div class="title">专业云端知识分享平台</div>
     <div class="login">

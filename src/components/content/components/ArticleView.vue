@@ -11,13 +11,13 @@
 </template>
 
 <script>
-import { getAticle } from "../../../api/classic";
+import { getArticleList } from "../../../api/classic";
 import ArticleCard from "./ArticleCard"
 export default {
   mounted() {
-    getAticle()
+    getArticleList()
       .then((res) => {
-        console.log(res);
+        console.log(res.data)
         this.result = res.data;
       })
       .catch();
