@@ -82,6 +82,15 @@ const routes = [
     meta:{
       title:"知食-注册"
     }
+  },
+  {
+    path:"/404",
+    name:"NotFound",
+    component:()=>import("../views/404.vue")
+  },
+  {
+    path:"*",
+    redirect:"/404"
   }
 
 ]

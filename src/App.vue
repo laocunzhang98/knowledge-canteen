@@ -17,7 +17,7 @@ export default {
     height: 100%;
     background-color: #f0f3f8;
     border:none;
-    overflow: hidden;
+    // overflow: hidden;
 }
 
 </style>

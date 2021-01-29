@@ -7,7 +7,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     isShow:true,
-    headerIndex:0
+    headerIndex:0,
+    headerShow:true
   },
   getters,
   mutations

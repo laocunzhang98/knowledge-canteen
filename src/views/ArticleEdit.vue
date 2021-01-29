@@ -8,7 +8,6 @@
         <div class="img-btn" @click="imageLoad">
           <img src="../assets/home/upload-pic .png" alt />
           <div class="up-img">
-            
             <el-upload
               class="avatar-uploader"
               drag
@@ -30,7 +29,26 @@
         </div>
 
         <div class="pub">
-          <el-button type="primary" @click="pub">发布文章</el-button>
+          <el-button type="primary" @click="dialogFormVisible = true">发布文章</el-button>
+          <!-- @click="pub" -->
+
+          <el-dialog title="发布文章" :visible.sync="dialogFormVisible">
+            <el-form :model="form">
+              <el-form-item label="活动名称" :label-width="formLabelWidth">
+                <el-input v-model="form.name" autocomplete="off" size="small"></el-input>
+              </el-form-item>
+              <el-form-item label="活动区域" :label-width="formLabelWidth">
+                <el-select v-model="form.region" placeholder="请选择活动区域">
+                  <el-option label="区域一" value="shanghai"></el-option>
+                  <el-option label="区域二" value="beijing"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogFormVisible = false">取 消</el-button>
+              <el-button type="primary" @click="dialogFormVisible = false;pub" >确 定</el-button>
+            </div>
+          </el-dialog>
         </div>
         <div class="person">
           <person></person>
@@ -56,6 +74,18 @@ import Person from "@/components/header/components/Person";
 export default {
   data() {
     return {
+      form: {
+          name: '',
+          region: '',
+          date1: '',
+          date2: '',
+          delivery: false,
+          type: [],
+          resource: '',
+          desc: ''
+        },
+        formLabelWidth: '120px',
+      dialogFormVisible:false,
       imageUrl: '',
       title: "",
       value: "",
@@ -85,9 +115,10 @@ export default {
         content:this.content,
         image:this.imageUrl,
       }
-      pubArticle(data).then((res)=>{
-        console.log(res)
-      })
+      console.log(this.form)
+      // pubArticle(data).then((res)=>{
+      //   console.log(res)
+      // })
     },
     renderValue(value,render) {
       this.content = render
@@ -149,19 +180,21 @@ export default {
     line-height: 178px;
     text-align: center;
   }
-  
-::v-deep .el-input__inner:focus {
+::v-deep .el-input--small{
+  width: 140px;
+}
+.edit-title ::v-deep .el-input__inner:focus {
   border-color: rgba(#000, 0);
   outline: 0;
 }
-::v-deep .el-input__inner:hover {
+.edit-title ::v-deep .el-input__inner:hover {
   border: rgba(#000, 0);
 }
-.el-input {
+.edit-title .el-input {
   height: 60px;
   width: 70vw;
 }
-::v-deep .el-input__inner {
+.edit-title ::v-deep .el-input__inner {
   border: none;
   height: 60px;
   font-size: 26px;

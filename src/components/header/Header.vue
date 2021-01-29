@@ -1,18 +1,34 @@
 <template>
-  <div class="content">
-    <div class="header-container clearfix">
-      <div class="logo"><a href="#"><img src="../../assets/header/logo.png" alt=""></a></div>
-      <div class="search"><search-box></search-box></div>
-      <div class="person"><person-box></person-box></div>
-    </div>
-    <div class="box"></div>
+  <div class="content clearfix" v-if="true">
+    <transition name="bounce">
+      <div class="header-container " >
+        <div class="logo"><a href="#"><img src="../../assets/header/logo.png" alt=""></a></div>
+        <div class="search"><search-box></search-box></div>
+        <div class="person"><person-box></person-box></div>
+      </div>
+    </transition>
+    
+    <el-backtop :bottom="60"></el-backtop>
+    
   </div>
 </template>
 <script>
-
+// import { mapGetters, mapMutations } from "vuex";
 import SearchBox from './components/Search'
 import PersonBox from './components/Person'
 export default {
+  data(){
+    return {
+      
+    }
+  },
+  computed:{
+    // ...mapGetters(["headerShow"])
+  },
+  mounted(){
+    
+    
+  },
   components:{
     SearchBox,
     PersonBox
@@ -23,13 +39,36 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.box{
+.bounce-enter-active {
+  animation: bounce-in .5s;
+}
+.bounce-leave-active {
+  animation: bounce-in .5s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    transform: translate3d(0,10,0);
+  }
+  50% {
+    transform: translate3d(0,30,0);;
+  }
+  100% {
+    transform: translate3d(0,50,0);;
+  }
+}
+// .clearfix::after {
+//   content:""; 
+//   display:block; 
+//   height:0; 
+//   visibility:hidden; 
+//   clear:both; 
+// }
+.content{
   height: 50px;
-  width: 100%;
 }
   .header-container{
     position: fixed;
-    z-index: 99;
+    z-index: 1600;
     height: 50px;
     width: 100%;
     background-color:#fff;

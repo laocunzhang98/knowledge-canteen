@@ -6,7 +6,12 @@ export function getArticleList(){
   })
 }
 
-
+export function getAuthorInfo(id){
+  return request({
+    url:`/classic/article/follow/${id}`,
+    method:"GET"
+  })
+}
 export function pubArticle(data){
   return request({
     url:"/classic/pub",

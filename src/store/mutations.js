@@ -7,5 +7,8 @@ export default {
   },
   setVerifyToken:(state,verifyToken)=>{
     state.verifyToken = verifyToken
+  },
+  setHeaderShow:(state,headerShow)=>{
+    state.headerShow = headerShow
   }
 }

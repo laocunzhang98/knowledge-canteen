@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import {
   Input, Button, Row, Col, Tabs, TabPane, Menu, Submenu, MenuItemGroup, MenuItem, Dropdown, DropdownMenu, DropdownItem
-  ,Card,InfiniteScroll,Upload,Dialog,Calendar,DatePicker,Table,TableColumn,Tag
+  ,Card,InfiniteScroll,Upload,Dialog,Calendar,DatePicker,Table,TableColumn,Tag,Form,FormItem,Select,Option,Backtop,Icon
 } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
@@ -26,4 +26,11 @@ Vue.use(DatePicker)
 Vue.use(Table)
 Vue.use(TableColumn)
 Vue.use(Tag)
+Vue.use(FormItem)
+Vue.use(Form)
+Vue.use(Select)
+Vue.use(Option)
+Vue.use(Backtop)
+Vue.use(Icon)
+
 Vue.use(InfiniteScroll)

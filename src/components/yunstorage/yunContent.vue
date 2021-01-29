@@ -25,7 +25,7 @@
             label="文件名"
             min-width="60%">
             <template slot-scope="scope">
-              <img :key="editFileNameKey" :src="getPng(scope.row)"
+              <img :src="getPng(scope.row)"
                 style="vertical-align: middle;margin-right: 10px;"/>
               <span style="padding-left: 1px; text-align: center; cursor: pointer;">{{scope.row.name}}</span>
             </template>

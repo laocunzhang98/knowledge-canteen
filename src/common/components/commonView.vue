@@ -6,7 +6,7 @@
 
 
 <script>
-import ArticleView from '../../components/content/components/ArticleView'
+import ArticleView from '@/components/content/components/ArticleView'
 export default {
   components:{
     ArticleView

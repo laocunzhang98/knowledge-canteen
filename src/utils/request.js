@@ -31,6 +31,9 @@ service.interceptors.response.use(
       router.push('/login')
     }
     if(response.data.code !=200){
+      if(response.data.code ===404){
+        router.push('/404')
+      }
       if(response.data.message instanceof Array){
         vue.$message.warning(response.data.message[0])
       }
