@@ -7,7 +7,7 @@ import './common/css/globelStyle.scss'
 import 'element-ui/lib/theme-chalk/display.css';
 import './common/css/initStyle.css'
 import WebStorageCache from "web-storage-cache";
-
+import "./common/css/font.css"
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 import { Message } from 'element-ui'

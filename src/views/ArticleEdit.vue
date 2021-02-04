@@ -29,24 +29,26 @@
         </div>
 
         <div class="pub">
-          <el-button type="primary" @click="dialogFormVisible = true">发布文章</el-button>
+          <el-button type="primary" @click="prepub">发布文章</el-button>
           <!-- @click="pub" -->
 
-          <el-dialog title="发布文章" :visible.sync="dialogFormVisible">
-            <el-form :model="form">
-              <el-form-item label="活动名称" :label-width="formLabelWidth">
-                <el-input v-model="form.name" autocomplete="off" size="small"></el-input>
-              </el-form-item>
-              <el-form-item label="活动区域" :label-width="formLabelWidth">
-                <el-select v-model="form.region" placeholder="请选择活动区域">
-                  <el-option label="区域一" value="shanghai"></el-option>
-                  <el-option label="区域二" value="beijing"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-form>
+          <el-dialog title="发布文章" :visible.sync="dialogFormVisible"  center>
+                <div class="other-info">
+                  <div class="classify">
+                    <span>请选择分类</span>
+                    <div class="category">
+                      <div class="category-item" :class="{categoryactive:categoryItem===item}" v-for="(item,index) in category" :key="index" @click="selectCategory(item)">{{item}}</div>
+                    </div>
+                  </div>
+                  
+                  <div class="label">
+                    <span>请添加标签</span>
+                      <el-input v-model="label" autocomplete="off" size="small" maxlength="10"></el-input>
+                  </div>
+                </div>
             <div slot="footer" class="dialog-footer">
-              <el-button @click="dialogFormVisible = false">取 消</el-button>
-              <el-button type="primary" @click="dialogFormVisible = false;pub" >确 定</el-button>
+              <el-button @click="dialogFormVisible = false">取 消 发 布</el-button>
+              <el-button type="primary" @click="pub" >确 定 发 布</el-button>
             </div>
           </el-dialog>
         </div>
@@ -58,38 +60,43 @@
     <div class="edit-content">
       <mavon-editor
         ref="md"
+        :ishljs="true"
         v-model="value"
         @change="renderValue"
         @imgAdd="$imgAdd"
         @imgDel="$imgDel"
-        @navigationToggle="navigationToggle"
       />
     </div>
   </div>
 </template>
 <script>
 import { Base64 } from "js-base64";
-import { pubArticle,pubPic } from "@/api/classic";
+import { pubArticle,pubPic,getCategoryList,UpdateArticle ,getArticleDetail} from "@/api/classic";
 import Person from "@/components/header/components/Person";
 export default {
+  mounted(){
+    console.log(this.$route.query.article_id)
+    if(this.$route.query.article_id){
+      getArticleDetail(this.$route.query.article_id).then((res) => {
+        this.value = res.data.rcontent;
+        this.title = res.data.title
+        this.imageUrl = res.data.image
+        this.label = res.data.label
+        this.categoryItem = res.data.classify_name
+        });
+    } 
+  },
   data() {
     return {
-      form: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
-        },
-        formLabelWidth: '120px',
+      categoryItem:"情感",
+      label:"",
+      category:[],
       dialogFormVisible:false,
       imageUrl: '',
       title: "",
       value: "",
       content:"",
+      rcontent:"",
       headers: {
         // "Content-Type": "multipart/form-data",
         Authorization:
@@ -102,25 +109,53 @@ export default {
     Person,
   },
   methods: {
-    navigationToggle(status,value){
-      console.log(value)
+    selectCategory(item){
+      this.categoryItem = item
+      console.log(item)
+    },
+    prepub(){
+      if(!this.title){
+        this.$message.warning("请填写标题")
+        return 
+      }
+      if(!this.content){
+        this.$message.warning("请填写内容")
+        return 
+      }
+      this.dialogFormVisible = true
+      getCategoryList().then((res)=>{
+        console.log(res)
+        this.category = res.data
+      })
     },
     imageLoad() {
       this.upimgShow = !this.upimgShow;
     },
     pub() {
+      this.dialogFormVisible = false
+      
       let data = {
         title:this.title,
-        label:"测试",
+        label:this.label,
         content:this.content,
+        rcontent:this.rcontent,
+        classify:this.categoryItem,
         image:this.imageUrl,
       }
-      console.log(this.form)
-      // pubArticle(data).then((res)=>{
-      //   console.log(res)
-      // })
+      if(this.$route.query.article_id){
+        data.article_id = this.$route.query.article_id
+        UpdateArticle(data).then((res)=>{
+          console.log(res)
+        })
+      }else{
+        pubArticle(data).then((res)=>{
+        console.log(res)
+      })
+      }
+      
     },
     renderValue(value,render) {
+      this.rcontent = value
       this.content = render
     },
     $imgAdd(pos, $file) {
@@ -157,6 +192,14 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.categoryactive{
+  border: 1px solid rgb(12, 118, 204) !important;
+  color: rgb(38, 137, 218) !important;
+  background-color: rbg(242,248,255) !important;
+}
+::v-deep .el-dialog__body{
+  height: 300px;
+}
 .avatar {
     width: 358px !important;
     height: 178px !important;
@@ -182,6 +225,10 @@ export default {
   }
 ::v-deep .el-input--small{
   width: 140px;
+}
+.classify ::v-deep .el-input__inner{
+  width: 140px;
+  height: 32px;
 }
 .edit-title ::v-deep .el-input__inner:focus {
   border-color: rgba(#000, 0);
@@ -219,6 +266,47 @@ export default {
       width: 500px;
       justify-content: space-between;
       align-items: center;
+      .pub{
+        .other-info{
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          .classify{
+            display: flex;
+            flex-direction: column;
+            width: 50%;
+            .category{
+              display: flex;
+              flex-wrap: wrap;
+              margin-top: 10px;
+              font-size: 16px;
+              .category-item{
+                padding: 5px 10px;
+                margin: 5px 10px;
+                color: #8c939d;
+                border: 1px solid #8c939d;
+                cursor: pointer;
+              }
+            }
+            margin-bottom: 100px;
+            span{
+              margin: auto;
+              font-size: 16px;
+              font-weight: 600;
+              padding: 10px 0;
+              color: #8c939d;
+            }
+          }
+          .label{
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            span{
+              margin-right: 10px;
+            }
+          }
+        }
+      }
       .img-btn {
         margin: 0 10px;
         cursor: pointer;

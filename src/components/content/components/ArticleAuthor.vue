@@ -8,7 +8,9 @@
         <div class="author-name">{{nickname}}</div>
         <div class="pub-info">
           <span class="pub-time">{{pub_time}}</span><span class="read-nums">阅读 {{read_nums}}</span>
+          <span class="edit" @click="JumpEdit">编辑</span>
         </div>
+        
       </div>
     </div>
     <div class="follow">
@@ -30,7 +32,11 @@ export default {
     };
   },
   props: ["articleInfo"],
-
+  methods:{
+    JumpEdit(){
+      this.$router.push({path:"/edit",query:{article_id:this.articleInfo.id}})
+    }
+  },
   watch: {
     articleInfo() {
       this.read_nums = this.articleInfo.read_nums
@@ -73,15 +79,19 @@ export default {
         font-weight: 600;
       }
       .pub-info {
+        font-size: 14px;
+        color: gray;
         .pub-time {
-          color: gray;
-          font-size: 14px;
           margin-right: 10px;
         }
-        .read-nums {
-          color: gray;
-          font-size: 14px;
+        .edit{
+          margin-left: 10px;
+          cursor: pointer;
+          &:hover{
+            color: blue;
+          }
         }
+        
       }
     }
   }

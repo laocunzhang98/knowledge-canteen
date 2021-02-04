@@ -6,7 +6,10 @@
           <article-card :result="item"></article-card>
         </el-card>
       </li>
+      <!-- <li v-for="(item,index) in count" class="list-item" :key="index">{{item}}</li> -->
     </ul>
+    <p v-if="loading">加载中...</p>
+    <p v-if="noMore">没有更多了</p>
   </div>
 </template>
 
@@ -22,31 +25,34 @@ export default {
       })
       .catch();
   },
+  computed: {
+      noMore () {
+        return this.count >= 20
+      },
+      disabled () {
+        return this.loading || this.noMore
+      }
+    },
   components:{
     ArticleCard
   },
   data() {
     return {
-      count: 10,
       loading: false,
       result: [],
     };
   },
-  computed: {
-    noMore() {
-      return this.count >= 20;
-    },
-    disabled() {
-      return this.loading || this.noMore;
-    },
-  },
+
   methods: {
     load() {
-      this.loading = true;
-      setTimeout(() => {
-        this.count += 2;
-        this.loading = false;
-      }, 2000);
+      // this.loading = true;
+      // setTimeout(() => {
+      //   getArticleList().then((res)=>{
+      //     console.log(res.data)
+      //     this.result.concat(res.data)
+      //   })
+      //   this.loading = false;
+      // }, 1000);
     },
   },
 };

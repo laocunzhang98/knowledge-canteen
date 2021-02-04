@@ -1,9 +1,10 @@
 import Vue from 'vue';
 import {
   Input, Button, Row, Col, Tabs, TabPane, Menu, Submenu, MenuItemGroup, MenuItem, Dropdown, DropdownMenu, DropdownItem
-  ,Card,InfiniteScroll,Upload,Dialog,Calendar,DatePicker,Table,TableColumn,Tag,Form,FormItem,Select,Option,Backtop,Icon
+  ,Card,InfiniteScroll,Upload,Dialog,Calendar,DatePicker,Table,TableColumn,Tag,Form,FormItem,Select,Option,Backtop,Icon,Progress
 } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+import vue from '../main';
 
 Vue.use(Input);
 Vue.use(Button);
@@ -32,5 +33,5 @@ Vue.use(Select)
 Vue.use(Option)
 Vue.use(Backtop)
 Vue.use(Icon)
-
+Vue.use(Progress)
 Vue.use(InfiniteScroll)

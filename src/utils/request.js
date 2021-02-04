@@ -3,6 +3,8 @@ import {Base64} from 'js-base64'
 import router from '../router/index'
 import vue from "../main"
 
+axios.defaults.timeout =  60000;
+
 const service = axios.create({
   baseURL:"/api",
   timeout:5000

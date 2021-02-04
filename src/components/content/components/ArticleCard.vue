@@ -2,14 +2,17 @@
   <div class="content" @click="Aticledetail">
     <div class="info-box">
       <div class="meta-row">
-        <div class="nickname">{{result.name}} <span>·</span></div>
-        <div class="pubtime"><time-diff :date="result.createdAt"></time-diff><span>·</span></div>
-        <div class="label">这是标签</div>
+        <div class="nickname">{{result.name}} <span>·</span> </div>
+        <div class="pubtime"><time-diff :date="result.createdAt"></time-diff> <span>·</span> </div>
+        <div class="label">{{result.label}}</div>
       </div>
       <div class="title-row">{{result.title}}</div>
       <div class="action-row">
-        <div class="favor" @click.stop="favor"><img src="../../../assets/home/favorActive.png" alt=""><span>{{result.fav_nums}}</span></div>
-        <div class="comment"><img src="../../../assets/home/common.png" alt=""><span>{{result.com_nums}}</span></div>
+        <div class="favor" @click.stop="favor">
+          <img :src="favorImg" alt="" v-show="!favorShow">
+          <img :src="favorImgActive" alt="" v-show="favorShow">
+          <span :class="{favnum:favorShow}">{{result.fav_nums}}</span></div>
+        <div class="comment"><img src="@/assets/home/common.png" alt=""><span>{{result.com_nums}}</span></div>
       </div>
     </div>
     <div class="img-box"><img :src="result.image" alt=""></div>
@@ -18,16 +21,27 @@
 
 <script>
 import TimeDiff from '@/utils/TimeDiff'
-import {Favor} from "@/api/classic"
+import {Favor,getFavorList} from "@/api/classic"
  export default {
    data(){
      return {
-       favorImg : "../../../assets/home/favor.png"
+       favorImg :require("@/assets/home/favor.png"),
+       favorImgActive:require("@/assets/home/favorActive.png"),
+       articleList:[],
+       favorShow:false
      }
    },
    mounted(){
-     console.log(this.result.id)
+     getFavorList().then(res=>{
+       if(res.code==200){
+          this.articleList = res.data
+          if(this.articleList.indexOf(this.result.id)!=-1){
+            this.favorShow = true
+          }
+       }
+     })
    },
+
    components:{
      TimeDiff
    },
@@ -36,12 +50,14 @@ import {Favor} from "@/api/classic"
        type:Object
      }
    },
+   
    methods:{
      favor(){
       //  this.favorImg = "../../../assets/home/favorActive.png"
       Favor({article_id:this.result.id}).then((res)=>{
         if(res.code ===200){
           this.result.fav_nums += 1
+          this.favorShow = true
         }
       })
      },
@@ -68,9 +84,18 @@ import {Favor} from "@/api/classic"
     .info-box{
       margin-left:30px;
       .meta-row{
+        color: #b2bac2;
+        font-size: 14px;
         display: flex;
       }
+      .title-row{
+        margin-top: 10px;
+        color: #2e3135;
+        font-size: 18px;
+        font-weight: 600;
+      }
       .action-row{
+        margin-top: 15px;
         display: flex;
         .comment,.favor{
           height: 25px;
@@ -81,23 +106,29 @@ import {Favor} from "@/api/classic"
           padding: 0 10px;
           margin-right: 10px;
           cursor: pointer;
-          color: rgba(#000, 0.4);
+          span{
+            color: rgba(#000, 0.4);
+          }
           img{
             height: 15px;
             width: 15px;
             margin-right: 5px;
           }
-         
         }
-        
       }
     }
     .img-box{
       margin-right: 30px;
       img{
+        box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 12px 0px;
+        border-radius: 4px;
         height: 80px;
         width: 80px;
       }
     }
+  }
+  .favnum{
+    color: rbg(26,250,41) !important;
+    font-weight: 600;
   }
 </style>

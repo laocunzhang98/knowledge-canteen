@@ -1,5 +1,5 @@
 
-function debounce(func, wait) {
+export function debounce(func, wait) {
   var timeout;
   return function () {
     var context = this;
@@ -11,7 +11,7 @@ function debounce(func, wait) {
   }
 }
 
-function throttle(fn, interval) {
+export function throttle(fn, interval) {
  
   let flag = true;
   return function(...args) {
@@ -24,7 +24,7 @@ function throttle(fn, interval) {
     }, interval);
   };
 }
-function getFormatDate() {
+export function getFormatDate() {
   var date = new Date();
   var seperator1 = "-";
   var year = date.getFullYear();
@@ -40,8 +40,3 @@ function getFormatDate() {
   return currentdate;
 }
 
-export {
-  debounce,
-  throttle,
-  getFormatDate
-}
