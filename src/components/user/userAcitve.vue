@@ -15,5 +15,7 @@ export default {
 </script>
 
 <style lang="scss">
-  
+  .user-active{
+    margin-top: 20px;
+  }
 </style>

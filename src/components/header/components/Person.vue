@@ -1,12 +1,12 @@
 <template>
   <div class="person">
     <el-dropdown trigger="click">
-    <div class="person-info" @click="JumpUserInfo" v-show="showLogin"><img :src="userInfo.avatar" alt=""></div>
+    <div class="person-info"  v-show="showLogin"><img :src="userInfo.avatar" alt=""></div>
       <el-dropdown-menu slot="dropdown" >
         <el-dropdown-item><i class="el-icon-edit"></i> 写文章</el-dropdown-item>
-        <el-dropdown-item><i class="el-icon-user"></i> 个人中心</el-dropdown-item>
+        <el-dropdown-item ><div @click="JumpUserInfo"><i class="el-icon-user" ></i> 个人中心</div></el-dropdown-item>
         <el-dropdown-item><i class="el-icon-ice-cream-round"></i> 我赞过的</el-dropdown-item>
-        <el-dropdown-item divided><i class="el-icon-thumb"></i> 登出</el-dropdown-item>
+        <el-dropdown-item divided ><div @click="Logout"><i class="el-icon-thumb" ></i> 登出</div></el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
     <div class="login-btn" @click="jumpLogin" v-show="!showLogin"><el-button type="primary" size="small">登录</el-button></div>
@@ -43,6 +43,10 @@ export default {
     },
     jumpLogin(){
       this.$router.push('/user')
+    },
+    Logout(){
+      localStorage.removeItem("token")
+      this.$router.push("/login")
     }
   }
 }
@@ -69,6 +73,7 @@ export default {
       height: 50px;
       width: 50px;
       margin-right: 30px;
+      cursor: pointer;
       img{
         position: absolute;
         border-radius: 20px;

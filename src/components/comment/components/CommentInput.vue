@@ -48,8 +48,8 @@ export default {
         content:this.comment
       }
       comment(data).then(res=>{
-        console.log(res)
         this.comment = ""
+        this.$emit("success",res.data)
       })
     }
   },

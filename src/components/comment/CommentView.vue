@@ -1,6 +1,6 @@
 <template>
   <div class="comment-box">
-    <comment-input :articleInfo="articleInfo"></comment-input>
+    <comment-input :articleInfo="articleInfo" @success="success"></comment-input>
     <div class="comment-display">
       <div v-for="(comment,index) in commentList" :key="index">
         <comment-card :comment="comment"></comment-card>
@@ -19,14 +19,8 @@ import CommentCard from "@/components/comment/components/CommentCard";
 export default {
   watch: {
     articleInfo(){
-      getCommentList({article_id:this.articleInfo.id}).then((res)=>{
-        if(res.code ==200){
-          console.log(res.data)
-          this.commentList = res.data
-        }
-      })
+      this.getDataList()
     }
-  
   },
   data(){
     return {
@@ -43,6 +37,26 @@ export default {
     CommentInput,
     CommentCard,
   },
+  methods:{
+    success(){
+      console.log("success")
+      setTimeout(() => {
+        getCommentList({article_id:this.articleInfo.id}).then((res)=>{
+        if(res.code ==200){
+          this.commentList = res.data
+          console.log(this.commentList)
+        }
+      })
+      }, 200);
+    },
+    getDataList(){
+       getCommentList({article_id:this.articleInfo.id}).then((res)=>{
+        if(res.code ==200){
+          this.commentList = res.data
+        }
+      })
+    }
+  }
 };
 </script>
 

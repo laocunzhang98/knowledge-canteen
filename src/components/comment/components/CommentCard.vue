@@ -7,7 +7,7 @@
         <div v-if="comment.replier" class="replier">回复 <span>{{comment.replier}}: </span></div>
         {{comment.content}}</div>
       <div class="content-footer">
-        <div class="time"><time-diff :date="comment.createdAt"></time-diff></div>
+        <div class="time"> <time-diff :date="comment.createdAt"></time-diff></div>
         <div class="reply"><i class="el-icon-chat-dot-round"></i> 回复</div>
       </div>
     </div>
@@ -15,24 +15,24 @@
 </template>
 
 <script>
+import {getFormatDate} from "@/utils/util"
 import TimeDiff from '@/utils/TimeDiff'
 export default {
+  data(){
+    return {
+    }
+  },
+  components:{
+    TimeDiff
+  },
   props:{
     comment:{
       type:Object
     },
   },
-  components:{
-    TimeDiff
-  },
-  watch:{
-    comment(){
-      console.log(111)
-    }
-  },
-  mounted(){
-    console.log(this.comment)
-  }
+  
+
+
 }
 </script>
 

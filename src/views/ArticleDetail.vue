@@ -13,7 +13,6 @@
             </div>
             <div class="title"><div id="flag">{{title}}</div></div>
           </div>
-          <!-- <div><img :src="imageUrl" alt=""></div> -->
           <div class="content">
             <mavon-editor codeStyle="monokai" v-html="content" style="padding:25px" ref="helpDocs"></mavon-editor>
           </div>
