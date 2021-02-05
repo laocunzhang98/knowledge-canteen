@@ -1,6 +1,6 @@
 <template>
   <div class="article-content">
-    <el-row :gutter="20">
+    <el-row>
       <el-col :span="5">
         <div></div>
       </el-col>
@@ -18,7 +18,7 @@
             <mavon-editor codeStyle="monokai" v-html="content" style="padding:25px" ref="helpDocs"></mavon-editor>
           </div>
           <div class="comment">
-            <comment-view></comment-view>
+            <comment-view :articleInfo="articleInfo"></comment-view>
           </div>
         </div>
       </el-col>
@@ -51,7 +51,7 @@
               </template>
             </about-article>
           </div>
-          <div class="article-nav">
+          <div class="article-nav" :class="{fixed:isFixed}">
             <div class="catalog">目录</div>
             <ul class="nav-list">
               <li
@@ -81,11 +81,13 @@ import { throttle } from "@/utils/util";
 export default {
   data() {
     return {
+      scrollTop:0,
+      isFixed:false,
       id:"",
       content: "",
       title: "",
       imageUrl: "",
-      articleInfo: "",
+      articleInfo: {},
       rcontent: "",
       navList: [],
       titleClickScroll: false,
@@ -100,6 +102,7 @@ export default {
     aboutArticle
   },
   created(){
+    let that = this
     getArticleDetail(this.$route.params.id).then((res) => {
       // console.log(res);
       this.content = res.data.content;
@@ -108,8 +111,20 @@ export default {
       this.articleInfo = res.data;
       this.rcontent = res.data.rcontent;
       this.navList = this.handleNavTree();
-      console.log(this.navList);
+      this.uid = this.articleInfo.uid
+      console.log(this.articleInfo);
     });
+    window.onscroll = throttle(function(){
+      // console.log("距离顶部距离"+that.$el.querySelector(".article-nav").offsetTop)
+      if(document.documentElement.scrollTop>=that.$el.querySelector(".article-nav").offsetTop&&!that.isFixed){
+        that.scrollTop = that.$el.querySelector(".article-nav").offsetTop
+        that.isFixed = true
+      }
+      if(document.documentElement.scrollTop<that.scrollTop-10){
+        that.isFixed = false
+      }
+      // console.log("卷去的距离是:"+document.documentElement.scrollTop)
+    },50)
   },
   mounted() {
     this.id = this.$route.params.id
@@ -231,6 +246,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.fixed{
+  top:50px;
+  position: fixed;
+}
 li {
   padding: 3px 10px;
 }
@@ -289,7 +308,6 @@ li {
   margin-top: 20px;
   .content-box {
     box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 12px 0px;
-    width: 100%;
     .author-info {
       background-color: #fff;
       .cover {
@@ -318,6 +336,7 @@ li {
   }
   .aside {
     width: 240px;
+    margin-left: 20px;
     .about-article{
       margin-top: 20px;
     }

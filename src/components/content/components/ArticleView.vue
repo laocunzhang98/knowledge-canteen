@@ -1,33 +1,47 @@
 <template>
-  <div class="infinite-list-wrapper" style="overflow:auto">
-    <ul class="list" v-infinite-scroll="load" infinite-scroll-disabled="disabled">
+  <div>
+    <ul class="list" >
       <li v-for="(item,index) in result" class="list-item" :key="index">
-        <el-card class="box-card">
+        <el-card class="box-card" >
           <article-card :result="item"></article-card>
         </el-card>
       </li>
       <!-- <li v-for="(item,index) in count" class="list-item" :key="index">{{item}}</li> -->
     </ul>
-    <p v-if="loading">加载中...</p>
-    <p v-if="noMore">没有更多了</p>
+    <p v-if="loading" style="text-align:center">加载中...</p>
+    <p v-if="noMore" style="text-align:center">没有更多了...</p>
   </div>
 </template>
 
 <script>
 import { getArticleList } from "../../../api/classic";
 import ArticleCard from "./ArticleCard"
+import { throttle } from "@/utils/util";
 export default {
+  created(){
+    let that = this
+    window.onscroll = throttle(function(){
+   		var scrollTop = document.documentElement.scrollTop||document.body.scrollTop;
+   		var windowHeight = document.documentElement.clientHeight || document.body.clientHeight;
+   		var scrollHeight = document.documentElement.scrollHeight||document.body.scrollHeight;
+        if(scrollTop+windowHeight==scrollHeight){
+           //写后台加载数据的函数
+          that.load()
+        }   
+    },200)
+  },
   mounted() {
     getArticleList()
       .then((res) => {
-        console.log(res.data)
-        this.result = res.data;
+        console.log(res)
+        this.result = res.data.data;
+        this.countSize = res.data.countSize
       })
       .catch();
   },
   computed: {
       noMore () {
-        return this.count >= 20
+        return this.count >= this.countSize-1
       },
       disabled () {
         return this.loading || this.noMore
@@ -39,20 +53,31 @@ export default {
   data() {
     return {
       loading: false,
+      countSize:0,
       result: [],
+      page:0,
+      count:10
     };
   },
 
   methods: {
     load() {
       // this.loading = true;
-      // setTimeout(() => {
-      //   getArticleList().then((res)=>{
-      //     console.log(res.data)
-      //     this.result.concat(res.data)
-      //   })
-      //   this.loading = false;
-      // }, 1000);
+      this.page += 1
+      let params = {
+        pageSize:10,
+        page:this.page
+      }
+      setTimeout(() => {
+        getArticleList(params).then((res)=>{
+          this.result = this.result.concat(res.data.data)
+          this.loading = false;
+          this.count+= res.data.data.length
+        })
+         .catch(err => {
+          console.log(err);
+        });
+      }, 2000);
     },
   },
 };

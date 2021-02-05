@@ -1,8 +1,9 @@
 import request from '../utils/request'
 
-export function getUserInfo(){
+export function getUserInfo(params){
   return request({
     url:"/user/userinfo",
-    method:"GET"
+    method:"GET",
+    params
   })
 }

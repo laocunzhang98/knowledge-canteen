@@ -26,7 +26,8 @@ export default {
     console.log(params)
     getArticleList(params).then((res)=>{
       if(res.code==200){
-        this.articleList = res.data
+        console.log(res)
+        this.articleList = res.data.data
       }
     })
     }

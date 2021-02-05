@@ -7,3 +7,10 @@ export function comment(data){
     data
   })
 }
+export function getCommentList(params){
+  return request({
+    url:"/comment/getcomment",
+    method:"GET",
+    params
+  })
+}
