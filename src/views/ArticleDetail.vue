@@ -1,10 +1,10 @@
 <template>
-  <div class="article-content">
+  <div class="article-content" @click="ceshi">
     <el-row>
-      <el-col :span="5">
+      <el-col :span="5" :xs="0">
         <div></div>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="12"  :xs="24">
         <div class="content-box">
           <article-author :articleInfo="articleInfo"></article-author>
           <div class="author-info">
@@ -21,7 +21,7 @@
           </div>
         </div>
       </el-col>
-      <el-col :span="7">
+      <el-col :span="7" :xs="0">
         <div class="aside">
           <div class="about-author">
             <about-author>
@@ -76,7 +76,7 @@ import ArticleAuthor from "@/components/content/components/ArticleAuthor";
 import aboutAuthor from "@/common/components/aboutAuthor";
 import aboutArticle from '@/common/components/aboutArticle'
 import { throttle } from "@/utils/util";
-
+import { mapGetters, mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -99,6 +99,9 @@ export default {
     CommentView,
     aboutAuthor,
     aboutArticle
+  },
+  computed:{
+    ...mapGetters(["commentShow"])
   },
   created(){
     let that = this
@@ -129,6 +132,10 @@ export default {
     this.id = this.$route.params.id
   },
   methods: {
+    ...mapMutations(["setCommentShow"]),
+    ceshi(){
+      this.setCommentShow(false)
+    },
     currentClick(index) {
       this.activeIndex = index;
       this.getDocsSecondLevels(index);
@@ -308,6 +315,7 @@ li {
   .content-box {
     box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 12px 0px;
     .author-info {
+      width: 100%;
       background-color: #fff;
       .cover {
         padding-bottom: 20px;
@@ -318,6 +326,9 @@ li {
         }
       }
       .title {
+        white-space:wrap;
+        text-overflow:ellipsis;
+        overflow: hidden;
         padding: 20px 25px;
         font-weight: 600;
         font-size: 30px;

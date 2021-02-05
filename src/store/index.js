@@ -8,7 +8,8 @@ export default new Vuex.Store({
   state: {
     isShow:true,
     headerIndex:0,
-    headerShow:true
+    headerShow:true,
+    commentShow:false
   },
   getters,
   mutations

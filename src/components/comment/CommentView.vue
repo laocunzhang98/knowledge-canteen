@@ -3,9 +3,9 @@
     <comment-input :articleInfo="articleInfo" @success="success"></comment-input>
     <div class="comment-display">
       <div v-for="(comment,index) in commentList" :key="index">
-        <comment-card :comment="comment"></comment-card>
+        <comment-card :comment="comment" @secondesuccess="secondeSuccess"></comment-card>
         <div class="second-comment" v-for="(second,index) in comment.second" :key="index">
-          <comment-card :comment="second"></comment-card>
+          <comment-card :comment="second" @secondesuccess="secondeSuccess"></comment-card>
         </div>
       </div>
     </div>
@@ -32,19 +32,27 @@ export default {
       type: Object,
     },
   },
-
+  // mounted(){
+  //   window.addEventListener("click",this.otherClose())
+  // },
   components: {
     CommentInput,
     CommentCard,
   },
   methods:{
+    otherClose(){
+
+    },
+    secondeSuccess(){
+      console.log(22)
+      this.success()
+    },
     success(){
       console.log("success")
       setTimeout(() => {
         getCommentList({article_id:this.articleInfo.id}).then((res)=>{
         if(res.code ==200){
           this.commentList = res.data
-          console.log(this.commentList)
         }
       })
       }, 200);
@@ -53,6 +61,7 @@ export default {
        getCommentList({article_id:this.articleInfo.id}).then((res)=>{
         if(res.code ==200){
           this.commentList = res.data
+          console.log(this.commentList)
         }
       })
     }

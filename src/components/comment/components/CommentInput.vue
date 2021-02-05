@@ -32,6 +32,9 @@ export default {
   props:{
     articleInfo:{
       type:Object
+    },
+    secondComment:{
+      type:Object
     }
   },
   data() {
@@ -41,16 +44,28 @@ export default {
   },
    methods: {
     commitComment(){
-      console.log(this.articleInfo)
+      let article_id,article_uid,oid,comment_id
+      if(this.articleInfo){
+        article_id=this.articleInfo.id,
+        article_uid=this.articleInfo.uid
+      }else{
+        article_id = this.secondComment.article_id,
+        article_uid= this.secondComment.article_uid
+        oid = this.secondComment.oid,
+        comment_id =this.secondComment.comment_id
+      }
       let data  = {
-        article_id:this.articleInfo.id,
-        article_uid:this.articleInfo.uid,
-        content:this.comment
+        article_id:article_id,
+        article_uid:article_uid,
+        content:this.comment,
+        oid: oid || 0,
+        comment_id: comment_id || 0
       }
       comment(data).then(res=>{
         this.comment = ""
         this.$emit("success",res.data)
       })
+      
     }
   },
 }
@@ -74,11 +89,7 @@ el-input {
       justify-content: space-between;
       align-items: center;
       width: 100%;
-      
-      
-
       .avatar {
-        margin-left: 10px;
         img {
           width: 36px;
           height: 36px;

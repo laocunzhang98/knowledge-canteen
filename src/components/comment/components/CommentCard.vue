@@ -8,8 +8,9 @@
         {{comment.content}}</div>
       <div class="content-footer">
         <div class="time"> <time-diff :date="comment.createdAt"></time-diff></div>
-        <div class="reply"><i class="el-icon-chat-dot-round"></i> 回复</div>
+        <div class="reply" @click.stop="reply"><i class="el-icon-chat-dot-round"></i> 回复</div>
       </div>
+      <div v-if="showInput" @click.stop><comment-input :secondComment="secondComment" @success="success"></comment-input></div>
     </div>
   </div>
 </template>
@@ -17,20 +18,45 @@
 <script>
 import {getFormatDate} from "@/utils/util"
 import TimeDiff from '@/utils/TimeDiff'
+import CommentInput from '@/components/comment/components/CommentInput'
+import {comment} from "@/api/comment"
 export default {
   data(){
     return {
+      showInput:false,
+      secondComment:{
+        article_id:this.comment.article_id,
+        article_uid:this.comment.article_uid,
+        comment_id:this.comment.comment_id==0?this.comment.id:this.comment.comment_id,
+        oid:this.comment.uid
+      }
     }
   },
+
   components:{
-    TimeDiff
+    TimeDiff,
+    CommentInput
   },
   props:{
     comment:{
       type:Object
     },
   },
-  
+  mounted(){
+    document.body.addEventListener("click",()=>{
+      this.showInput =false
+    },false)
+  },
+  methods:{
+    reply(){
+      this.showInput = !this.showInput
+    },
+    success(){
+      console.log(1111)
+      this.showInput = false
+      this.$emit("secondesuccess","success")
+    }
+  }
 
 
 }

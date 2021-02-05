@@ -10,5 +10,8 @@ export default {
   },
   setHeaderShow:(state,headerShow)=>{
     state.headerShow = headerShow
+  },
+  setCommentShow:(state,commentShow)=>{
+    state.commentShow = commentShow
   }
 }
