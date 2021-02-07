@@ -84,6 +84,7 @@ export default {
   display: flex;
   .avatar {
     width: 8%;
+    min-width: 50px;
     margin-top: 15px;
     img {
       margin-left: 10px;

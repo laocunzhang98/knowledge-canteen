@@ -7,12 +7,12 @@
         <div class="support">
           <img src="../../assets/home/zan.png" alt />
           <span>获得点赞</span>
-          <span>555555</span>
+          <span>{{all_favs}}</span>
         </div>
         <div class="read">
           <img src="../../assets/home/read.png" alt />
           <span>文章被阅读</span>
-          <span>999999</span>
+          <span>{{all_reads}}</span>
         </div>
       </div>
     </el-card>
@@ -20,7 +20,31 @@
 </template>
 
 <script>
-export default {};
+import {getuserArticleNum} from "@/api/user"
+export default {
+  props:{
+    articleUid:{
+      type:Number
+    }
+  },
+  watch:{
+    articleUid(){
+      getuserArticleNum({id:this.articleUid}).then(res=>{
+        console.log(res)
+        if(res.code==200){
+          this.all_favs = res.data[0].all_favs
+          this.all_reads = res.data[0].all_reads
+        }
+      })
+    }
+  },
+  data(){
+    return {
+      all_favs:0,
+      all_reads:0
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -38,6 +62,7 @@ export default {};
       display: flex;
       align-items: center;
       padding-left: 5px;
+      cursor: pointer;
       span{
         font-size: 14px;
         font-weight: 600;
@@ -53,6 +78,7 @@ export default {};
       align-items: center;
       margin-top: 15px;
       padding-left: 5px;
+      cursor: pointer;
       span{
         font-size: 14px;
         font-weight: 600;

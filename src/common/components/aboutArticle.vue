@@ -23,7 +23,6 @@ export default {
       pageSize:4,
       article_id:this.articleId
     }
-    console.log(params)
     getArticleList(params).then((res)=>{
       if(res.code==200){
         console.log(res)

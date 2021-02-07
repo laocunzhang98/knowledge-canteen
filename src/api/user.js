@@ -34,3 +34,10 @@ export function editUserInfo(data){
     data
   })
 }
+export function getuserArticleNum(params){
+  return request({
+    url:"/classic/articleall",
+    method:"GET",
+    params
+  })
+}

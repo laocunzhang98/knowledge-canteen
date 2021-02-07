@@ -24,7 +24,7 @@
       <el-col :span="7" :xs="0">
         <div class="aside">
           <div class="about-author">
-            <about-author>
+            <about-author :articleUid="uid">
               <template v-slot:title>
                 <div>
                   关于作者
@@ -34,8 +34,8 @@
                 <div class="auth-info">
                   <img src="../assets/header/avator.jpg" alt="">
                   <div class="user-item">
-                    <div class="nickname">这是名字</div>
-                    <div class="position">这是身份111111111111111</div>
+                    <div class="nickname">{{articleInfo.nickname}}</div>
+                    <div class="position" :title="articleInfo.describe">{{articleInfo.describe}}</div>
                   </div>
                 </div>
               </template>
@@ -92,6 +92,7 @@ export default {
       titleClickScroll: false,
       docsFirstLevels: [],
       docsSecondLevels: [],
+      uid:0
     };
   },
   components: {
@@ -114,7 +115,6 @@ export default {
       this.rcontent = res.data.rcontent;
       this.navList = this.handleNavTree();
       this.uid = this.articleInfo.uid
-      console.log(this.articleInfo);
     });
     window.onscroll = throttle(function(){
       // console.log("距离顶部距离"+that.$el.querySelector(".article-nav").offsetTop)
@@ -368,6 +368,8 @@ li {
           text-overflow: ellipsis;
           white-space: nowrap;
           width: 120px;
+          cursor: pointer;
+
         }
       }
       img{
