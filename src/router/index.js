@@ -64,6 +64,11 @@ const routes = [
         component:()=>import("../views/ArticleDetail.vue"),
         name:"Article"
       },
+      {
+        path:"/peredit",
+        component:()=>import("../components/user/userEdit.vue"),
+        name:"peredit"
+      }
     ]
   },
   {

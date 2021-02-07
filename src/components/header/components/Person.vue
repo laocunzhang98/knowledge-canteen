@@ -3,10 +3,12 @@
     <el-dropdown trigger="click">
     <div class="person-info"  v-show="showLogin"><img :src="userInfo.avatar" alt=""></div>
       <el-dropdown-menu slot="dropdown" >
-        <el-dropdown-item><i class="el-icon-edit"></i> 写文章</el-dropdown-item>
+        <el-dropdown-item><i class="el-icon-edit" @click="addedit"></i> 写文章</el-dropdown-item>
         <el-dropdown-item ><div @click="JumpUserInfo"><i class="el-icon-user" ></i> 个人中心</div></el-dropdown-item>
+        <el-dropdown-item ><div ><i class="el-icon-s-flag"></i> 我的圈子</div></el-dropdown-item>
         <el-dropdown-item><i class="el-icon-ice-cream-round"></i> 我赞过的</el-dropdown-item>
-        <el-dropdown-item divided ><div @click="Logout"><i class="el-icon-thumb" ></i> 登出</div></el-dropdown-item>
+        <el-dropdown-item><i class="el-icon-s-check"></i> 我关注的</el-dropdown-item>
+        <el-dropdown-item divided ><div @click="Logout"><i class="el-icon-thumb"></i>登出</div></el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
     <div class="login-btn" @click="jumpLogin" v-show="!showLogin"><el-button type="primary" size="small">登录</el-button></div>
@@ -38,6 +40,9 @@ export default {
     }
   },
   methods:{
+    addedit(){
+      this.$router.push("/edit")
+    },
     JumpUserInfo(){
       this.$router.push('/user')
     },
@@ -70,16 +75,16 @@ export default {
     justify-content: flex-end;
     align-items: center;
     .person-info{
-      height: 50px;
-      width: 50px;
+      height: 40px;
+      width: 40px;
       margin-right: 30px;
       cursor: pointer;
       img{
         position: absolute;
-        border-radius: 20px;
+        border-radius: 50%;
         z-index: 0;
-        height: 50px;
-        width: 50px;
+        height: 40px;
+        width: 40px;
       }
     }
     .login-btn{

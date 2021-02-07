@@ -3,8 +3,8 @@
     <div class="info-box">
       <div class="meta-row">
         <div class="nickname">{{result.name}} <span>·</span> </div>
-        <div class="pubtime"><time-diff :date="result.createdAt"></time-diff> <span>·</span> </div>
-        <div class="label">{{result.label}}</div>
+        <div class="pubtime"><time-diff :date="result.createdAt"></time-diff></div>
+        <div class="label" v-show="result.label"> <span>· </span> {{result.label}}</div>
       </div>
       <div class="title-row">{{result.title}}</div>
       <div class="action-row">
@@ -15,7 +15,7 @@
         <div class="comment"><img src="@/assets/home/common.png" alt=""><span>{{result.com_nums}}</span></div>
       </div>
     </div>
-    <div class="img-box"><img :src="result.image" alt=""></div>
+    <div class="img-box" v-if="result.image"><img :src="result.image" alt=""></div>
   </div>
 </template>
 

@@ -2,16 +2,16 @@
   <div class="person-info">
     <el-card>
       <el-row class="info-swiper">
-        <el-col class="img-box" :span="6"><img src="" alt=""></el-col>
+        <el-col class="img-box" :span="6"><img :src="avatar" alt=""></el-col>
         <el-col class="info-box" :span="12">
           <div class="info-detail">
-            <span class="nickname"> 华航一枝花</span>
-            <span class="job"><i class="el-icon-ice-cream-round"></i> 前端爱好者</span>
-            <span class="description"><i class="el-icon-s-opportunity"></i> 路漫漫求修远兮,吾将上下而求索.</span>
+            <span class="nickname"> {{nickname}}</span>
+            <span class="job"><i class="el-icon-ice-cream-round"></i> {{job}}</span>
+            <span class="description"><i class="el-icon-s-opportunity"></i> {{describe}}</span>
           </div>
         </el-col>
         <el-col class="active-box" :span="6">
-            <el-button>编辑个人资料</el-button>
+            <el-button @click="editPerson">编辑个人资料</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -19,8 +19,32 @@
 </template>
 
 <script>
+import {getUserInfo} from "@/api/user"
+
 export default {
-  
+  mounted(){
+    getUserInfo().then(res=>{
+      if(res.code==200){
+        this.avatar = res.data.avatar
+        this.job = res.data.job
+        this.describe = res.data.describe
+        this.nickname = res.data.nickname
+      }
+    })
+  },
+  data() {
+    return {
+      avatar:"",
+      job:"",
+      describe:"",
+      nickname:""
+    }
+  },
+  methods:{
+    editPerson(){
+      this.$router.push("/peredit")
+    }
+  }
 }
 </script>
 
@@ -37,6 +61,11 @@ export default {
         width: 80px;
         border-radius: 40px;
         background-color: red;
+        img{
+          height: 80px;
+          width: 80px;
+          border-radius: 40px;
+        }
       }
       .info-box{
         .info-detail{

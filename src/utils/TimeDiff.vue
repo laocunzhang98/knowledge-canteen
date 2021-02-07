@@ -45,7 +45,6 @@ export default {
         var now = new Date().getTime();
         var diffValue = (now - this.dateTimeStamp);
         var monthC =diffValue/month;
-        console.log(monthC)
         var weekC =diffValue/(7*day);
         var dayC =diffValue/day;
         var hourC =diffValue/hour;

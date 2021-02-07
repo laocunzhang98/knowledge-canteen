@@ -21,3 +21,16 @@ export function getIsFollow(params){
     params
   })
 }
+export function getUserArticle(){
+  return request({
+    url:"/classic/userarticle",
+    method:"GET",
+  })
+}
+export function editUserInfo(data){
+  return request({
+    url:"/user/update",
+    method:"PUT",
+    data
+  })
+}
