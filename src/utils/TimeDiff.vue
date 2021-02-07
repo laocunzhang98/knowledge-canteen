@@ -20,6 +20,11 @@ export default {
       dateTimeStamp: ''
     }
   },
+  watch:{
+    date(){
+      this.diffTime()
+    }
+  },
   mounted() {
     this.diffTime()
   },
@@ -37,16 +42,15 @@ export default {
         var day = hour * 24;
         var halfamonth = day * 15;
         var month = day * 30;
-
         var now = new Date().getTime();
-        var diffValue = now - this.dateTimeStamp;
-
+        var diffValue = (now - this.dateTimeStamp);
         var monthC =diffValue/month;
+        console.log(monthC)
         var weekC =diffValue/(7*day);
         var dayC =diffValue/day;
         var hourC =diffValue/hour;
         var minC =diffValue/minute;
-        if (parseInt(monthC) >=1) {
+        if (Math.floor(monthC) >=1) {
           this.content = parseInt(monthC) + '个月前'
         } else if (parseInt(dayC) > 1) {
           this.content = parseInt(dayC) + '天前'
