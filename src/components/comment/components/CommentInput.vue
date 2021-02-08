@@ -8,19 +8,13 @@
             </div>
           </el-col>
           <el-col :span="22">
-            <el-input
-              v-model="comment"
-              placeholder="输入评论"
-              type="textarea"
-              autosize
-              maxlength="200"
-              show-word-limit
-            ></el-input>
+            <div id="textarea" placeholder="输入评论" :contenteditable="true">
+            </div>
           </el-col>
         </div>
       </el-row>
       <div class="commit">
-        <div>表情</div>
+        <emoji></emoji>
         <el-button type="primary" size="small" @click="commitComment">评论</el-button>
       </div>
     </div>
@@ -28,6 +22,7 @@
 
 <script>
 import {comment} from "@/api/comment"
+import emoji from '@/common/components/emoji'
 export default {
   props:{
     articleInfo:{
@@ -42,8 +37,12 @@ export default {
       comment: "",
     };
   },
+  components:{
+    emoji
+  },
    methods: {
     commitComment(){
+      this.comment = document.getElementById("textarea").innerHTML
       let article_id,article_uid,oid,comment_id
       if(this.articleInfo){
         article_id=this.articleInfo.id,
@@ -62,7 +61,7 @@ export default {
         comment_id: comment_id || 0
       }
       comment(data).then(res=>{
-        this.comment = ""
+        document.getElementById("textarea").innerHTML = ""
         this.$emit("success",res.data)
       })
       
@@ -89,6 +88,21 @@ el-input {
       justify-content: space-between;
       align-items: center;
       width: 100%;
+      #textarea{
+        border: 1px solid skyblue;
+        padding: 5px;
+        border-radius: 3px;
+        box-sizing: border-box;
+        outline: 0;
+        &:empty::before {
+            content: attr(placeholder);
+            color: #909090;
+            font-size: 14px;
+        }
+        &:focus{
+          border: 1px solid skyblue;
+        }
+      }
       .avatar {
         img {
           width: 36px;

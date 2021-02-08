@@ -3,7 +3,7 @@
     <el-card>
       <div class="dynamic-swiper">
         <div class="dynamic-input">
-          <div id="textarea" class="textarea" :contenteditable="true" @input="fontCount"></div>
+          <div id="textarea" class="textarea" :contenteditable="true" ></div>
         </div>
         <div class="dynamic-image" v-show="visibileimg">
           <el-upload
@@ -28,20 +28,7 @@
       </div>
       <div class="dynamic-menu">
         <div class="topic">
-          <div id="topic-emoji" @click="fontCount()">
-            <div class="emoji-btn"  @click.stop="emojiActive=!emojiActive">
-              <i class="iconfont icon-A"></i>
-              <span style="font-size:14px;color:blue">表情</span>
-            </div>   
-            <div class="emoji-list" v-show="emojiActive" @click.stop="emojiActive=true">
-              <div class="triangle"></div>
-              <ul>
-                <li class="emoji-item" v-for="(item,index) in emojiLists.srcs" :key="index" @click="emojiSelect(index)">
-                  <img :src="item" class="emoji" alt />
-                </li>
-              </ul>
-            </div>
-          </div>
+          <div><emoji></emoji></div>
           <div class="pic-upload">
             <div class="pic-btn" @click="uploadimg">
               <i class="el-icon-picture-outline"></i>
@@ -81,15 +68,14 @@
 </template>
 
 <script>
-import emojiList from "./emoji";
+import emoji from '@/common/components/emoji'
 export default {
+  components: { emoji },
   data() {
     return {
       textarea: "",
       fontCounts: 300,
       inputCount: 0,
-      emojiLists: emojiList,
-      emojiActive: false,
 
       dialogImageUrl: "",
       dialogVisible: false,
@@ -118,29 +104,9 @@ export default {
       this.dialogVisible = true;
     },
     //处理文件上传end
-    removeHTMLTag(str) {
-      str = str.replace(/<\/?[^>]*>/g, ""); //去除HTML tag
-      str = str.replace(/[ | ]*\n/g, ""); //去除行尾空白
-      str = str.replace(/&nbsp;/gi, ""); //去掉尾部空格
-      return str;
-    },
-    fontCount() {
-      let innertext = document.getElementById("textarea").innerHTML;
-      let strCount = this.removeHTMLTag(innertext).length;
-      this.inputCount = strCount;
-      if (strCount > this.fontCounts) {
-        this.inputCount = this.fontCounts;
-        document.getElementById("textarea").innerHTML = innertext.substr(
-          0,
-          this.fontCounts
-        );
-      }
-    },
+   
+
     // 表情选择
-    emojiSelect(index) {
-      document.getElementById("textarea").innerHTML +=
-        `<img class="emoji" draggable="false" alt="" src="${this.emojiLists.srcs[index]}">`;
-    },
     // 话题选择
     topicSelect(){
 
@@ -171,34 +137,7 @@ export default {
 /deep/.el-button {
   line-height: 0.5;
 }
-.emoji-item:hover {
-  transform: scale(1.3);
-  transition: 0.4s;
-}
-.emoji-list {
-  width: 300px;
-  height: 190px;
-  position: absolute;
-  top: 175px;
-  border-radius: 4px;
-  box-shadow: 0 5px 18px 0 rgba(0, 0, 0, 0.16);
-  background-color: #fff;
-  z-index: 999;
-  ul {
-    display: flex;
-    flex-wrap: wrap;
-    padding: 15px;
-    li {
-      margin: 2px;
-    }
-  }
-}
-/deep/.emoji {
-  width: 22px;
-  height: 22px;
-  margin: 0 2px;
-  vertical-align: sub;
-}
+
 .font-count {
   font-size: 12px;
   position: absolute;
