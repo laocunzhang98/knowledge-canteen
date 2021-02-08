@@ -65,6 +65,10 @@ const routes = [
         name:"Article"
       },
       {
+        path:"/organize/:id",
+        component:()=>import("../views/OrganizeDetail.vue")
+      },
+      {
         path:"/peredit",
         component:()=>import("../components/user/userEdit.vue"),
         name:"peredit"

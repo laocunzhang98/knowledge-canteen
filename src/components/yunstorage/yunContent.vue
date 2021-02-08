@@ -1,11 +1,11 @@
 <template>
   <div class="content-box">
     <el-card class="card-box">
-      <div class="content-header">
+      <!-- <div class="content-header">
         <el-menu default-active="1" class="el-menu-demo" mode="horizontal">
-          <el-menu-item index="1">我的云盘</el-menu-item>
+          <el-menu-item index="1">知识库</el-menu-item>
         </el-menu>
-      </div>
+      </div> -->
       <div class="up-btn">
         <!-- webkitdirectory -->
         <el-button size="small" class="input-file"><i class="el-icon-upload"></i> 上传文件<input type="file" id="file" name="file" webkitdirectory   @change.stop="changeData" ref="file" ></el-button>
@@ -114,6 +114,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// ::v-deep .el-card__body{
+//   padding-top: 0;
+// }
 .input-file {
   overflow:hidden;
   position:relative;
@@ -129,8 +132,12 @@ export default {
 }
 .content-box {
   margin-top: 15px;
+  // display: flex;
+  // justify-content: flex-end;
   .up-btn {
-    margin-left: 15px;
+    display: flex;
+    justify-content: flex-end;
+    // margin-left: 15px;
     margin-top: 5px;
     display: flex;
     .commit {

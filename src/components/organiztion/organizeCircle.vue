@@ -1,11 +1,14 @@
 <template>
   <div>
     <el-row class="el-row">
-      <el-col :span="6" :xs="0"><organize-nav></organize-nav></el-col>
-      <el-col :span="18" :xs="24">
+      <el-col :span="6" :xs="0">
+        <organize-create></organize-create>
+        <organize-nav></organize-nav>
+        </el-col>
+      <el-col :span="16" :xs="24">
         <dynamic-input></dynamic-input>
         <div class="article-view">
-          <organize-search></organize-search>
+          <!-- <organize-search></organize-search> -->
           <article-view></article-view>
         </div>
       </el-col>
@@ -15,6 +18,7 @@
 
 
 <script>
+import organizeCreate from '@/components/organiztion/organizeCreate'
 import dynamicInput from '../dynamic/dynamicInput'
 import organizeNav from './organizeNav'
 import ArticleView from '../content/components/ArticleView'
@@ -24,7 +28,8 @@ export default {
     dynamicInput,
     organizeNav,
     ArticleView,
-    organizeSearch
+    organizeSearch,
+    organizeCreate
   }
 }
 </script>

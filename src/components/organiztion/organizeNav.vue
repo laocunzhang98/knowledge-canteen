@@ -40,8 +40,9 @@ export default {
 </script>>
 
 <style lang="scss" scoped>
+
   .el-menu{
-    background-color: #f0f3f8!important;
+    background-color: rgba(0,0,0,0)!important;
     margin-top: 15px;
     /deep/.el-menu-item{
       padding-left: 30px!important;
