@@ -7,25 +7,9 @@
         </el-menu>
       </div>
       <div class="up-btn">
-        <el-upload
-          class="upload-demo"
-          ref="upload"
-          action="/api/uploads/addfile"
-          :headers="headers"
-          :on-success="handleSuccess"
-          :on-progress="uploadVideoProcess"
-          :show-file-list="false"
-          :before-upload="handleBeforeUpload"
-          multiple
-        >
-          <div class="commit">
-            <el-button type="primary" size="small" @click="upFile">
-              <i class="el-icon-upload" style="margin-right:5px"></i>上传
-            </el-button>
-          </div>
-        </el-upload>
+        <!-- webkitdirectory -->
+        <el-button size="small" class="input-file"><i class="el-icon-upload"></i> 上传文件<input type="file" id="file" name="file" webkitdirectory   @change.stop="changeData" ref="file" ></el-button>
         <div></div>
-        <el-progress v-if="videoFlag == true" type="circle" :percentage="videoUploadPercent" style="position:absolute;margin-top:130px;z-index:9999;margin:auto"></el-progress>
         <div>
           <el-button size="small">
             <i class="el-icon-folder-add" style="margin-right:5px"></i> 新建文件夹
@@ -54,15 +38,21 @@
 
 <script>
 import { Base64 } from "js-base64";
+import {uploadFile} from '@/api/uploads';
 export default {
   data() {
     return {
-      videoFlag:false,
-      videoUploadPercent:0,
       headers: {
-        // "Content-Type": "multipart/form-data",
         Authorization:
           "Basic " + Base64.encode(localStorage.getItem("token") + ":"),
+      },
+      filesList: [],
+      files: {
+        fileName: '', // 文件名
+        filesExtension: '', // 扩展名
+        fileDate: '', // 上传时间
+        fileSize: '', // 上传大小
+        fileData: '' // 文件数据
       },
       tableData: [
         {
@@ -93,34 +83,50 @@ export default {
     };
   },
   methods: {
-    handleBeforeUpload(file){
-      console.log(file)
-    },
-    uploadVideoProcess(event, file, fileList){
-        this.videoFlag = true;
-        console.log(file)
-        this.videoUploadPercent = parseInt(file.percentage.toFixed(0));
-       
+    changeData (event) {
+      console.log(event.target.value)
+      let filevalue = event.target.value
+      let files = event.target.files
+      if (files[0] == undefined) {
+        this.$message.warning('未上传任何文件！');
+      } else{
+        if(files.length>20){
+          this.$message.warning("上传文件数不得超过20个")
+          return 
+        }
+        for(let i=0;i<files.length;i++){
+          console.log(files[0])
+          let formdata = new FormData()
+          formdata.append("file",files[i])
+          uploadFile(formdata).then(res=>{
+            console.log(res)
+          })
+        }
+      }
     },
     getPng(row) {
       return require("../../assets/header/" + row.extName + ".png");
     },
     upFile() {},
-    handleSuccess(response, file) {
-      console.log(file);
-      this.videoFlag = false;
-      if (response.code === 200) {
-        this.$message.success(response.message);
-      } else {
-        this.$message.error(response.message);
-      }
-      
-    },
+   
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.input-file {
+  overflow:hidden;
+  position:relative;
+  margin-right: 20px;
+}
+.input-file input{
+  opacity:0;
+  filter:alpha(opacity=0);
+  font-size:100px;
+  position:absolute;
+  top:0;
+  right:0;
+}
 .content-box {
   margin-top: 15px;
   .up-btn {

@@ -40,21 +40,27 @@ export default {
   },
   methods: {
     fontCount() {
-      let innertext = document.getElementById("textarea").innerHTML;
+      let innertext = document.getElementsByClassName(
+        "textarea"
+      )[document.getElementsByClassName("textarea").length-1].innerHTML;
       let strCount = this.removeHTMLTag(innertext).length;
       this.inputCount = strCount;
       if (strCount > this.fontCounts) {
         this.inputCount = this.fontCounts;
-        document.getElementById("textarea").innerHTML = innertext.substr(
+        
+        document.getElementsByClassName(
+        "textarea"
+      )[document.getElementsByClassName("textarea").length-1].innerHTML = innertext.substr(
           0,
           this.fontCounts
         );
       }
     },
     emojiSelect(index) {
-      document.getElementById(
+      
+      document.getElementsByClassName(
         "textarea"
-      ).innerHTML += `<img style="width: 22px;height: 22px;margin: 0 2px;vertical-align: sub;" draggable="false" alt="" src="${this.emojiLists.srcs[index]}">`;
+      )[document.getElementsByClassName("textarea").length-1].innerHTML += `<img style="width: 22px;height: 22px;margin: 0 2px;vertical-align: sub;" draggable="false" alt="" src="${this.emojiLists.srcs[index]}">`;
     },
     removeHTMLTag(str) {
       str = str.replace(/<\/?[^>]*>/g, ""); //去除HTML tag

@@ -8,7 +8,7 @@
             </div>
           </el-col>
           <el-col :span="22">
-            <div id="textarea" placeholder="输入评论" :contenteditable="true">
+            <div class="textarea" placeholder="输入评论" :contenteditable="true">
             </div>
           </el-col>
         </div>
@@ -42,7 +42,9 @@ export default {
   },
    methods: {
     commitComment(){
-      this.comment = document.getElementById("textarea").innerHTML
+      let textarea =  document.getElementsByClassName("textarea")
+      console.log(textarea[textarea.length-1].innerHTML)
+      this.comment = textarea[textarea.length-1].innerHTML
       let article_id,article_uid,oid,comment_id
       if(this.articleInfo){
         article_id=this.articleInfo.id,
@@ -61,7 +63,7 @@ export default {
         comment_id: comment_id || 0
       }
       comment(data).then(res=>{
-        document.getElementById("textarea").innerHTML = ""
+        document.getElementsByClassName("textarea")[document.getElementsByClassName("textarea").length-1].innerHTML = ""
         this.$emit("success",res.data)
       })
       
@@ -88,7 +90,7 @@ el-input {
       justify-content: space-between;
       align-items: center;
       width: 100%;
-      #textarea{
+      .textarea{
         border: 1px solid skyblue;
         padding: 5px;
         border-radius: 3px;
