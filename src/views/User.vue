@@ -7,7 +7,7 @@
         <user-space></user-space>
       </el-col>
       <el-col class="el-col-right" :span="5" :xs="0">
-        <user-active></user-active>
+        <about-achieve></about-achieve>
       </el-col>
     </el-row>
   </div>
@@ -15,13 +15,13 @@
 
 <script>
 import UserData from '../components/user/userData'
-import UserActive from "../components/user/userAcitve"
 import UserSpace from "@/components/user/userSpace"
+import aboutAchieve from '@/common/components/aboutAchieve'
 export default {
   components:{
     UserData,
-    UserActive,
-    UserSpace
+    UserSpace,
+    aboutAchieve
   }
   
 }
@@ -35,6 +35,9 @@ export default {
     }
     .el-col-left{
       min-height: 36px;
+    }
+    .el-col-right{
+      margin-top: 15px;
     }
   }
 </style>
