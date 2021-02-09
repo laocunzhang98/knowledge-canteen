@@ -6,7 +6,7 @@
         <div class="pubtime"><time-diff :date="result.createdAt"></time-diff></div>
         <div class="label" v-show="result.label"> <span>· </span> {{result.label}}</div>
       </div>
-      <div class="title-row">{{result.title}}</div>
+      <div class="title-row" >{{result.title}}</div>
       <div class="action-row">
         <div class="favor" @click.stop="favor">
           <img :src="favorImg" alt="" v-show="!favorShow">
@@ -52,6 +52,7 @@ import {Favor,getFavorList} from "@/api/classic"
    },
    
    methods:{
+     
      favor(){
       //  this.favorImg = "../../../assets/home/favorActive.png"
       Favor({article_id:this.result.id}).then((res)=>{
@@ -75,7 +76,9 @@ import {Favor,getFavorList} from "@/api/classic"
 </script>
 
 <style lang="scss" scoped>
-
+.log-hight-light{
+  color: #ffe72d;
+}
   .content{
     display: flex;
     align-items: center;

@@ -18,7 +18,7 @@
               :on-success="handleAvatarSuccess"
               :before-upload="beforeAvatarUpload"
             >
-              <img v-if="imageUrl" :src="imageUrl" class="avatar">
+              <img v-if="imageUrl" :src="imageUrl" class="avatar" />
               <i class="el-icon-upload"></i>
               <div class="el-upload__text">
                 上传封面大图拖到此处，或
@@ -32,23 +32,29 @@
           <el-button type="primary" @click="prepub">发布文章</el-button>
           <!-- @click="pub" -->
 
-          <el-dialog title="发布文章" :visible.sync="dialogFormVisible"  center>
-                <div class="other-info">
-                  <div class="classify">
-                    <span>请选择分类</span>
-                    <div class="category">
-                      <div class="category-item" :class="{categoryactive:categoryItem===item}" v-for="(item,index) in category" :key="index" @click="selectCategory(item)">{{item}}</div>
-                    </div>
-                  </div>
-                  
-                  <div class="label">
-                    <span>请添加标签</span>
-                      <el-input v-model="label" autocomplete="off" size="small" maxlength="10"></el-input>
-                  </div>
+          <el-dialog title="发布文章" :visible.sync="dialogFormVisible" center>
+            <div class="other-info">
+              <div class="classify">
+                <span>请选择分类</span>
+                <div class="category">
+                  <div
+                    class="category-item"
+                    :class="{categoryactive:categoryItem===item}"
+                    v-for="(item,index) in category"
+                    :key="index"
+                    @click="selectCategory(item)"
+                  >{{item}}</div>
                 </div>
+              </div>
+
+              <div class="label">
+                <span>请添加标签</span>
+                <el-input v-model="label" autocomplete="off" size="small" maxlength="10"></el-input>
+              </div>
+            </div>
             <div slot="footer" class="dialog-footer">
               <el-button @click="dialogFormVisible = false">取 消 发 布</el-button>
-              <el-button type="primary" @click="pub" >确 定 发 布</el-button>
+              <el-button type="primary" @click="pub">确 定 发 布</el-button>
             </div>
           </el-dialog>
         </div>
@@ -71,32 +77,39 @@
 </template>
 <script>
 import { Base64 } from "js-base64";
-import { pubArticle,pubPic,getCategoryList,UpdateArticle ,getArticleDetail} from "@/api/classic";
+import {
+  pubArticle,
+  pubPic,
+  getCategoryList,
+  UpdateArticle,
+  getArticleDetail,
+} from "@/api/classic";
 import Person from "@/components/header/components/Person";
 export default {
-  mounted(){
-    console.log(this.$route.query.article_id)
-    if(this.$route.query.article_id){
+  mounted() {
+    console.log(this.$route.query.article_id);
+    if (this.$route.query.article_id) {
       getArticleDetail(this.$route.query.article_id).then((res) => {
         this.value = res.data.rcontent;
-        this.title = res.data.title
-        this.imageUrl = res.data.image
-        this.label = res.data.label
-        this.categoryItem = res.data.classify_name
-        });
-    } 
+        this.title = res.data.title;
+        this.imageUrl = res.data.image;
+        this.label = res.data.label;
+        this.categoryItem = res.data.classify_name;
+      });
+    }
   },
   data() {
     return {
-      categoryItem:"情感",
-      label:"",
-      category:[],
-      dialogFormVisible:false,
-      imageUrl: '',
+      categoryItem: "情感",
+      label: "",
+      category: [],
+      dialogFormVisible: false,
+      imageUrl: "",
       title: "",
       value: "",
-      content:"",
-      rcontent:"",
+      content: "",
+      rcontent: "",
+      article_id: "",
       headers: {
         // "Content-Type": "multipart/form-data",
         Authorization:
@@ -109,54 +122,71 @@ export default {
     Person,
   },
   methods: {
-    selectCategory(item){
-      this.categoryItem = item
-      console.log(item)
+    selectCategory(item) {
+      this.categoryItem = item;
+      console.log(item);
     },
-    prepub(){
-      if(!this.title){
-        this.$message.warning("请填写标题")
-        return 
+    prepub() {
+      if (!this.title) {
+        this.$message.warning("请填写标题");
+        return;
       }
-      if(!this.content){
-        this.$message.warning("请填写内容")
-        return 
+      if (!this.content) {
+        this.$message.warning("请填写内容");
+        return;
       }
-      this.dialogFormVisible = true
-      getCategoryList().then((res)=>{
-        console.log(res)
-        this.category = res.data
-      })
+      this.dialogFormVisible = true;
+      getCategoryList().then((res) => {
+        console.log(res);
+        this.category = res.data;
+      });
     },
     imageLoad() {
       this.upimgShow = !this.upimgShow;
     },
     pub() {
-      this.dialogFormVisible = false
-      
+      this.dialogFormVisible = false;
+
       let data = {
-        title:this.title,
-        label:this.label,
-        content:this.content,
-        rcontent:this.rcontent,
-        classify:this.categoryItem,
-        image:this.imageUrl,
-      }
-      if(this.$route.query.article_id){
-        data.article_id = this.$route.query.article_id
-        UpdateArticle(data).then((res)=>{
+        title: this.title,
+        label: this.label,
+        content: this.content,
+        rcontent: this.rcontent,
+        classify: this.categoryItem,
+        image: this.imageUrl,
+      };
+      if (this.$route.query.article_id) {
+        data.article_id = this.$route.query.article_id;
+        UpdateArticle(data).then((res) => {
+          // this.article_id = res.data;
           console.log(res)
-        })
-      }else{
-        pubArticle(data).then((res)=>{
-        console.log(res)
-      })
+          this.$router.push({
+            path: "/published",
+            query: {
+              data:res.data
+            },
+          });
+        });
+      } else {
+        pubArticle(data).then((res) => {
+          // this.article_id = res.data;
+          console.log(res)
+          this.$router.push({
+            path: "/published",
+            query: {
+              data:res.data
+            },
+          });
+        });
       }
-      
+      this.$router.push({
+        path: "/published",
+        query: this.article_id,
+      });
     },
-    renderValue(value,render) {
-      this.rcontent = value
-      this.content = render
+    renderValue(value, render) {
+      this.rcontent = value;
+      this.content = render;
     },
     $imgAdd(pos, $file) {
       const formdata = new FormData();
@@ -170,63 +200,63 @@ export default {
       console.log(111);
     },
     handleAvatarSuccess(res, file) {
-      console.log(res)
-      console.log(file)
-      this.imageUrl = res.data
+      console.log(res);
+      console.log(file);
+      this.imageUrl = res.data;
     },
     beforeAvatarUpload(file) {
-      const isJPG = file.type === 'image/jpeg';
-      const isPng = file.type === 'image/png'
+      const isJPG = file.type === "image/jpeg";
+      const isPng = file.type === "image/png";
       const isLt2M = file.size / 1024 / 1024 < 2;
 
       if (!isJPG && !isPng) {
-        this.$message.error('上传封面图片只能是 JPG 格式!');
+        this.$message.error("上传封面图片只能是 JPG 格式!");
       }
       if (!isLt2M) {
-        this.$message.error('上传封面图片大小不能超过 2MB!');
+        this.$message.error("上传封面图片大小不能超过 2MB!");
       }
-      return isJPG && isLt2M || isPng && isLt2M
-    }
+      return (isJPG && isLt2M) || (isPng && isLt2M);
+    },
   },
 };
 </script>
 
 <style scoped lang="scss">
-.categoryactive{
+.categoryactive {
   border: 1px solid rgb(12, 118, 204) !important;
   color: rgb(38, 137, 218) !important;
-  background-color: rbg(242,248,255) !important;
+  background-color: rbg(242, 248, 255) !important;
 }
-::v-deep .el-dialog__body{
+::v-deep .el-dialog__body {
   height: 300px;
 }
 .avatar {
-    width: 358px !important;
-    height: 178px !important;
-    display: block;
-  }
+  width: 358px !important;
+  height: 178px !important;
+  display: block;
+}
 .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-  }
-::v-deep .el-input--small{
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+::v-deep .el-input--small {
   width: 140px;
 }
-.classify ::v-deep .el-input__inner{
+.classify ::v-deep .el-input__inner {
   width: 140px;
   height: 32px;
 }
@@ -258,29 +288,29 @@ export default {
     height: 60px;
     align-items: center;
     background-color: #fff;
-    .edit-title{
-      flex-basis:100%;
+    .edit-title {
+      flex-basis: 100%;
     }
     .edit-info {
       display: flex;
       width: 500px;
       justify-content: space-between;
       align-items: center;
-      .pub{
-        .other-info{
+      .pub {
+        .other-info {
           display: flex;
           flex-direction: column;
           align-items: center;
-          .classify{
+          .classify {
             display: flex;
             flex-direction: column;
             width: 50%;
-            .category{
+            .category {
               display: flex;
               flex-wrap: wrap;
               margin-top: 10px;
               font-size: 16px;
-              .category-item{
+              .category-item {
                 padding: 5px 10px;
                 margin: 5px 10px;
                 color: #8c939d;
@@ -289,7 +319,7 @@ export default {
               }
             }
             margin-bottom: 100px;
-            span{
+            span {
               margin: auto;
               font-size: 16px;
               font-weight: 600;
@@ -297,11 +327,11 @@ export default {
               color: #8c939d;
             }
           }
-          .label{
+          .label {
             display: flex;
             align-items: center;
             margin-top: 10px;
-            span{
+            span {
               margin-right: 10px;
             }
           }

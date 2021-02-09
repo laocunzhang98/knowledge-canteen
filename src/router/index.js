@@ -72,6 +72,11 @@ const routes = [
         path:"/peredit",
         component:()=>import("../components/user/userEdit.vue"),
         name:"peredit"
+      },
+      {
+        path:"/published",
+        component:()=>import("../views/published.vue"),
+        name:"published"
       }
     ]
   },
