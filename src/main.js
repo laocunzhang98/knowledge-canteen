@@ -13,6 +13,7 @@ import 'mavon-editor/dist/css/index.css'
 import { Message } from 'element-ui'
 // 挂载到$message上
 Vue.prototype.$message = Message
+Vue.prototype.$bus = new Vue()
 // use
 Vue.use(mavonEditor)
 // import Darkmode from 'darkmode-js';

@@ -33,11 +33,21 @@ export default {
   mounted() {
     getArticleList()
       .then((res) => {
+        this.result = res.data.data;
+        this.countSize = res.data.countSize
+      })
+      .catch();
+    this.$bus.$on("word",(word)=>{
+      this.word = word
+      getArticleList({"word":this.word})
+      .then((res) => {
         console.log(res)
         this.result = res.data.data;
         this.countSize = res.data.countSize
       })
       .catch();
+    })
+    
   },
   computed: {
       noMore () {
@@ -56,7 +66,8 @@ export default {
       countSize:0,
       result: [],
       page:0,
-      count:10
+      count:10,
+      word:""
     };
   },
 
@@ -66,7 +77,8 @@ export default {
       this.page += 1
       let params = {
         pageSize:10,
-        page:this.page
+        page:this.page,
+        word:this.word
       }
       setTimeout(() => {
         getArticleList(params).then((res)=>{

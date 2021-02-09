@@ -23,8 +23,8 @@
       </el-dropdown>
     </div>
     <div class="navbar-search">
-      <el-input v-model="input" placeholder="请输入内容" size="small">
-        <el-button slot="append" icon="el-icon-search" class="btn"></el-button>
+      <el-input v-model="word" placeholder="请输入内容" size="small">
+        <el-button slot="append" icon="el-icon-search" class="btn" @click="searchArticle"></el-button>
       </el-input>
     </div>
     <div class="edit" @click="addedit">
@@ -36,6 +36,7 @@
 <script>
 import { mixin } from "../../../mixin/mixin";
 import { mapGetters, mapMutations } from "vuex";
+import {getArticleList} from "@/api/classic"
 export default {
   mixins: [mixin],
   computed: {
@@ -58,7 +59,15 @@ export default {
     this.focusLbael(index);
   },
   methods: {
+    
     ...mapMutations(["setHeaderIndex"]),
+    searchArticle(){
+      console.log(this.word)
+      this.$bus.$emit("word",this.word)
+      // getArticleList({word:this.word}).then(res=>{
+      //   console.log(res)
+      // })
+    },
     focusLbael(index) {
       this.setHeaderIndex(index);
       this.$storage.set("headerIndex", index);
@@ -81,7 +90,7 @@ export default {
   },
   data() {
     return {
-      input: "",
+      word: "",
       labelList: ["全民食堂", "茶余饭后", "私房菜", "黑暗料理", "饭友圈"],
     };
   },
