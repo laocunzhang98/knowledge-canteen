@@ -37,11 +37,20 @@ export default {
       comment: "",
     };
   },
+  sockets:{
+    connect:function(){
+      console.log("socket connected")
+    },
+    foo:function(value){
+      console.log(value)
+    }
+  },
   components:{
     emoji
   },
    methods: {
     commitComment(){
+      
       let textarea =  document.getElementsByClassName("textarea")
       console.log(textarea[textarea.length-1].innerHTML)
       this.comment = textarea[textarea.length-1].innerHTML
@@ -65,10 +74,12 @@ export default {
       comment(data).then(res=>{
         document.getElementsByClassName("textarea")[document.getElementsByClassName("textarea").length-1].innerHTML = ""
         this.$emit("success",res.data)
+        console.log(this.secondComment.oid)
+        this.$socket.emit("first",this.secondComment.oid)
       })
-      
     }
   },
+ 
 }
 </script>
 

@@ -24,8 +24,9 @@ export default {
     getUserInfo().then((res)=>{
       if(res.code === 200){
         this.userInfo = res.data
+        console.log(this.userInfo)
       }
-      console.log(res)
+      this.$socket.emit("uid", this.userInfo.id)
     }).catch()
   },
   data(){
@@ -38,6 +39,21 @@ export default {
     if(localStorage.getItem('token')){
       this.showLogin = true
     }
+  },
+  updated(){
+  },
+  sockets:{
+    disconnect() {
+      console.log('断开链接')
+      alert(1111)
+       this.$socket.emit("disconnects",this.userInfo.id)
+    },
+    reconnect() {
+      console.log('重新链接')
+    },
+  },
+  beforeDestroy(){
+    this.$socket.emit("disconnect",this.userInfo.id)
   },
   methods:{
     addedit(){

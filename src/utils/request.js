@@ -22,6 +22,10 @@ service.interceptors.request.use(
     return config
   },
   error=>{
+    try {
+      Promise.reject(error)
+    } catch (error) {
+    }
     return Promise.reject(error)
   }
 )

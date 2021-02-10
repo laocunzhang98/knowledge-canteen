@@ -3,7 +3,10 @@
     <el-card>
       <div class="header"><slot name=title></slot></div>
       <div class="article-list">
-        <div class="article-item" v-for="(article,index) in articleList" :key="index" @click="articleDetail(article.id)">{{article.title}}</div>
+        <div class="article-item" v-for="(article,index) in articleList" :key="index" @click="articleDetail(article.id)">
+          <span>{{article.title}}</span>
+          <div class="favor"><img src="../../assets/home/favor.png" alt=""><span>{{article.fav_nums}}</span><img src="../../assets/home/common.png" alt=""><span>{{article.com_nums}}</span></div>
+        </div>
       </div>
     </el-card>
   </div>
@@ -67,9 +70,18 @@ export default {
       text-overflow: ellipsis;
       -webkit-line-clamp: 2;  /*要显示的行数*/
       -webkit-box-orient: vertical;
-      font-size:12px;
       &:hover{
         background-color: rgb(249,249,249);
+      }
+      .favor{
+        display: flex;
+        align-items:flex-start;
+        margin-top: 5px;
+        img{
+          width: 18px;
+          height: 18px;
+          margin-left: 5px;
+        }
       }
     }
   }

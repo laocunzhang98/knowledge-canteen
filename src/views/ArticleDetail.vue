@@ -14,7 +14,7 @@
             <div class="title"><div id="flag">{{title}}</div></div>
           </div>
           <div class="content">
-            <mavon-editor codeStyle="monokai" v-html="content" style="padding:25px" ref="helpDocs"></mavon-editor>
+            <mavon-editor codeStyle="monokai" v-html="content" style="padding:25px" ref="helpDocs" ></mavon-editor>
           </div>
           <div class="comment">
             <comment-view :articleInfo="articleInfo"></comment-view>
@@ -203,7 +203,7 @@ export default {
         index1 = 1 + index1;
         let b = match.replace("\n", "");
         let a = match.replace("\n", "_" + index1 + "\n");
-        a.replace(/(#+)[^#][^\n]*?(?:\n)/, function (match, m1, m2) {
+        a.replace(/(^#+)[^#][^\n]*?(?:\n)/, function (match, m1, m2) {
           let title = match.replace("\n", "");
           title = title.replace(/^#+ /, "").replace(/^\s*/, "");
           let level = m1.length;

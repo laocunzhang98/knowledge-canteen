@@ -67,6 +67,7 @@ export default {
       false
     );
   },
+ 
   methods: {
     reply() {
       this.showInput = !this.showInput;
