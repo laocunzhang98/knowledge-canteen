@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { getFormatDate } from "@/utils/util";
+
 import TimeDiff from "@/utils/TimeDiff";
 import CommentInput from "@/components/comment/components/CommentInput";
 import { comment } from "@/api/comment";
@@ -36,7 +36,7 @@ export default {
   data() {
     return {
       showInput: false,
-
+      
       secondComment: {
         article_id: this.comment.article_id,
         article_uid: this.comment.article_uid,

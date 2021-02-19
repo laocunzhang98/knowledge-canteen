@@ -7,4 +7,30 @@ export function uploadFile(data){
     data
   })
 }
-
+export async function createFolder(data){
+  return request({
+    url:"/uploads/destination",
+    method:"POST",
+    data
+  })
+}
+export function getFileList(params){
+  return request({
+    url:"/download/filelist",
+    method:"GET",
+    params
+  })
+}
+export function getCataLog(params){
+  return request({
+    url:"/download/catalog",
+    method:"GET",
+    params
+  })
+}
+export function downloadFile(origin_path,filename){
+  return request({
+    url:`/download/file/${origin_path}/${filename}`,
+    method:"GET"
+  })
+}

@@ -24,8 +24,8 @@ export function throttle(fn, interval) {
     }, interval);
   };
 }
-export function getFormatDate() {
-  var date = new Date();
+export function getFormatDate(dates) {
+  var date = new Date(dates);
   var seperator1 = "-";
   var year = date.getFullYear();
   var month = date.getMonth() + 1;

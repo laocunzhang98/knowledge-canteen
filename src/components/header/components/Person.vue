@@ -45,15 +45,13 @@ export default {
   sockets:{
     disconnect() {
       console.log('断开链接')
-      alert(1111)
-       this.$socket.emit("disconnects",this.userInfo.id)
     },
     reconnect() {
       console.log('重新链接')
     },
   },
   beforeDestroy(){
-    this.$socket.emit("disconnect",this.userInfo.id)
+    this.$socket.emit("disconnect")
   },
   methods:{
     addedit(){

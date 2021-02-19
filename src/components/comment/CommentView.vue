@@ -44,7 +44,6 @@ export default {
 
     },
     secondeSuccess(){
-      console.log(22)
       this.success()
     },
     success(){
