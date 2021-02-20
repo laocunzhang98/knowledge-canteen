@@ -116,6 +116,7 @@ import {
   getCataLog,
   downloadFile,
   getFolderId,
+  getCateFile
 } from "@/api/uploads";
 export default {
   data() {
@@ -139,6 +140,13 @@ export default {
       this.tableData = res.data;
       console.log(res);
     });
+    this.$bus.$on("catetype",(type)=>{
+      // this.catetype = type
+      console.log(type)
+      getCateFile({type:JSON.stringify(type)}).then(res=>{
+        this.tableData = res.data
+      })
+    })
   },
   filters: {
     fileSize(val) {

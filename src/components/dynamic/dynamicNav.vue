@@ -1,13 +1,13 @@
 <template>
   <div class="nav-card">
     <el-card class="box-card">
-      <li v-for="(item,index) in headerIndex===1?navList:yunlabel" 
+      <li v-for="(item,index) in yunlabel" 
         :key="index" class="item-list" 
-        :title="item" 
-        @click="addNavBgc(index)"
+        :title="item.name" 
+        @click="addNavBgc(index);cateDisplay(item.type)"
         :class="{navbgc:activeIndex==index}"
       >
-        <a href="#" class="item-link" :style="{color:activeIndex==index?'#fff':''}">{{item}}</a>
+        <a href="#" class="item-link" :style="{color:activeIndex==index?'#fff':''}">{{item.name}}</a>
       </li>
     </el-card>
   </div>
@@ -37,6 +37,9 @@ export default {
   methods:{
     addNavBgc(index){
       this.activeIndex = index
+    },
+    cateDisplay(type){
+      this.$bus.$emit("catetype",type)
     }
   }
 }

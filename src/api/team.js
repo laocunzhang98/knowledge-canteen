@@ -7,3 +7,20 @@ export function createdTeam(data){
     data
   })
 }
+export function getTeamInfo(){
+  return request({
+    
+  })
+}
+export function getOwnOrg(){
+  return request({
+    url:"/organize/ownorg",
+    method:"GET"
+  })
+}
+export function getOtherOrg(){
+  return request({
+    url:"/organize/otherorg",
+    method:"GET"
+  })
+}

@@ -41,3 +41,11 @@ export function getFolderId(params){
     params
   })
 }
+
+export function getCateFile(params){
+  return request({
+    url:"/download/catefile",
+    method:"GET",
+    params
+  })
+}

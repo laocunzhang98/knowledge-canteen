@@ -11,7 +11,7 @@ import yunContent from '@/components/yunstorage/yunContent'
 export default {
   data(){
     return{
-      yunlabel:['全部文件','图片','文档','视频','种子','音乐','我的分享','回收站']
+      yunlabel:[{name:'全部文件',type:[]},{name:'图片',type:["png","jpeg"]},{name:'文档',type:["plain","msword","pdf"]},{name:'视频',type:["mp4"]},{name:'音乐',type:["mp3"]},{name:'回收站',type:[]}]
       }
     },
   components:{
