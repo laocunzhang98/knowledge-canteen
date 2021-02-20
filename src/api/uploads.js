@@ -34,3 +34,10 @@ export function downloadFile(origin_path,filename){
     method:"GET"
   })
 }
+export function getFolderId(params){
+  return request({
+    url:"/download/folderid",
+    method:"GET",
+    params
+  })
+}

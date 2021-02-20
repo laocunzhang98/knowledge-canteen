@@ -8,7 +8,7 @@
       </div>-->
       <div class="card-header">
         <div class="catalog">
-          <span v-for="(cata,index) in cataLog" :key="index">{{cata.origin_name}}/</span>
+          <span v-for="(cata,index) in cataLog" :key="index" @click="Jumpcata(cata.id)">{{cata.origin_name}}/</span>
         </div>
         <div class="up-btn">
           <!-- webkitdirectory -->
@@ -52,7 +52,7 @@
         </div>
         <div slot="footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="createFolder(currentid)">确 定</el-button>
+          <el-button type="primary" @click="createFolders(currentid)">确 定</el-button>
         </div>
       </el-dialog>
       <div class="content">
@@ -99,6 +99,7 @@ import {
   getFileList,
   getCataLog,
   downloadFile,
+  getFolderId
 } from "@/api/uploads";
 export default {
   data() {
@@ -112,14 +113,14 @@ export default {
       pathName: "新建文件夹",
       loading: true,
       zid: 0,
-      cataLog: [],
+      cataLog: [{origin_name:"...",id:0}],
       currentid: 0,
       filesList: [],
       files: {
         fileName: "", // 文件名
         filesExtension: "", // 扩展名
         fileDate: "", // 上传时间
-        fileSize: "", // 上传大小
+        // fileSize: "", // 上传大小
         fileData: "", // 文件数据
       },
       tableData: [],
@@ -147,6 +148,15 @@ export default {
     },
   },
   methods: {
+    Jumpcata(id){
+      getFileList({id:id}).then(res=>{
+        this.tableData = res.data;
+      })
+      getCataLog({ parent_fileid: id }).then((res) => {
+        this.cataLog = [{origin_name:"...",id:0}]
+        this.cataLog = this.cataLog.concat(res.data);
+      });
+    },
     getFormatDate(dates) {
       var date = new Date(dates);
       var seperator1 = "-";
@@ -170,11 +180,10 @@ export default {
         };
         getFileList(params).then((res) => {
           this.tableData = res.data;
-          console.log(res);
         });
         getCataLog({ parent_fileid: id }).then((res) => {
-          this.cataLog = res.data;
-          console.log(this.cataLog);
+          this.cataLog = [{origin_name:"...",id:0}]
+          this.cataLog = this.cataLog.concat(res.data);
         });
       } else {
         // this.dialogVisible1=true
@@ -195,7 +204,7 @@ export default {
         // })
       }
     },
-    createFolder(id) {
+    createFolders(id) {
       this.dialogVisible = false;
       let data = {
         parent_fileid: id,
@@ -208,7 +217,7 @@ export default {
     createPath() {
       this.dialogVisible = true;
     },
-    changeData(event, id) {
+    async changeData(event, id) {
       // console.log(event.target.value);
       console.log(id);
       let filevalue = event.target.value;
@@ -226,59 +235,63 @@ export default {
           filename: files[0].webkitRelativePath.split("/")[0], //文件夹只存储在数据库
         };
         console.log(files[0]);
-        createFolder(data).then((res) => {
+        await createFolder(data).then(async (res) => {
           let self = this;
           console.log(res);
           let tempList = []; // 临时存储已经创建的文件
           for (let i = 0; i < files.length; i++) {
             let formdata = new FormData();
             formdata.append("file", files[i]);
-
-              uploadFile(formdata).then((cres) => {
-                this.zid = res.data.id;
-                let folderlist = files[i].webkitRelativePath
-                  .split("/")
-                  .slice(1, -1);
-                for (let folder of folderlist) {
-                  let flag = false;
-                  let data1 = {
-                    parent_fileid: this.zid,
-                    filename: folder,
-                  };
-                  console.log(data1);
-                  for (let temp of tempList) {
-                    if (
-                      temp.parent_fileid === data1.parent_fileid &&
-                      temp.filename === data1.filename
-                    ) {
-                      flag = true;
-                      break;
-                    }
-                  }
-                  if (flag) {
-                    continue;
-                  }
-                  tempList.push(data1);
-                  new Promise((resolve, reject) => {
-                    createFolder(data1).then((res) => {
-                      return resolve(res.data.id);
-                    });
-                  }).then((response) => {
-                    self.zid = response;
-                    console.log(self.zid);
-                  });
-                }
-                let data = {
-                  origin_name: files[i].name,
-                  filename: cres.data.filename,
-                  mimetype: files[i].type.split("/").pop(),
-                  size: files[i].size,
+            await uploadFile(formdata).then(async (cres) => {
+              this.zid = res.data.id;
+              let folderlist = files[i].webkitRelativePath
+                .split("/")
+                .slice(1, -1);
+              for (let folder of folderlist) {
+                let flag = false;
+                let data1 = {
                   parent_fileid: this.zid,
+                  filename: folder,
                 };
-                createFolder(data).then((res) => {});
-              });
+                console.log(data1)
+                console.log(this.zid);
+                for (let temp of tempList) {
+                  if (
+                    temp.parent_fileid === data1.parent_fileid &&
+                    temp.filename === data1.filename
+                  ) {
+                    // this.zid = temp.parent_fileid
+                    flag = true;
+                    break;
+                  }
+                }
+                if (flag) {
+                  await getFolderId(data1).then(res=>{
+                    this.zid = res.data.id
+                  })
+                  continue;
+                }
+                tempList.push(data1);
+                await createFolder(data1).then((res) => {
+                  this.zid = res.data.id;
+                  console.log(this.zid)
+                });
+              }
+              let data = {
+                origin_name: files[i].name,
+                filename: cres.data.filename,
+                mimetype: files[i].type.split("/").pop(),
+                size: files[i].size,
+                parent_fileid: this.zid,
+              };
+              await createFolder(data).then((res) => {});
+            });
             console.log(files[i]);
           }
+        await getFileList().then((res) => {
+          this.tableData = res.data;
+        });
+
         });
       }
     },
