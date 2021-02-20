@@ -1,17 +1,33 @@
 <template>
   <div class="content-box">
     <el-card class="card-box">
-      <!-- <div class="content-header">
-        <el-menu default-active="1" class="el-menu-demo" mode="horizontal">
-          <el-menu-item index="1">知识库</el-menu-item>
-        </el-menu>
-      </div>-->
       <div class="card-header">
         <div class="catalog">
-          <span v-for="(cata,index) in cataLog" :key="index" @click="Jumpcata(cata.id)">{{cata.origin_name}}/</span>
+          <span
+            v-for="(cata,index) in cataLog"
+            :key="index"
+            @click="Jumpcata(cata.id)"
+          >{{cata.origin_name}}/</span>
         </div>
         <div class="up-btn">
           <!-- webkitdirectory -->
+          <div style="margin-right: 20px;">
+            <el-upload
+              class="upload-demo"
+              :headers="headers"
+              action="/api/uploads/addfile"
+              :on-preview="handlePreview"
+              multiple
+              :show-file-list="false"
+              :limit="5"
+              :on-success="handleFileSuccess"
+              :on-exceed="handleExceed"
+            >
+              <el-button size="small">
+                <i class="el-icon-upload"></i>上传文件
+              </el-button>
+            </el-upload>
+          </div>
           <el-button size="small" class="input-file">
             <i class="el-icon-upload"></i> 上传文件夹
             <input
@@ -60,10 +76,10 @@
           <el-table-column type="selection" width="55"></el-table-column>
           <el-table-column label="文件名" min-width="60%">
             <template slot-scope="scope">
-              <img :src="getPng(scope.row)" style="vertical-align: middle;margin-right: 10px;" />
+              <img :src="scope.row.path || getPng(scope.row)" class="file-pic" />
               <span
                 style="padding-left: 1px; text-align: center; cursor: pointer;"
-                @click="selectDir(scope.row.id,scope.row.mimetype,scope.row.origin_path,scope.row.origin_name)"
+                @click="selectDir(scope.row.id,scope.row.mimetype,scope.row.origin_path,scope.row.origin_name,scope.row.filename)"
               >{{scope.row.origin_name}}</span>
             </template>
           </el-table-column>
@@ -99,7 +115,7 @@ import {
   getFileList,
   getCataLog,
   downloadFile,
-  getFolderId
+  getFolderId,
 } from "@/api/uploads";
 export default {
   data() {
@@ -113,16 +129,8 @@ export default {
       pathName: "新建文件夹",
       loading: true,
       zid: 0,
-      cataLog: [{origin_name:"...",id:0}],
+      cataLog: [{ origin_name: "...", id: 0 }],
       currentid: 0,
-      filesList: [],
-      files: {
-        fileName: "", // 文件名
-        filesExtension: "", // 扩展名
-        fileDate: "", // 上传时间
-        // fileSize: "", // 上传大小
-        fileData: "", // 文件数据
-      },
       tableData: [],
     };
   },
@@ -148,12 +156,36 @@ export default {
     },
   },
   methods: {
-    Jumpcata(id){
-      getFileList({id:id}).then(res=>{
+    async handleFileSuccess(res, files) {
+      console.log(res);
+      let data = {
+        origin_name: files.name,
+        filename: res.data.filename,
+        mimetype: files.raw.type.split("/").pop(),
+        size: files.raw.size,
+        parent_fileid: this.currentid,
+      };
+      await createFolder(data).then((res) => {});
+      await getFileList({ id: this.currentid }).then(
+        (res) => (this.tableData = res.data)
+      );
+    },
+    handlePreview(file) {
+      console.log(file);
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning(
+        `当前限制选择 5 个文件，本次选择了 ${files.length} 个文件，共选择了 ${
+          files.length + fileList.length
+        } 个文件`
+      );
+    },
+    Jumpcata(id) {
+      getFileList({ id: id }).then((res) => {
         this.tableData = res.data;
-      })
+      });
       getCataLog({ parent_fileid: id }).then((res) => {
-        this.cataLog = [{origin_name:"...",id:0}]
+        this.cataLog = [{ origin_name: "...", id: 0 }];
         this.cataLog = this.cataLog.concat(res.data);
       });
     },
@@ -172,7 +204,7 @@ export default {
       var currentdate = year + seperator1 + month + seperator1 + strDate;
       return currentdate;
     },
-    selectDir(id, type, origin_path, filename) {
+    selectDir(id, type, origin_path, filename,ofilename) {
       if (type === "dir") {
         this.currentid = id;
         let params = {
@@ -182,12 +214,13 @@ export default {
           this.tableData = res.data;
         });
         getCataLog({ parent_fileid: id }).then((res) => {
-          this.cataLog = [{origin_name:"...",id:0}]
+          this.cataLog = [{ origin_name: "...", id: 0 }];
           this.cataLog = this.cataLog.concat(res.data);
         });
       } else {
         // this.dialogVisible1=true
-        fetch(origin_path)
+        let url = `http://localhost:3000/files/${origin_path}/${ofilename}`
+        fetch(url)
           .then((res) => res.blob())
           .then((blob) => {
             let blobURL = URL.createObjectURL(blob);
@@ -204,15 +237,18 @@ export default {
         // })
       }
     },
-    createFolders(id) {
+    async createFolders(id) {
       this.dialogVisible = false;
       let data = {
         parent_fileid: id,
         filename: this.pathName,
       };
-      createFolder(data).then((res) => {
+      await createFolder(data).then((res) => {
         console.log(res);
       });
+      await getFileList({id:id}).then((res)=>{
+        this.tableData = res.data
+      })
     },
     createPath() {
       this.dialogVisible = true;
@@ -253,7 +289,7 @@ export default {
                   parent_fileid: this.zid,
                   filename: folder,
                 };
-                console.log(data1)
+                console.log(data1);
                 console.log(this.zid);
                 for (let temp of tempList) {
                   if (
@@ -266,15 +302,15 @@ export default {
                   }
                 }
                 if (flag) {
-                  await getFolderId(data1).then(res=>{
-                    this.zid = res.data.id
-                  })
+                  await getFolderId(data1).then((res) => {
+                    this.zid = res.data.id;
+                  });
                   continue;
                 }
                 tempList.push(data1);
                 await createFolder(data1).then((res) => {
                   this.zid = res.data.id;
-                  console.log(this.zid)
+                  console.log(this.zid);
                 });
               }
               let data = {
@@ -288,10 +324,9 @@ export default {
             });
             console.log(files[i]);
           }
-        await getFileList().then((res) => {
-          this.tableData = res.data;
-        });
-
+          await getFileList({ id: this.currentid }).then((res) => {
+            this.tableData = res.data;
+          });
         });
       }
     },
@@ -354,10 +389,19 @@ export default {
   margin-top: 15px;
   // display: flex;
   // justify-content: flex-end;
+  .content{
+      .file-pic{
+        vertical-align: middle;
+        margin-right: 10px;
+        height: 35px;
+        width: 35px;
+      }
+    }
   .card-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    
     .catalog {
       font-size: 14px;
       color: #909090;
