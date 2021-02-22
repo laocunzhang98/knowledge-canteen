@@ -2,9 +2,6 @@
   <div class="content">
     <el-tabs v-model="activeName" class="tabs">
       <el-tab-pane label="热门" name="first">
-        <!-- <ul class="infinite-list" v-infinite-scroll="load" style="overflow:auto">
-          <li v-for="i in count" class="infinite-list-item" :key="i">{{ i }}</li>
-        </ul> -->
         <article-view ref="view"></article-view>
       </el-tab-pane>
     </el-tabs>

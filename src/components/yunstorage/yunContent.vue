@@ -11,6 +11,8 @@
         </div>
         <div class="up-btn">
           <!-- webkitdirectory -->
+          <div style="margin-right: 20px;" v-show="isSelect"><el-button type="warning" size="small" @click="handleMoveFile"><i class="el-icon-sort"></i> 移动到</el-button></div>
+          <div style="margin-right: 20px;" v-show="isSelect"><el-button type="danger" size="small" @click="handleDeleteFiles(ids)"><i class="el-icon-delete"></i> 删除</el-button></div>
           <div style="margin-right: 20px;">
             <el-upload
               class="upload-demo"
@@ -54,17 +56,6 @@
             <span>文件夹名字</span>
             <el-input placeholder="文件夹名字" v-model="pathName"></el-input>
           </div>
-          <div class="file-path">
-            <span>请选择目录</span>
-            <!-- <el-select v-model="model" placeholder>
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>-->
-          </div>
         </div>
         <div slot="footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
@@ -72,7 +63,11 @@
         </div>
       </el-dialog>
       <div class="content">
-        <el-table :data="tableData" style="width: 100%" height="420">
+        <el-table :data="tableData" style="width: 100%" height="420" 
+        @select="handleSelectFile"
+        @select-all="handleSelectAll"
+        ref="FileTable"
+        >
           <el-table-column type="selection" width="55"></el-table-column>
           <el-table-column label="文件名" min-width="60%">
             <template slot-scope="scope">
@@ -93,7 +88,11 @@
               <span>{{getFormatDate(scope.row.createdAt)}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="prop" label="操作" min-width="20%"></el-table-column>
+          <el-table-column prop="prop" label="操作" min-width="20%">
+            <template slot-scope="scope">
+              <span v-show="isMove&&scope.row.mimetype==='dir'"><el-button type="primary" size="mini">移入</el-button></span>
+            </template>
+          </el-table-column>
         </el-table>
       </div>
       <el-dialog title="文件下载" :visible.sync="dialogVisible1">
@@ -116,7 +115,8 @@ import {
   getCataLog,
   downloadFile,
   getFolderId,
-  getCateFile
+  getCateFile,
+  deleteFile
 } from "@/api/uploads";
 export default {
   data() {
@@ -130,24 +130,31 @@ export default {
       pathName: "新建文件夹",
       loading: true,
       zid: 0,
+      catetype:[],
+      ids:[],
       cataLog: [{ origin_name: "...", id: 0 }],
       currentid: 0,
       tableData: [],
+      isSelect:false,// 判断是否选中文件
+      isMove:false,//判断是否移动文件
     };
   },
   mounted() {
     getFileList().then((res) => {
       this.tableData = res.data;
-      console.log(res);
+      
     });
     this.$bus.$on("catetype",(type)=>{
-      // this.catetype = type
-      console.log(type)
+      this.catetype = type
       getCateFile({type:JSON.stringify(type)}).then(res=>{
         this.tableData = res.data
       })
     })
+    // this.$nextTick(function(){
+    //   this.$refs.FileTable.toggleRowSelection(this.tableData[0])
+    // })
   },
+  
   filters: {
     fileSize(val) {
       if (!val) return "";
@@ -163,7 +170,50 @@ export default {
       }
     },
   },
+  
   methods: {
+    handleMoveFile(){
+      this.isMove = true
+    },
+    handleDeleteFiles(ids){
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          deleteFile({ids:ids}).then(res=>{
+            getFileList().then((res)=>{
+              this.tableData = res.data
+              this.isSelect = false
+            })
+          })
+        })
+    },
+    
+    handleSelectAll(selection){
+      console.log(selection)
+      this.isSelect = true
+      if(selection.length===0){
+        this.isSelect = false
+      }
+    },
+    handleSelectFile(selection, row){
+      // this.$refs.FileTable.toggleRowSelection(this.tableData[0])
+      let indexof = this.ids.indexOf(row.id)
+      if(indexof != -1){
+        this.ids.splice(indexof,1)
+      }else{
+        this.ids.push(row.id)
+      }
+      if(this.catetype.length==0){
+        this.isSelect = true
+      }
+      if(selection.length===0){
+        this.isMove = false
+        this.isSelect = false
+      }
+      // console.log(selection)
+    },
     async handleFileSuccess(res, files) {
       console.log(res);
       let data = {
@@ -173,6 +223,7 @@ export default {
         size: files.raw.size,
         parent_fileid: this.currentid,
       };
+      console.log(data)
       await createFolder(data).then((res) => {});
       await getFileList({ id: this.currentid }).then(
         (res) => (this.tableData = res.data)
@@ -189,6 +240,7 @@ export default {
       );
     },
     Jumpcata(id) {
+      this.currentid = id
       getFileList({ id: id }).then((res) => {
         this.tableData = res.data;
       });
@@ -239,10 +291,6 @@ export default {
             // 释放 blobURL
             URL.revokeObjectURL(blobURL);
           });
-        // downloadFile(origin_path,filename).then(res=>{
-        //   console.log(res)
-        //   window.open(res.data)
-        // })
       }
     },
     async createFolders(id) {
@@ -297,14 +345,11 @@ export default {
                   parent_fileid: this.zid,
                   filename: folder,
                 };
-                console.log(data1);
-                console.log(this.zid);
                 for (let temp of tempList) {
                   if (
                     temp.parent_fileid === data1.parent_fileid &&
                     temp.filename === data1.filename
                   ) {
-                    // this.zid = temp.parent_fileid
                     flag = true;
                     break;
                   }
@@ -341,15 +386,18 @@ export default {
     getPng(row) {
       return require("../../assets/header/" + row.mimetype + ".png");
     },
-    upFile() {},
   },
+  watch:{
+    // tableData(){
+    //    this.$nextTick(function() {
+    //     this.$refs.tableData.toggleRowSelection(this.tableData[0])
+    //   })
+    // }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
-// ::v-deep .el-card__body{
-//   padding-top: 0;
-// }
 ::v-deep .el-dialog__body {
   height: 200px;
 }
@@ -395,8 +443,6 @@ export default {
 }
 .content-box {
   margin-top: 15px;
-  // display: flex;
-  // justify-content: flex-end;
   .content{
       .file-pic{
         vertical-align: middle;
@@ -409,7 +455,6 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    
     .catalog {
       font-size: 14px;
       color: #909090;
@@ -423,7 +468,6 @@ export default {
     .up-btn {
       display: flex;
       justify-content: flex-end;
-      // margin-left: 15px;
       margin-top: 5px;
       display: flex;
       .commit {

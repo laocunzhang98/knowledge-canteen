@@ -1,10 +1,12 @@
 import Vue from 'vue';
 import {
   Input, Button, Row, Col, Tabs, TabPane, Menu, Submenu, MenuItemGroup, MenuItem, Dropdown, DropdownMenu, DropdownItem
-  ,Card,InfiniteScroll,Upload,Dialog,Calendar,DatePicker,Table,TableColumn,Tag,Form,FormItem,Select,Option,Backtop,Icon,Progress
+  ,Card,InfiniteScroll,Upload,Dialog,Calendar,DatePicker,Table,TableColumn,Tag,Form,FormItem,Select,Option,Backtop,Icon,Progress,MessageBox,Message
 } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
-import vue from '../main';
+Vue.prototype.$confirm = MessageBox.confirm
+Vue.prototype.$message = Message
+// import vue from '../main';
 
 Vue.use(Input);
 Vue.use(Button);
@@ -34,4 +36,5 @@ Vue.use(Option)
 Vue.use(Backtop)
 Vue.use(Icon)
 Vue.use(Progress)
+// Vue.use(MessageBox)
 Vue.use(InfiniteScroll)

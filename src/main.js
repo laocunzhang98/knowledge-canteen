@@ -10,7 +10,7 @@ import WebStorageCache from "web-storage-cache";
 import "./common/css/font.css"
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
-import { Message } from 'element-ui'
+// import { Message } from 'element-ui'
 
 import VueSocketio from 'vue-socket.io'
 import ClientSocketIO  from "socket.io-client"
@@ -27,7 +27,7 @@ Vue.use(new VueSocketio({
   }
 })) // 第二个参数为服务端地址
 // 挂载到$message上
-Vue.prototype.$message = Message
+// Vue.prototype.$message = Message
 Vue.prototype.$bus = new Vue()
 // use
 Vue.use(mavonEditor)

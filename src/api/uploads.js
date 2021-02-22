@@ -49,3 +49,11 @@ export function getCateFile(params){
     params
   })
 }
+
+export function deleteFile(data){
+  return request({
+    url:"/download/delfile",
+    method:"DELETE",
+    data
+  })
+}

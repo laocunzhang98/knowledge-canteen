@@ -93,7 +93,6 @@ export default {
       editUserInfo(item).then(res=>{
         console.log(res)
       })
-
     },
     handleAvatarSuccess(res, file) {
       this.imageUrl = res.data;
