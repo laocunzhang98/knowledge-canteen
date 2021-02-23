@@ -66,7 +66,13 @@ const routes = [
       },
       {
         path:"/organize/:id",
-        component:()=>import("../views/OrganizeDetail.vue")
+        component:()=>import("../views/OrganizeDetail.vue"),
+        children:[{
+          path:"home",
+          component:()=>import("../components/organiztion/organizeHome.vue"),
+          name:"orghome"
+        }
+      ]
       },
       {
         path:"/peredit",

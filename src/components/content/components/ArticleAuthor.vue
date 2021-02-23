@@ -27,13 +27,16 @@ import { getAuthorInfo } from "@/api/classic";
 import { postFollow, getIsFollow } from "@/api/user";
 import { getFormatDate } from "@/utils/util";
 import { getUserInfo } from "@/api/user";
+import {getTeamLevel} from "@/api/team"
 export default {
   data() {
     return {
       nickname: "",
       avatar: "",
       read_nums: 0,
+      team_id:0,
       pub_time: "",
+      level:0,
       fid: 0,
       uid: 0,
       editactive: false,
@@ -46,13 +49,14 @@ export default {
         this.uid = res.data.id;
       }
     });
+    
   },
   props: ["articleInfo"],
   methods: {
     JumpEdit() {
       this.$router.push({
         path: "/edit",
-        query: { article_id: this.articleInfo.id },
+        query: { article_id: this.articleInfo.id,team_id:this.team_id},
       });
     },
     follow() {
@@ -76,8 +80,9 @@ export default {
   watch: {
     articleInfo() {
       this.read_nums = this.articleInfo.read_nums;
+      this.team_id = this.articleInfo.organize_id;
       this.pub_time = getFormatDate(this.articleInfo.createdAt);
-      getAuthorInfo(this.articleInfo.id).then((res) => {
+      getAuthorInfo(this.articleInfo.id).then( async (res) => {
         if (res.code === 200) {
           this.nickname = res.data.nickname;
           this.avatar = res.data.avatar;
@@ -85,7 +90,10 @@ export default {
           let params = {
             fid: this.fid,
           };
-          getIsFollow(params).then((res) => {
+          await getTeamLevel({team_id:this.team_id}).then(res=>{
+            this.level = res.data.level
+          })
+          await getIsFollow(params).then((res) => {
             if (res.code === 200) {
               if (res.data == 0) {
                 this.followactive = false
@@ -95,7 +103,7 @@ export default {
               }
             }
           });
-          if (this.fid == this.uid) {
+          if (this.fid == this.uid || this.level>=16) {
             this.editactive = true;
           }
         }

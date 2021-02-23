@@ -13,7 +13,7 @@ module.exports = {
   devServer: {
     proxy: {  
       '/api':{
-        target: 'http://localhost:3000/v1',
+        target: `${process.env.VUE_APP_BASE_API}/v1`,
         changOrigin: true,  
         wx:true,
         pathRewrite: {

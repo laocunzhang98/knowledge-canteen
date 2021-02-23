@@ -90,6 +90,7 @@
           </el-table-column>
           <el-table-column prop="prop" label="操作" min-width="20%">
             <template slot-scope="scope">
+              <span class="option"><img src="../../assets/header/op.png" alt="" style="height:10px"></span>
               <span v-show="isMove&&scope.row.mimetype==='dir'"><el-button type="primary" size="mini">移入</el-button></span>
             </template>
           </el-table-column>
@@ -150,9 +151,7 @@ export default {
         this.tableData = res.data
       })
     })
-    // this.$nextTick(function(){
-    //   this.$refs.FileTable.toggleRowSelection(this.tableData[0])
-    // })
+
   },
   
   filters: {
@@ -279,7 +278,7 @@ export default {
         });
       } else {
         // this.dialogVisible1=true
-        let url = `http://localhost:3000/files/${origin_path}/${ofilename}`
+        let url = `${process.env.VUE_APP_BASE_API}/files/${origin_path}/${ofilename}`
         fetch(url)
           .then((res) => res.blob())
           .then((blob) => {
@@ -449,6 +448,10 @@ export default {
         margin-right: 10px;
         height: 35px;
         width: 35px;
+      }
+      .option{
+        margin-left: 10px;
+        cursor: pointer;
       }
     }
   .card-header {

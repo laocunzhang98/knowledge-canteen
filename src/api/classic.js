@@ -64,3 +64,17 @@ export function getCategoryList(){
     method:"GET",
   })
 }
+
+export function getOrgArticleList(params){
+  return request({
+    url:`/classic/orglatest`,
+    method:"GET",
+    params
+  })
+}
+export function getFavorArticle(){
+  return request({
+    url:`/favor/article`,
+    method:"GET",
+  })
+}

@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { getArticleList } from "../../../api/classic";
+import { getArticleList,getOrgArticleList } from "../../../api/classic";
 import ArticleCard from "./ArticleCard"
 import { throttle } from "@/utils/util";
 export default {
@@ -31,12 +31,20 @@ export default {
     },200)
   },
   mounted() {
-    getArticleList()
+    if(!this.$route.params.id){
+      getArticleList({public:1})
       .then((res) => {
         this.result = res.data.data;
         this.countSize = res.data.countSize
       })
-      .catch();
+    }
+    else{
+      console.log(this.$route.params.id)
+      getOrgArticleList({organize_id:this.$route.params.id}).then(res=>{
+        this.result = res.data.data;
+        this.countSize = res.data.countSize
+      })
+    }
     this.$bus.$on("word",(word)=>{
       this.word = word
       getArticleList({"word":this.word})
@@ -45,9 +53,8 @@ export default {
         this.result = res.data.data;
         this.countSize = res.data.countSize
       })
-      .catch();
     })
-    
+
   },
   computed: {
       noMore () {
@@ -99,11 +106,9 @@ export default {
   .text {
     font-size: 14px;
   }
-
   .item {
     padding: 5px 0;
   }
-
   .box-card {
     box-sizing: border-box;
     height: 150px;

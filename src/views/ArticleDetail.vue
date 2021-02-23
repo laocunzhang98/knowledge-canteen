@@ -160,13 +160,13 @@ export default {
       this.childrenCurrentClick(secondLevelIndex);
     },
     pageJump(id) {
-      // console.log(this.$el.querySelector("#flag").offsetTop)
+      console.log(id)
       this.titleClickScroll = true;
       this.$refs.helpDocs.scrollTop =
-        this.$el.querySelector(id).offsetTop + 80;
+        document.getElementById(id).offsetTop + 80;
       setTimeout(() => {
         this.titleClickScroll = false;
-        document.documentElement.scrollTop = this.$el.querySelector(id).offsetTop+this.$el.querySelector("#flag").offsetTop+50;
+        document.documentElement.scrollTop = document.getElementById(id).offsetTop+this.$el.querySelector("#flag").offsetTop+50;
       }, 100);
     },
 
@@ -210,7 +210,6 @@ export default {
           tempArr.push({
             title: title.replace(/\([^)]*?\)/, "").replace(/_(?<=_)\w+$/, ""),
             id:
-              "#" +
               title
                 .replace(/\s/g, "_")
                 .replace(/[\u4e00-\u9fa5]/g, "")

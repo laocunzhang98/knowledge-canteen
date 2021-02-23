@@ -41,3 +41,10 @@ export function getuserArticleNum(params){
     params
   })
 }
+// 获取关注列表
+export function getFollowUser(){
+  return request({
+    url:"/follow/user",
+    method:"GET",
+  })
+}

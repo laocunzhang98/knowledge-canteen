@@ -2,7 +2,7 @@ import Vue from 'vue';
 import {
   Input, Button, Row, Col, Tabs, TabPane, Menu, Submenu, MenuItemGroup, MenuItem, Dropdown, DropdownMenu, DropdownItem
   ,Card,InfiniteScroll,Upload,Dialog,Calendar,DatePicker,Table,TableColumn,Tag,Form,FormItem,Select,Option,Backtop,Icon,Progress,MessageBox,Message
-} from 'element-ui';
+,Radio,Checkbox} from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.prototype.$confirm = MessageBox.confirm
 Vue.prototype.$message = Message
@@ -36,5 +36,7 @@ Vue.use(Option)
 Vue.use(Backtop)
 Vue.use(Icon)
 Vue.use(Progress)
+Vue.use(Radio)
+Vue.use(Checkbox)
 // Vue.use(MessageBox)
 Vue.use(InfiniteScroll)

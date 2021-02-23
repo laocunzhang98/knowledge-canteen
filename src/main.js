@@ -19,7 +19,7 @@ const socketOptions = {
 }
 Vue.use(new VueSocketio({
   debug:true,
-  connection:ClientSocketIO.connect('http://localhost:3000/',{
+  connection:ClientSocketIO.connect(`${process.env.VUE_APP_BASE_API}`,{
     transports: ['websocket'],
   }),
   options:{

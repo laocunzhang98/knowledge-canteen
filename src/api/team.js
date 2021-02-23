@@ -9,7 +9,7 @@ export function createdTeam(data){
 }
 export function getTeamInfo(){
   return request({
-    
+
   })
 }
 export function getOwnOrg(){
@@ -22,5 +22,25 @@ export function getOtherOrg(){
   return request({
     url:"/organize/otherorg",
     method:"GET"
+  })
+}
+export function getLimitOrg(){
+  return request({
+    url:"/organize/limitorg",
+    method:"GET",
+  })
+}
+export function getTeamId(params){
+  return request({
+    url:"/organize/teamid",
+    method:"GET",
+    params
+  })
+}
+export function getTeamLevel(params){
+  return request({
+    url:"/organize/level",
+    method:"GET",
+    params
   })
 }

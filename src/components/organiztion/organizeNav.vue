@@ -10,13 +10,13 @@
             <template slot="title">
               <span>创建的饭圈</span>
             </template>
-               <el-menu-item v-for="(item,index) in OwnOrgList" :key="index" @click="jumpTeam(item.id)">{{item.team_name}}</el-menu-item>
+               <el-menu-item v-for="(item,index) in OwnOrgList" :key="index" @click="jumpTeam(item.team_id)">{{item.team_name}}</el-menu-item>
           </el-submenu>
           <el-submenu index="2">
             <template slot="title">
               <span>加入的饭圈</span>
             </template>
-              <el-menu-item v-for="(item,index) in OtherOrgList" :key="index">{{item.team_name}}</el-menu-item>
+              <el-menu-item v-for="(item,index) in OtherOrgList" :key="index" @click="jumpTeam(item.team_id)">{{item.team_name}}</el-menu-item>
           </el-submenu>
         </el-menu>
       </el-col>
@@ -35,12 +35,13 @@ export default {
     },
   methods: {
     jumpTeam(id){
-      this.$router.push(`/organize/${id}`)
+      this.$router.push(`/organize/${id}/home`)
     }
   },
   created(){
     getOtherOrg().then(res=>{
       if(res.code===200){
+        console.log(res)
         this.OtherOrgList = res.data
       }
     })

@@ -46,11 +46,25 @@
                   >{{item}}</div>
                 </div>
               </div>
-
-              <div class="label">
-                <span>请添加标签</span>
-                <el-input v-model="label" autocomplete="off" size="small" maxlength="10"></el-input>
+              <div class="orgnize" v-show="!isTeamEdit">
+                <span style="margin-right:10px">发布的圈子</span>
+                <el-select v-model="model" placeholder="选择圈子" clearable @change="handleOrgSelect">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.id"
+                    :label="item.team_name"
+                    :value="item.id"
+                  ></el-option>
+                </el-select>
               </div>
+              <div class="label">
+                  <span>请添加标签</span>
+                  <el-input v-model="label" autocomplete="off" size="small" maxlength="10"></el-input>
+                </div>
+                <div class="tip">
+                  <span>发布到全民食堂</span>
+                  <el-checkbox v-model="checked" @change="handleCheck"></el-checkbox>
+                </div>
             </div>
             <div slot="footer" class="dialog-footer">
               <el-button @click="dialogFormVisible = false">取 消 发 布</el-button>
@@ -84,19 +98,26 @@ import {
   UpdateArticle,
   getArticleDetail,
 } from "@/api/classic";
+import { getLimitOrg, getTeamId } from "@/api/team";
 import Person from "@/components/header/components/Person";
 export default {
   mounted() {
-    console.log(this.$route.query.article_id);
-    if (this.$route.query.article_id) {
+    // console.log(this.$route.query.article_id);
+    if (this.$route.query.article_id&&this.$route.query.team_id) {
+      this.isTeamEdit = true
       getArticleDetail(this.$route.query.article_id).then((res) => {
         this.value = res.data.rcontent;
         this.title = res.data.title;
         this.imageUrl = res.data.image;
         this.label = res.data.label;
         this.categoryItem = res.data.classify_name;
+        this.organize_id = res.data.organize_id
       });
     }
+    getLimitOrg().then((res) => {
+      console.log(res.data);
+      this.options = res.data;
+    });
   },
   data() {
     return {
@@ -110,18 +131,36 @@ export default {
       content: "",
       rcontent: "",
       article_id: "",
+      organize_id: 0,
+      public: 0,
+      isTeamEdit:false,
+      checked: false, // 全民食堂
+      model: "",
       headers: {
         // "Content-Type": "multipart/form-data",
         Authorization:
           "Basic " + Base64.encode(localStorage.getItem("token") + ":"),
       },
       upimgShow: false,
+      options: [],
     };
   },
   components: {
     Person,
   },
   methods: {
+    handleCheck(val) {
+      if (val) {
+        this.public = 1;
+      } else {
+        this.public = 0;
+      }
+    },
+    async handleOrgSelect(val) {
+      await getTeamId({ id: val }).then((res) => {
+        this.organize_id = res.data.team_id;
+      });
+    },
     selectCategory(item) {
       this.categoryItem = item;
       console.log(item);
@@ -146,7 +185,10 @@ export default {
     },
     pub() {
       this.dialogFormVisible = false;
-
+      if (this.organize_id === 0 && this.public === 0) {
+        this.$message.warning("至少选择一个发布地点！！！");
+        return;
+      }
       let data = {
         title: this.title,
         label: this.label,
@@ -154,27 +196,29 @@ export default {
         rcontent: this.rcontent,
         classify: this.categoryItem,
         image: this.imageUrl,
+        organize_id: this.organize_id,
+        public: this.public,
       };
       if (this.$route.query.article_id) {
         data.article_id = this.$route.query.article_id;
         UpdateArticle(data).then((res) => {
           // this.article_id = res.data;
-          console.log(res)
+          console.log(res);
           this.$router.push({
             path: "/published",
             query: {
-              data:res.data
+              data: res.data,
             },
           });
         });
       } else {
         pubArticle(data).then((res) => {
           // this.article_id = res.data;
-          console.log(res)
+          console.log(res);
           this.$router.push({
             path: "/published",
             query: {
-              data:res.data
+              data: res.data,
             },
           });
         });
@@ -228,7 +272,7 @@ export default {
   background-color: rbg(242, 248, 255) !important;
 }
 ::v-deep .el-dialog__body {
-  height: 300px;
+  height: 400px;
 }
 .avatar {
   width: 358px !important;
@@ -256,8 +300,12 @@ export default {
 ::v-deep .el-input--small {
   width: 140px;
 }
-.classify ::v-deep .el-input__inner {
+.classify::v-deep .el-input__inner {
   width: 140px;
+  height: 32px;
+}
+.orgnize ::v-deep .el-input__inner {
+  width: 160px;
   height: 32px;
 }
 .edit-title ::v-deep .el-input__inner:focus {
@@ -334,6 +382,11 @@ export default {
             span {
               margin-right: 10px;
             }
+          }
+          .tip {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
           }
         }
       }

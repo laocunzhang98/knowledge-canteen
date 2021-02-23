@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row class="el-row" :gutter="15">
+    <el-row class="el-row">
       <el-col :span="5" :xs="0"></el-col>
       <el-col :span="12" :xs="24"  class="el-col-center">
         <user-data></user-data>
@@ -38,6 +38,7 @@ export default {
     }
     .el-col-right{
       margin-top: 15px;
+      margin-left: 15px;
     }
   }
 </style>
