@@ -12,7 +12,7 @@
       </el-dropdown-menu>
     </el-dropdown>
     <div class="login-btn" @click="jumpLogin" v-show="!showLogin"><el-button type="primary" size="small">登录</el-button></div>
-    <div class="person-news"><a href="#"><span class="iconfont icon-xiaoxi"></span></a></div>
+    <div class="person-news"><a href="#"><span class="iconfont icon-xiaoxi"></span><div class="notice-num" v-show="isNotice">{{noticeNum}}</div></a></div>
   </div>
 </template>
 
@@ -32,7 +32,9 @@ export default {
   data(){
     return {
       showLogin:false,
-      userInfo:{}
+      userInfo:{},
+      isNotice:false,
+      noticeNum:0
     }
   },
   mounted(){
@@ -43,6 +45,11 @@ export default {
   updated(){
   },
   sockets:{
+     reply: function (value) {
+      this.isNotice = true
+      this.noticeNum++
+      console.log(value);
+    },
     disconnect() {
       console.log('断开链接')
     },
@@ -106,9 +113,20 @@ export default {
     }
     .person-news{
       margin-right: 50px;
+      position: relative;
       .iconfont{
         font-size: 24px;
         color: rgb(136,119,145);
+      }
+      .notice-num{
+        color: #fff;
+        font-size: 12px;
+        background-color: red;
+        position: absolute;
+        border-radius: 50%;
+        padding: 0 5px;
+        top: 0;
+        left: 20px;
       }
     }
 

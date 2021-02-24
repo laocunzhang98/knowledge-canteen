@@ -34,9 +34,7 @@ export default {
     connect: function () {
       console.log("socket connected");
     },
-    reply: function (value) {
-      console.log(value);
-    },
+   
   },
   components: {
     SearchBox,

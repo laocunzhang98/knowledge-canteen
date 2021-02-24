@@ -4,7 +4,7 @@
       <img :src="comment.avatar" alt />
     </div>
     <div class="content-box">
-      <div class="nickname">{{comment.nickname}} <span class="job">{{comment.job}}</span></div>
+      <div class="nickname">{{comment.nickname}}<span class="nametip" v-show="comment.article_uid===comment.uid">(作者)</span><span class="job">{{comment.job}}</span></div>
       <div class="content">
         <div v-if="comment.replier" class="replier">
           回复
@@ -36,7 +36,6 @@ export default {
   data() {
     return {
       showInput: false,
-      
       secondComment: {
         article_id: this.comment.article_id,
         article_uid: this.comment.article_uid,
@@ -98,6 +97,9 @@ export default {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     padding: 15px 10px;
     .nickname{
+      .nametip{
+        font-size: 14px;
+      }
       .job{
         font-size: 14px;
         color: #909090;

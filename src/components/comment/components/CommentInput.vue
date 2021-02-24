@@ -44,7 +44,7 @@ export default {
    methods: {
     commitComment(){
       let textarea =  document.getElementsByClassName("textarea")
-      console.log(textarea[textarea.length-1].innerHTML)
+      // console.log(textarea[textarea.length-1].innerHTML)
       this.comment = textarea[textarea.length-1].innerHTML
       let article_id,article_uid,oid,comment_id
       if(this.articleInfo){
@@ -65,9 +65,10 @@ export default {
       }
       comment(data).then(res=>{
         document.getElementsByClassName("textarea")[document.getElementsByClassName("textarea").length-1].innerHTML = ""
+        console.log(res)
         this.$emit("success",res.data)
         // console.log(this.secondComment.oid)   // 注意此处应同时通知文章发布者
-        // this.$socket.emit("comment",this.secondComment.oid)
+        this.$socket.emit("comment",res.data)
       })
     }
   },
