@@ -4,17 +4,19 @@
       <el-col :span="5" :xs="0">
         <div></div>
       </el-col>
-      <el-col :span="12"  :xs="24">
+      <el-col :span="12" :xs="24">
         <div class="content-box">
           <article-author :articleInfo="articleInfo"></article-author>
           <div class="author-info">
             <div class="cover">
               <img :src="imageUrl" alt v-if="imageUrl" />
             </div>
-            <div class="title"><div id="flag">{{title}}</div></div>
+            <div class="title">
+              <div id="flag">{{title}}</div>
+            </div>
           </div>
           <div class="content">
-            <mavon-editor codeStyle="monokai" v-html="content" style="padding:25px" ref="helpDocs" ></mavon-editor>
+            <mavon-editor codeStyle="monokai" v-html="content" style="padding:25px" ref="helpDocs"></mavon-editor>
           </div>
           <div class="comment">
             <comment-view :articleInfo="articleInfo"></comment-view>
@@ -26,13 +28,11 @@
           <div class="about-author">
             <about-author :articleUid="uid">
               <template v-slot:title>
-                <div>
-                  关于作者
-                </div>
+                <div>关于作者</div>
               </template>
               <template v-slot:identity>
                 <div class="auth-info">
-                  <img src="../assets/header/avator.jpg" alt="">
+                  <img src="../assets/header/avator.jpg" alt />
                   <div class="user-item">
                     <div class="nickname">{{articleInfo.nickname}}</div>
                     <div class="position" :title="articleInfo.describe">{{articleInfo.describe}}</div>
@@ -44,9 +44,7 @@
           <div class="about-article">
             <about-article :articleId="id">
               <template v-slot:title>
-                <div>
-                  相关文章
-                </div>
+                <div>相关文章</div>
               </template>
             </about-article>
           </div>
@@ -57,7 +55,7 @@
                 v-for="(item, idx) in navList"
                 :key="idx"
                 :class="{first:item.level==1,second:item.level==2}"
-                 @click="pageJump(item.id)"
+                @click="pageJump(item.id)"
               >
                 <a href="javascript:;">{{item.title}}</a>
               </li>
@@ -74,15 +72,15 @@ import { getArticleDetail } from "@/api/classic";
 import CommentView from "@/components/comment/CommentView";
 import ArticleAuthor from "@/components/content/components/ArticleAuthor";
 import aboutAuthor from "@/common/components/aboutAuthor";
-import aboutArticle from '@/common/components/aboutArticle'
+import aboutArticle from "@/common/components/aboutArticle";
 import { throttle } from "@/utils/util";
 import { mapGetters, mapMutations } from "vuex";
 export default {
   data() {
     return {
-      scrollTop:0,
-      isFixed:false,
-      id:"",
+      scrollTop: 0,
+      isFixed: false,
+      id: "",
       content: "",
       title: "",
       imageUrl: "",
@@ -92,49 +90,53 @@ export default {
       titleClickScroll: false,
       docsFirstLevels: [],
       docsSecondLevels: [],
-      uid:0
+      uid: 0,
     };
   },
   components: {
     ArticleAuthor,
     CommentView,
     aboutAuthor,
-    aboutArticle
+    aboutArticle,
   },
-  computed:{
-    ...mapGetters(["commentShow"])
+  computed: {
+    ...mapGetters(["commentShow"]),
   },
-  created(){
-    let that = this
-    getArticleDetail(this.$route.params.id).then((res) => {
-      // console.log(res);
-      this.content = res.data.content;
-      this.title = res.data.title;
-      this.imageUrl = res.data.image;
-      this.articleInfo = res.data;
-      this.rcontent = res.data.rcontent;
-      this.navList = this.handleNavTree();
-      this.uid = this.articleInfo.uid
-    });
-    window.onscroll = throttle(function(){
+  created() {
+    let that = this;
+      getArticleDetail(this.$route.params.id).then((res) => {
+        // console.log(res);
+        this.content = res.data.content;
+        this.title = res.data.title;
+        this.imageUrl = res.data.image;
+        this.articleInfo = res.data;
+        this.rcontent = res.data.rcontent;
+        this.navList = this.handleNavTree();
+        this.uid = this.articleInfo.uid;
+      });
+    window.onscroll = throttle(function () {
       // console.log("距离顶部距离"+that.$el.querySelector(".article-nav").offsetTop)
-      if(document.documentElement.scrollTop>=that.$el.querySelector(".article-nav").offsetTop&&!that.isFixed){
-        that.scrollTop = that.$el.querySelector(".article-nav").offsetTop
-        that.isFixed = true
+      if (
+        document.documentElement.scrollTop >=
+          that.$el.querySelector(".article-nav").offsetTop &&
+        !that.isFixed
+      ) {
+        that.scrollTop = that.$el.querySelector(".article-nav").offsetTop;
+        that.isFixed = true;
       }
-      if(document.documentElement.scrollTop<that.scrollTop-10){
-        that.isFixed = false
+      if (document.documentElement.scrollTop < that.scrollTop - 10) {
+        that.isFixed = false;
       }
       // console.log("卷去的距离是:"+document.documentElement.scrollTop)
-    },50)
+    }, 50);
   },
   mounted() {
-    this.id = this.$route.params.id
+    this.id = this.$route.params.id;
   },
   methods: {
     ...mapMutations(["setCommentShow"]),
-    ceshi(){
-      this.setCommentShow(false)
+    ceshi() {
+      this.setCommentShow(false);
     },
     currentClick(index) {
       this.activeIndex = index;
@@ -160,13 +162,16 @@ export default {
       this.childrenCurrentClick(secondLevelIndex);
     },
     pageJump(id) {
-      console.log(id)
+      console.log(id);
       this.titleClickScroll = true;
       this.$refs.helpDocs.scrollTop =
         document.getElementById(id).offsetTop + 80;
       setTimeout(() => {
         this.titleClickScroll = false;
-        document.documentElement.scrollTop = document.getElementById(id).offsetTop+this.$el.querySelector("#flag").offsetTop+50;
+        document.documentElement.scrollTop =
+          document.getElementById(id).offsetTop +
+          this.$el.querySelector("#flag").offsetTop +
+          50;
       }, 100);
     },
 
@@ -209,11 +214,10 @@ export default {
           let level = m1.length;
           tempArr.push({
             title: title.replace(/\([^)]*?\)/, "").replace(/_(?<=_)\w+$/, ""),
-            id:
-              title
-                .replace(/\s/g, "_")
-                .replace(/[\u4e00-\u9fa5]/g, "")
-                .replace(/\W/g, ""),
+            id: title
+              .replace(/\s/g, "_")
+              .replace(/[\u4e00-\u9fa5]/g, "")
+              .replace(/\W/g, ""),
             level: level,
             children: [],
           });
@@ -251,8 +255,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.fixed{
-  top:50px;
+.fixed {
+  top: 50px;
   position: fixed;
 }
 li {
@@ -326,8 +330,8 @@ li {
         }
       }
       .title {
-        white-space:wrap;
-        text-overflow:ellipsis;
+        white-space: wrap;
+        text-overflow: ellipsis;
         overflow: hidden;
         padding: 20px 25px;
         font-weight: 600;
@@ -347,40 +351,39 @@ li {
   .aside {
     width: 240px;
     margin-left: 20px;
-    .about-article{
+    .about-article {
       margin-top: 20px;
     }
-    .about-author{
-      .auth-info{
-      display: flex;
-      align-items: center;
-      .user-item{
-        margin-left: 10px;
-        .nickname{
-          font-weight: 600;
-          font-size: 20px;
+    .about-author {
+      .auth-info {
+        display: flex;
+        align-items: center;
+        .user-item {
+          margin-left: 10px;
+          .nickname {
+            font-weight: 600;
+            font-size: 20px;
+          }
+          .position {
+            color: gray;
+            font-size: 14px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 120px;
+            cursor: pointer;
+          }
         }
-        .position{
-          color: gray;
-          font-size: 14px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          width: 120px;
-          cursor: pointer;
+        img {
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+        }
+      }
+    }
 
-        }
-      }
-      img{
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-      }
-    }
-    }
-    
     .article-nav {
-     margin-top: 20px;
+      margin-top: 20px;
     }
   }
 }

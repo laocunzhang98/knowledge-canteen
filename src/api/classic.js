@@ -51,10 +51,11 @@ export function Favor(data){
   })
 }
 
-export function getArticleDetail(id){
+export function getArticleDetail(id,params){
   return request({
     url:`/classic/article/${id}`,
     method:"GET",
+    params
   })
 }
 
@@ -76,5 +77,13 @@ export function getFavorArticle(){
   return request({
     url:`/favor/article`,
     method:"GET",
+  })
+}
+
+export function DeleteArticle(data){
+  return request({
+    url:"/classic/del/",
+    method:"DELETE",
+    data
   })
 }

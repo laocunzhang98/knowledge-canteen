@@ -64,9 +64,7 @@ export default {
     searchArticle(){
       console.log(this.word)
       this.$bus.$emit("word",this.word)
-      // getArticleList({word:this.word}).then(res=>{
-      //   console.log(res)
-      // })
+
     },
     focusLbael(index) {
       this.setHeaderIndex(index);

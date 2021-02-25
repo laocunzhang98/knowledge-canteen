@@ -22,7 +22,7 @@
 import {getUserInfo} from "@/api/user"
 
 export default {
-  mounted(){
+  created(){
     getUserInfo().then(res=>{
       if(res.code==200){
         this.avatar = res.data.avatar
@@ -31,6 +31,10 @@ export default {
         this.nickname = res.data.nickname
       }
     })
+  },
+
+  mounted(){
+    
   },
   data() {
     return {

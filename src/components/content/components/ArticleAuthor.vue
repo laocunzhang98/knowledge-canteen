@@ -10,6 +10,7 @@
           <span class="pub-time">{{pub_time}}</span>
           <span class="read-nums">阅读 {{read_nums}}</span>
           <span class="edit" @click="JumpEdit" v-show="editactive">编辑</span>
+          <span class="del" @click="delArticle" v-show="delactive">删除</span>
         </div>
       </div>
     </div>
@@ -23,66 +24,78 @@
 </template>
 
 <script>
-import { getAuthorInfo } from "@/api/classic";
+import { getAuthorInfo, DeleteArticle } from "@/api/classic";
 import { postFollow, getIsFollow } from "@/api/user";
 import { getFormatDate } from "@/utils/util";
 import { getUserInfo } from "@/api/user";
-import {getTeamLevel} from "@/api/team"
+import { getTeamLevel } from "@/api/team";
 export default {
   data() {
     return {
       nickname: "",
       avatar: "",
       read_nums: 0,
-      team_id:0,
+      team_id: 0,
       pub_time: "",
-      level:0,
+      level: 0,
       fid: 0,
       uid: 0,
       editactive: false,
+      delactive: false,
       followactive: false,
     };
   },
-  mounted() {
+  created() {
+    // 获取用户信息
     getUserInfo().then((res) => {
       if (res.code == 200) {
         this.uid = res.data.id;
       }
     });
-    
+  },
+  mounted() {
+    // 获取用户信息
   },
   props: ["articleInfo"],
   methods: {
     JumpEdit() {
       this.$router.push({
         path: "/edit",
-        query: { article_id: this.articleInfo.id,team_id:this.team_id},
+        query: { article_id: this.articleInfo.id, team_id: this.team_id },
       });
     },
+    // 关注
     follow() {
       let data = {
         fid: this.fid,
       };
       postFollow(data).then((res) => {
-        this.followactive = true
-        console.log(res)
+        this.followactive = true;
+        console.log(res);
       });
     },
-    cancelfollow(){
+    // 删除文章
+    delArticle() {
+      DeleteArticle({ article_id: this.articleInfo.id }).then((res) => {
+        this.$router.push("/home");
+      });
+    },
+    // 取消关注
+    cancelfollow() {
       let data = {
         fid: this.fid,
       };
       postFollow(data).then((res) => {
-        this.followactive = false
+        this.followactive = false;
       });
-    }
+    },
   },
   watch: {
     articleInfo() {
       this.read_nums = this.articleInfo.read_nums;
       this.team_id = this.articleInfo.organize_id;
       this.pub_time = getFormatDate(this.articleInfo.createdAt);
-      getAuthorInfo(this.articleInfo.id).then( async (res) => {
+      getAuthorInfo(this.articleInfo.id).then(async (res) => {
         if (res.code === 200) {
           this.nickname = res.data.nickname;
           this.avatar = res.data.avatar;
@@ -90,20 +103,22 @@ export default {
           let params = {
             fid: this.fid,
           };
-          await getTeamLevel({team_id:this.team_id}).then(res=>{
-            this.level = res.data.level
-          })
+          await getTeamLevel({ team_id: this.team_id }).then((res) => {
+            this.level = res.data.level;
+          });
           await getIsFollow(params).then((res) => {
             if (res.code === 200) {
               if (res.data == 0) {
-                this.followactive = false
-              }
-              else{
-                this.followactive = true
+                this.followactive = false;
+              } else {
+                this.followactive = true;
               }
             }
           });
-          if (this.fid == this.uid || this.level>=16) {
+          if (this.fid == this.uid) {
+            this.delactive = true;
+          }
+          if (this.fid == this.uid || this.level >= 16) {
             this.editactive = true;
           }
         }
@@ -126,8 +141,6 @@ export default {
     align-items: center;
     height: 50px;
     .author-img {
-      // width: 40px;
-      // height: 40px;
       margin-right: 12px;
       img {
         width: 40px;
@@ -152,18 +165,23 @@ export default {
             color: blue;
           }
         }
+        .del {
+          margin-left: 10px;
+          cursor: pointer;
+          &:hover {
+            color: red;
+          }
+        }
       }
     }
   }
   .follow {
-    
     color: skyblue;
     border: 1px solid skyblue;
     padding: 1px 10px;
     cursor: pointer;
   }
   .follow-active {
-
     padding: 2px 10px;
     cursor: pointer;
     color: #fff;

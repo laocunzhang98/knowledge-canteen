@@ -2,7 +2,7 @@
   <div class="content clearfix" v-if="true">
     <transition name="bounce">
       <div class="header-container">
-        <div class="logo">
+        <div class="logo" @click="gohome">
           <a href="#">
             <img src="../../assets/header/logo.png" alt />
           </a>
@@ -40,7 +40,11 @@ export default {
     SearchBox,
     PersonBox,
   },
-  methods: {},
+  methods: {
+    gohome(){
+      this.$router.push("/home")
+    }
+  },
 };
 </script>
 <style lang="scss" scoped>

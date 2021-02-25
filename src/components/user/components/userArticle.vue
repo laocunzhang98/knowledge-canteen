@@ -2,7 +2,7 @@
   <div>
     <div v-for="(item,index) in result" :key="index">
       <div class="card">
-        <article-card :result="item"></article-card>
+        <article-card :result="item" :uid="item.uid"></article-card>
       </div>
       <div class="line"></div>
     </div>
