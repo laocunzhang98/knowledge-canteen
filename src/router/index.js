@@ -71,6 +71,9 @@ const routes = [
           path:"home",
           component:()=>import("../components/organiztion/organizeHome.vue"),
           name:"orghome"
+        },{
+          path:"yun",
+          component:()=>import("../components/organiztion/organizeYun.vue")
         }
       ]
       },

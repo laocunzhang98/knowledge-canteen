@@ -54,17 +54,18 @@
 import ArticleView from "@/components/content/components/ArticleView";
 import organizeNav from "@/components/organiztion/organizeNav";
 import yunContent from "@/components/yunstorage/yunContent";
+import { mapGetters, mapMutations } from "vuex";
 export default {
   data() {
     return {
-      activeIndex: "1",
-    };
+
+    }
   },
   computed:{
     key() {
-      console.log(this.$route.path);
       return this.$route.path;
     },
+    ...mapGetters(["activeIndex"]),
   },
   components: {
     organizeNav,
@@ -72,8 +73,20 @@ export default {
     yunContent,
   },
   methods: {
+    ...mapMutations(["setActiveIndex"]),
     menuSelect(val) {
-      this.$router.push(`/organize/${this.$route.params.id}/home`)
+      switch (val) {
+        case "1":
+          this.setActiveIndex("1")
+          this.$router.push(`/organize/${this.$route.params.id}/home`)
+          break;
+        case "2":
+          this.setActiveIndex("2")
+          this.$router.push(`/organize/${this.$route.params.id}/yun`)
+        default:
+          
+          break;
+      }
     },
   },
 };

@@ -13,5 +13,8 @@ export default {
   },
   setCommentShow:(state,commentShow)=>{
     state.commentShow = commentShow
+  },
+  setActiveIndex:(state,activeIndex)=>{
+    state.activeIndex = activeIndex
   }
 }

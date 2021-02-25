@@ -28,12 +28,7 @@ export function getCataLog(params){
     params
   })
 }
-export function downloadFile(origin_path,filename){
-  return request({
-    url:`/download/file/${origin_path}/${filename}`,
-    method:"GET"
-  })
-}
+
 export function getFolderId(params){
   return request({
     url:"/download/folderid",

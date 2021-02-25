@@ -95,7 +95,7 @@ export default {
   
     del(){
       DeleteArticle({article_id:this.result.id,organize_id:this.$route.params.id}).then(res=>{
-        this.$router.go(0)
+        // this.$router.go(0)
       })
     },
     favor() {

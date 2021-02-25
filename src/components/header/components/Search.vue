@@ -43,7 +43,8 @@ export default {
     ...mapGetters(["isShow", "headerIndex"]),
   },
   mounted() {
-    if(this.$route.path === '/'){
+    console.log(this.$route.path)
+    if(this.$route.path === '/home'){
       this.$storage.set("headerIndex", 0);
     }
     if(this.$route.path === '/pins'){
@@ -59,7 +60,6 @@ export default {
     this.focusLbael(index);
   },
   methods: {
-    
     ...mapMutations(["setHeaderIndex"]),
     searchArticle(){
       console.log(this.word)
@@ -85,6 +85,9 @@ export default {
     addedit(){
       this.$router.push("/edit")
     }
+  },
+  beforeDestroy(){
+    this.$storage.delete("headerIndex")
   },
   data() {
     return {

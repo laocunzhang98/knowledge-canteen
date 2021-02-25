@@ -11,8 +11,16 @@
         </div>
         <div class="up-btn">
           <!-- webkitdirectory -->
-          <div style="margin-right: 20px;" v-show="isSelect"><el-button type="warning" size="small" @click="handleMoveFile"><i class="el-icon-sort"></i> 移动到</el-button></div>
-          <div style="margin-right: 20px;" v-show="isSelect"><el-button type="danger" size="small" @click="handleDeleteFiles(ids)"><i class="el-icon-delete"></i> 删除</el-button></div>
+          <div style="margin-right: 20px;" v-show="isSelect">
+            <el-button type="warning" size="small" @click="handleMoveFile">
+              <i class="el-icon-sort"></i> 移动到
+            </el-button>
+          </div>
+          <div style="margin-right: 20px;" v-show="isSelect">
+            <el-button type="danger" size="small" @click="handleDeleteFiles(ids)">
+              <i class="el-icon-delete"></i> 删除
+            </el-button>
+          </div>
           <div style="margin-right: 20px;">
             <el-upload
               class="upload-demo"
@@ -63,10 +71,13 @@
         </div>
       </el-dialog>
       <div class="content">
-        <el-table :data="tableData" style="width: 100%" height="420" 
-        @select="handleSelectFile"
-        @select-all="handleSelectAll"
-        ref="FileTable"
+        <el-table
+          :data="tableData"
+          style="width: 100%"
+          height="420"
+          @select="handleSelectFile"
+          @select-all="handleSelectAll"
+          ref="FileTable"
         >
           <el-table-column type="selection" width="55"></el-table-column>
           <el-table-column label="文件名" min-width="60%">
@@ -90,8 +101,12 @@
           </el-table-column>
           <el-table-column prop="prop" label="操作" min-width="20%">
             <template slot-scope="scope">
-              <span class="option"><img src="../../assets/header/op.png" alt="" style="height:10px"></span>
-              <span v-show="isMove&&scope.row.mimetype==='dir'"><el-button type="primary" size="mini">移入</el-button></span>
+              <span class="option">
+                <img src="../../assets/header/op.png" alt style="height:10px" />
+              </span>
+              <span v-show="isMove&&scope.row.mimetype==='dir'">
+                <el-button type="primary" size="mini">移入</el-button>
+              </span>
             </template>
           </el-table-column>
         </el-table>
@@ -114,10 +129,9 @@ import {
   createFolder,
   getFileList,
   getCataLog,
-  downloadFile,
   getFolderId,
   getCateFile,
-  deleteFile
+  deleteFile,
 } from "@/api/uploads";
 export default {
   data() {
@@ -131,29 +145,33 @@ export default {
       pathName: "新建文件夹",
       loading: true,
       zid: 0,
-      catetype:[],
-      ids:[],
+      catetype: [],
+      ids: [],
       cataLog: [{ origin_name: "...", id: 0 }],
       currentid: 0,
       tableData: [],
-      isSelect:false,// 判断是否选中文件
-      isMove:false,//判断是否移动文件
+      isSelect: false, // 判断是否选中文件
+      isMove: false, //判断是否移动文件
     };
   },
   mounted() {
-    getFileList().then((res) => {
-      this.tableData = res.data;
-      
+    if (this.$route.params.id) {
+      getFileList({organize_id:this.$route.params.id||0}).then((res) => {
+        this.tableData = res.data;
+      });
+    } else {
+      getFileList().then((res) => {
+        this.tableData = res.data;
+      });
+    }
+    this.$bus.$on("catetype", (type) => {
+      this.catetype = type;
+      getCateFile({ type: JSON.stringify(type) }).then((res) => {
+        this.tableData = res.data;
+      });
     });
-    this.$bus.$on("catetype",(type)=>{
-      this.catetype = type
-      getCateFile({type:JSON.stringify(type)}).then(res=>{
-        this.tableData = res.data
-      })
-    })
-
   },
-  
+
   filters: {
     fileSize(val) {
       if (!val) return "";
@@ -169,47 +187,47 @@ export default {
       }
     },
   },
-  
+
   methods: {
-    handleMoveFile(){
-      this.isMove = true
+    handleMoveFile() {
+      this.isMove = true;
     },
-    handleDeleteFiles(ids){
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          deleteFile({ids:ids}).then(res=>{
-            getFileList().then((res)=>{
-              this.tableData = res.data
-              this.isSelect = false
-            })
-          })
-        })
+    handleDeleteFiles(ids) {
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      }).then(() => {
+        deleteFile({ ids: ids }).then((res) => {
+          getFileList({organize_id:this.$route.params.id||0}).then((res) => {
+            this.tableData = res.data;
+            this.isSelect = false;
+          });
+        });
+      });
     },
-    
-    handleSelectAll(selection){
-      console.log(selection)
-      this.isSelect = true
-      if(selection.length===0){
-        this.isSelect = false
+
+    handleSelectAll(selection) {
+      console.log(selection);
+      this.isSelect = true;
+      if (selection.length === 0) {
+        this.isSelect = false;
       }
     },
-    handleSelectFile(selection, row){
+    handleSelectFile(selection, row) {
       // this.$refs.FileTable.toggleRowSelection(this.tableData[0])
-      let indexof = this.ids.indexOf(row.id)
-      if(indexof != -1){
-        this.ids.splice(indexof,1)
-      }else{
-        this.ids.push(row.id)
+      let indexof = this.ids.indexOf(row.id);
+      if (indexof != -1) {
+        this.ids.splice(indexof, 1);
+      } else {
+        this.ids.push(row.id);
       }
-      if(this.catetype.length==0){
-        this.isSelect = true
+      if (this.catetype.length == 0) {
+        this.isSelect = true;
       }
-      if(selection.length===0){
-        this.isMove = false
-        this.isSelect = false
+      if (selection.length === 0) {
+        this.isMove = false;
+        this.isSelect = false;
       }
       // console.log(selection)
     },
@@ -221,10 +239,11 @@ export default {
         mimetype: files.raw.type.split("/").pop(),
         size: files.raw.size,
         parent_fileid: this.currentid,
+        organize_id: this.$route.params.id || 0,
       };
-      console.log(data)
+      console.log(data);
       await createFolder(data).then((res) => {});
-      await getFileList({ id: this.currentid }).then(
+      await getFileList({ id: this.currentid,organize_id:this.$route.params.id||0}).then(
         (res) => (this.tableData = res.data)
       );
     },
@@ -239,8 +258,8 @@ export default {
       );
     },
     Jumpcata(id) {
-      this.currentid = id
-      getFileList({ id: id }).then((res) => {
+      this.currentid = id;
+      getFileList({ id: id,organize_id:this.$route.params.id||0}).then((res) => {
         this.tableData = res.data;
       });
       getCataLog({ parent_fileid: id }).then((res) => {
@@ -263,11 +282,12 @@ export default {
       var currentdate = year + seperator1 + month + seperator1 + strDate;
       return currentdate;
     },
-    selectDir(id, type, origin_path, filename,ofilename) {
+    selectDir(id, type, origin_path, filename, ofilename) {
       if (type === "dir") {
         this.currentid = id;
         let params = {
           id: id,
+          organize_id:this.$route.params.id||0
         };
         getFileList(params).then((res) => {
           this.tableData = res.data;
@@ -278,7 +298,7 @@ export default {
         });
       } else {
         // this.dialogVisible1=true
-        let url = `${process.env.VUE_APP_BASE_API}/files/${origin_path}/${ofilename}`
+        let url = `${process.env.VUE_APP_BASE_API}/files/${origin_path}/${ofilename}`;
         fetch(url)
           .then((res) => res.blob())
           .then((blob) => {
@@ -297,13 +317,14 @@ export default {
       let data = {
         parent_fileid: id,
         filename: this.pathName,
+        organize_id: this.$route.params.id || 0,
       };
       await createFolder(data).then((res) => {
         console.log(res);
       });
-      await getFileList({id:id}).then((res)=>{
-        this.tableData = res.data
-      })
+      await getFileList({ id: id,organize_id:this.$route.params.id||0}).then((res) => {
+        this.tableData = res.data;
+      });
     },
     createPath() {
       this.dialogVisible = true;
@@ -324,6 +345,7 @@ export default {
         let data = {
           parent_fileid: id,
           filename: files[0].webkitRelativePath.split("/")[0], //文件夹只存储在数据库
+          organize_id: this.$route.params.id || 0,
         };
         console.log(files[0]);
         await createFolder(data).then(async (res) => {
@@ -343,6 +365,7 @@ export default {
                 let data1 = {
                   parent_fileid: this.zid,
                   filename: folder,
+                  organize_id: this.$route.params.id || 0,
                 };
                 for (let temp of tempList) {
                   if (
@@ -371,12 +394,13 @@ export default {
                 mimetype: files[i].type.split("/").pop(),
                 size: files[i].size,
                 parent_fileid: this.zid,
+                organize_id: this.$route.params.id || 0,
               };
               await createFolder(data).then((res) => {});
             });
             console.log(files[i]);
           }
-          await getFileList({ id: this.currentid }).then((res) => {
+          await getFileList({ id: this.currentid,organize_id:this.$route.params.id||0}).then((res) => {
             this.tableData = res.data;
           });
         });
@@ -386,13 +410,13 @@ export default {
       return require("../../assets/header/" + row.mimetype + ".png");
     },
   },
-  watch:{
+  watch: {
     // tableData(){
     //    this.$nextTick(function() {
     //     this.$refs.tableData.toggleRowSelection(this.tableData[0])
     //   })
     // }
-  }
+  },
 };
 </script>
 
@@ -442,18 +466,18 @@ export default {
 }
 .content-box {
   margin-top: 15px;
-  .content{
-      .file-pic{
-        vertical-align: middle;
-        margin-right: 10px;
-        height: 35px;
-        width: 35px;
-      }
-      .option{
-        margin-left: 10px;
-        cursor: pointer;
-      }
+  .content {
+    .file-pic {
+      vertical-align: middle;
+      margin-right: 10px;
+      height: 35px;
+      width: 35px;
     }
+    .option {
+      margin-left: 10px;
+      cursor: pointer;
+    }
+  }
   .card-header {
     display: flex;
     justify-content: space-between;
