@@ -24,7 +24,7 @@ export default {
     articleId(){
       let params = {
       pageSize:4,
-      article_id:this.articleId
+      article_id:this.articleId,
     }
     getArticleList(params).then((res)=>{
       if(res.code==200){

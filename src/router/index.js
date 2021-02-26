@@ -43,7 +43,17 @@ const routes = [
       {
         path:'/user',
         name:'User',
-        component:User
+        component:User,
+        redirect:"/user/article",
+        children:[{
+          path:"notice",
+          component:()=>import("../views/NoticeView.vue")
+        },
+        {
+          path:"article",
+          component:()=>import("@/components/user/components/userArticle")
+        }
+      ]
       },
       {
         path:'/organize',
@@ -73,7 +83,8 @@ const routes = [
           name:"orghome"
         },{
           path:"yun",
-          component:()=>import("../components/organiztion/organizeYun.vue")
+          component:()=>import("../components/organiztion/organizeYun.vue"),
+          name:"orgyun"
         }
       ]
       },
@@ -86,6 +97,16 @@ const routes = [
         path:"/published",
         component:()=>import("../views/published.vue"),
         name:"published"
+      },
+      {
+        path:"/users/:userid",
+        component:()=>import("../views/User.vue"),
+        children:[
+          {
+            path:"article",
+            component:()=>import("@/components/user/components/userArticle")
+          }
+        ]
       }
     ]
   },

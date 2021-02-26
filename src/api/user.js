@@ -21,10 +21,11 @@ export function getIsFollow(params){
     params
   })
 }
-export function getUserArticle(){
+export function getUserArticle(params){
   return request({
     url:"/classic/userarticle",
     method:"GET",
+    params
   })
 }
 export function editUserInfo(data){

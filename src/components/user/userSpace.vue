@@ -2,59 +2,76 @@
   <div class="space-box">
     <div class="menu">
       <el-menu :default-active="activeIndex" mode="horizontal" @select="handleSelect">
-        <el-menu-item index="1">文章</el-menu-item>
+        <el-menu-item index="1" @click.native="jumpArticle">文章</el-menu-item>
         <el-menu-item index="2">赞</el-menu-item>
         <el-menu-item index="3">关注</el-menu-item>
         <el-menu-item index="4">圈子</el-menu-item>
+        <el-menu-item index="5" @click.native="jumpNotice" v-show="isShow">消息通知</el-menu-item>
+        <el-menu-item index="6" v-show="isShow">申请通知</el-menu-item>
       </el-menu>
     </div>
     <el-card class="box-card">
-      <user-article></user-article>
+      <router-view :key="key"></router-view>
     </el-card>
   </div>
 </template>
 
 <script>
-import userArticle from '@/components/user/components/userArticle'
 export default {
-  data(){
+  data() {
     return {
-      activeIndex: '1',
+      activeIndex: "1",
+      isShow:true
+    };
+  },
+  computed: {
+    key() {
+      return this.$route.path;
+    },
+  },
+  mounted(){
+    if(this.$route.params.userid){
+      this.isShow = false
     }
   },
-  components:{
-    userArticle
-  },
-   methods: {
-      handleSelect(key, keyPath) {
-        console.log(key, keyPath);
+  methods: {
+    jumpNotice(){
+      this.$router.push("/user/notice")
+    },
+    jumpArticle(){
+      if(this.isShow){
+        this.$router.push("/user/article")
+      }else{
+        this.$router.push(`/users/${this.$route.params.userid}/article`)
       }
-    }
-}
+    },
+    handleSelect(key, keyPath) {
+      console.log(key, keyPath);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-
-::v-deep .el-card__header{
+::v-deep .el-card__header {
   padding: 10px 20px;
 }
-::v-deep .el-menu--horizontal>.el-menu-item{
+::v-deep .el-menu--horizontal > .el-menu-item {
   height: 50px;
   line-height: 50px;
 }
-.el-menu-item{
+.el-menu-item {
   font-size: 16px;
   font-family: "PingFang SC";
 }
-.box-card{
+.box-card {
   margin-top: 1px;
   padding-bottom: 50px;
 }
-.space-box{
+.space-box {
   margin-top: 20px;
-  .menu{
+  .menu {
     // padding: 10px 5px;
   }
 }
-
 </style>

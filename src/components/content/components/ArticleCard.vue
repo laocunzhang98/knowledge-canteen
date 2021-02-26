@@ -2,7 +2,7 @@
   <div class="content" @click="Aticledetail">
     <div class="info-box">
       <div class="meta-row">
-        <div class="nickname">
+        <div class="nickname" @click.stop="jumpUserHome">
           {{result.name}}
           <span>·</span>
         </div>
@@ -30,7 +30,7 @@
     <div class="img-box" v-if="result.image">
       <img :src="result.image" alt />
     </div>
-    <div class="option" v-show="isEdit||result.uid==uid">
+    <div class="option" v-show="(isEdit||result.uid==uid)&&isUser">
       <el-dropdown>
       <div @click.stop>
         <img src="../../../assets/header/op.png" alt />
@@ -56,6 +56,7 @@ export default {
       articleList: [],
       favorShow: false,
       isEdit:false,
+      isUser:true
     };
   },
 
@@ -63,7 +64,12 @@ export default {
     if(this.$route.params.id){
       this.isEdit = true
     }
-    
+    if(this.$route.params.userid){
+      this.isUser = false
+      if(this.$route.params.userid == this.$storage.get("uid")){
+        this.$router.push("/user")
+      }
+    }
     getFavorList().then((res) => {
       if (res.code == 200) {
         this.articleList = res.data;
@@ -86,6 +92,11 @@ export default {
   },
 
   methods: {
+    jumpUserHome(){
+      this.$router.push({
+        path:`/users/${this.result.uid}/article`
+      })
+    },
     edit(){
       this.$router.push({
         path: "/edit",
@@ -107,23 +118,19 @@ export default {
       });
     },
     Aticledetail() {
+      let params = {}
       if (this.$route.params.id) {
-        this.$router.push({
-          name: "Article",
-          params: {
-            id: this.result.id,
-            organize_id: this.$route.params.id,
-          },
-        });
-      } else {
-        this.$router.push({
-          name: "Article",
-          params: {
-            id: this.result.id,
-          },
-        });
+        params.id= this.result.id
+        params.organize_id = this.$route.params.id
+      } 
+      else {
+        params.id = this.result.id
       }
-    },
+      this.$router.push({
+          name: "Article",
+          params
+      });
+    }
   },
 };
 </script>
@@ -164,6 +171,11 @@ export default {
       color: #b2bac2;
       font-size: 14px;
       display: flex;
+      .nickname{
+        &:hover{
+          color: skyblue;
+        }
+      }
     }
     .title-row {
       margin-top: 10px;

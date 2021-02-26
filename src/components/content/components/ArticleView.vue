@@ -39,7 +39,6 @@ export default {
       })
     }
     else{
-      console.log(this.$route.params.id)
       getOrgArticleList({organize_id:this.$route.params.id}).then(res=>{
         this.result = res.data.data;
         this.countSize = res.data.countSize

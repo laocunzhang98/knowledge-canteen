@@ -65,7 +65,6 @@ export default {
       }
       comment(data).then(res=>{
         document.getElementsByClassName("textarea")[document.getElementsByClassName("textarea").length-1].innerHTML = ""
-        console.log(res)
         this.$emit("success",res.data)
         // console.log(this.secondComment.oid)   // 注意此处应同时通知文章发布者
         this.$socket.emit("comment",res.data)

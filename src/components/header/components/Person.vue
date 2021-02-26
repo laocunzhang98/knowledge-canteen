@@ -12,7 +12,7 @@
       </el-dropdown-menu>
     </el-dropdown>
     <div class="login-btn" @click="jumpLogin" v-show="!showLogin"><el-button type="primary" size="small">登录</el-button></div>
-    <div class="person-news"><a href="#"><span class="iconfont icon-xiaoxi"></span><div class="notice-num" v-show="isNotice">{{noticeNum}}</div></a></div>
+    <div class="person-news"><span class="iconfont icon-xiaoxi"></span><div class="notice-num" v-show="isNotice">{{noticeNum}}</div></div>
   </div>
 </template>
 
@@ -26,6 +26,7 @@ export default {
         this.userInfo = res.data
         console.log(this.userInfo)
       }
+      this.$storage.set("uid",this.userInfo.id)
       this.$socket.emit("uid", this.userInfo.id)
     }).catch()
   },
@@ -45,10 +46,18 @@ export default {
   updated(){
   },
   sockets:{
-     reply: function (value) {
+     reply(value) {
       this.isNotice = true
       this.noticeNum++
       console.log(value);
+    },
+    login(res){
+      console.log(res)
+      if(res.count){
+        this.isNotice = true
+        this.noticeNum = res.count
+      }
+      this.isNotice = false
     },
     disconnect() {
       console.log('断开链接')
@@ -58,7 +67,8 @@ export default {
     },
   },
   beforeDestroy(){
-    this.$socket.emit("disconnect")
+    // this.$socket.emit("disconnect")
+    tshi.$socket.close()
   },
   methods:{
     addedit(){
@@ -116,6 +126,7 @@ export default {
       position: relative;
       .iconfont{
         font-size: 24px;
+        cursor: pointer;
         color: rgb(136,119,145);
       }
       .notice-num{

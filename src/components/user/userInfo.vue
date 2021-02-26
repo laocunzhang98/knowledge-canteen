@@ -11,7 +11,7 @@
           </div>
         </el-col>
         <el-col class="active-box" :span="6">
-            <el-button @click="editPerson">编辑个人资料</el-button>
+            <el-button @click="editPerson" v-show="isEdit">编辑个人资料</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -23,7 +23,12 @@ import {getUserInfo} from "@/api/user"
 
 export default {
   created(){
-    getUserInfo().then(res=>{
+    let params = {}
+    if(this.$route.params.userid){
+      params.id = this.$route.params.userid
+      this.isEdit = false
+    }
+    getUserInfo(params).then(res=>{
       if(res.code==200){
         this.avatar = res.data.avatar
         this.job = res.data.job
@@ -41,7 +46,8 @@ export default {
       avatar:"",
       job:"",
       describe:"",
-      nickname:""
+      nickname:"",
+      isEdit:true
     }
   },
   methods:{

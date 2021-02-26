@@ -19,7 +19,11 @@ export default {
     };
   },
   mounted() {
-    getUserArticle().then((res) => {
+    let params = {}
+    if(this.$route.params.userid){
+      params.uid = this.$route.params.userid
+    }
+    getUserArticle(params).then((res) => {
       this.result = res.data;
     });
   },
