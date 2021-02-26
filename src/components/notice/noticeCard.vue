@@ -6,9 +6,9 @@
       </div>
       <div class="notice-info">
         <div>
-          <span class="nickname">{{noticeInfo.user.nickname}}</span>
+          <span class="nickname" @click="jumpUserHome">{{noticeInfo.user.nickname}}</span>
           <span>在</span>
-          <span class="title">{{noticeInfo.article.title}}</span>
+          <span class="title" @click="jumpArticle(noticeInfo.article.id)">{{noticeInfo.article.title}}</span>
           <span>中</span>
           <span class="type">{{noticeInfo.type}}</span>了你
         </div>
@@ -33,6 +33,17 @@ export default {
     return {};
   },
   mounted(){
+  },
+  methods:{
+    jumpArticle(id){
+      this.$router.push(`/post/${id}`)
+    },
+    jumpUserHome(){
+      this.$router.push({
+        path:`/users/${this.noticeInfo.user.id}/article`
+      })
+    }
+    
   },
   components:{
     TimeDiff
@@ -64,6 +75,18 @@ export default {
       background: #fafbfc;
       border-radius: 3px;
       border: 1px solid #f1f1f2;
+    }
+    .nickname{
+      cursor: pointer;
+      &:hover{
+        color: blue;
+      }
+    }
+    .title{
+      cursor: pointer;
+      &:hover{
+        color: blue;
+      }
     }
   }
 }

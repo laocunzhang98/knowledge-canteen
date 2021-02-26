@@ -6,4 +6,10 @@ export function getNoticeInfo(){
     method:"GET",
   })
 }
-
+export function readNoticeInfo(data){
+  return request({
+    url:"/notice/readinfo",
+    method:"POST",
+    data
+  })
+}

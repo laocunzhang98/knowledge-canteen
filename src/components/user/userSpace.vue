@@ -33,6 +33,15 @@ export default {
     if(this.$route.params.userid){
       this.isShow = false
     }
+    let path = this.$route.path.split("/").slice(-1)[0]
+    if(path=="article"){
+      this.activeIndex = "1"
+    }
+    if(path=="notice"){
+      this.activeIndex = "5"
+    }
+    
+    console.log(path)
   },
   methods: {
     jumpNotice(){
