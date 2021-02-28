@@ -9,8 +9,8 @@
               <img src="../assets/home/tuandui.png" alt />
             </div>
             <div class="team-info">
-              <div class="team-name">团队名字</div>
-              <div class="team-des">团队描述</div>
+              <div class="team-name">{{orgInfo.team_name}}</div>
+              <div class="team-des">{{orgInfo.describe}}</div>
             </div>
           </div>
         </el-col>
@@ -39,12 +39,12 @@
         <el-col :span="4">
           <organize-nav></organize-nav>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="13">
           <div>
             <router-view :key="key"></router-view>
           </div>
         </el-col>
-        <el-col :span="6"></el-col>
+        <el-col :span="5"></el-col>
       </el-row>
     </div>
   </div>
@@ -54,35 +54,53 @@
 import ArticleView from "@/components/content/components/ArticleView";
 import organizeNav from "@/components/organiztion/organizeNav";
 import yunContent from "@/components/yunstorage/yunContent";
-import { mapGetters, mapMutations } from "vuex";
+import {getTeamInfo} from "@/api/team"
 export default {
   data() {
     return {
-
+      activeIndex:"1",
+      orgInfo:{}
     }
+  },
+  created(){
+    getTeamInfo({team_id:this.$route.params.id}).then(res=>{
+      this.orgInfo = res.data
+    })
   },
   computed:{
     key() {
       return this.$route.path;
     },
-    ...mapGetters(["activeIndex"]),
   },
   components: {
     organizeNav,
     ArticleView,
     yunContent,
   },
+  mounted(){
+    
+    let path = this.$route.path.split("/").slice(-1)[0]
+    if(path=="home"){
+      this.activeIndex = "1"
+    }
+    if(path=="yun"){
+      this.activeIndex = "2"
+    }
+    if(path=="setting"){
+      this.activeIndex = "5"
+    }
+  },
   methods: {
-    ...mapMutations(["setActiveIndex"]),
     menuSelect(val) {
       switch (val) {
         case "1":
-          this.setActiveIndex("1")
           this.$router.push(`/organize/${this.$route.params.id}/home`)
           break;
         case "2":
-          this.setActiveIndex("2")
           this.$router.push(`/organize/${this.$route.params.id}/yun`)
+          break;
+        case "5":
+          this.$router.push(`/organize/${this.$route.params.id}/setting`)
         default:
           
           break;

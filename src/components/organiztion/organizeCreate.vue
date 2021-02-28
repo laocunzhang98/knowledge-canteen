@@ -53,6 +53,9 @@ export default {
     justify-content: center;
     align-items: center;
     font-size: 16px;
+    .title{
+      padding: 5px 10px;
+    }
     .teamname{
       display: flex;
       align-items: center;

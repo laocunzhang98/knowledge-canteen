@@ -16,7 +16,7 @@
             </div>
           </div>
           <div class="content">
-            <mavon-editor codeStyle="monokai" v-html="content" style="padding:25px" ref="helpDocs"></mavon-editor>
+            <mavon-editor codeStyle="monokai" v-html="content" style="padding:25px" ref="helpDocs" v-highlight></mavon-editor>
           </div>
           <div class="comment">
             <comment-view :articleInfo="articleInfo"></comment-view>

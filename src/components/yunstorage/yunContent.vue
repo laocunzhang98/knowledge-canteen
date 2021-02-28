@@ -407,7 +407,11 @@ export default {
       }
     },
     getPng(row) {
-      return require("../../assets/header/" + row.mimetype + ".png");
+      try {
+        return require("../../assets/header/" + row.mimetype + ".png");
+      } catch (error) {
+        
+      }
     },
   },
   watch: {

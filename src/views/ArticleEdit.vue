@@ -157,6 +157,7 @@ export default {
       }
     },
     async handleOrgSelect(val) {
+      console.log(val)
       await getTeamId({ id: val }).then((res) => {
         this.organize_id = res.data.team_id;
       });

@@ -11,7 +11,14 @@ import "./common/css/font.css"
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 // import { Message } from 'element-ui'
-
+import hljs from 'highlight.js'
+import 'highlight.js/styles/googlecode.css' // 样式文件
+Vue.directive('highlight', function (el) {
+  let blocks = el.querySelectorAll('pre code')
+  blocks.forEach((block) => {
+    hljs.highlightBlock(block)
+  })
+})
 import VueSocketio from 'vue-socket.io'
 import ClientSocketIO  from "socket.io-client"
 const socketOptions = {

@@ -85,6 +85,14 @@ const routes = [
           path:"yun",
           component:()=>import("../components/organiztion/organizeYun.vue"),
           name:"orgyun"
+        },{
+          path:"setting",
+          component:()=>import("../components/organiztion/organizeSetting.vue"),
+          name:"orgsetting",
+          children:[{
+            path:"basic",
+            component:()=>import("../components/organiztion/components/orgSetting.vue")
+          }]
         }
       ]
       },
