@@ -13,3 +13,24 @@ export function readNoticeInfo(data){
     data
   })
 }
+export function getApplyInfo(){
+  return request({
+    url:"/notice/applyinfo",
+    method:"GET",
+  })
+}
+
+export function readApplyInfo(data){
+  return request({
+    url:"/notice/readapply",
+    method:"POST",
+    data
+  })
+}
+export function refuseApply(data){
+  return request({
+    url:"/notice/refuseapply",
+    method:"POST",
+    data
+  })
+}

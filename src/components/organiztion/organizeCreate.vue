@@ -35,6 +35,7 @@ export default {
       this.dialogVisible = false
       createdTeam({team_name:this.teamName}).then(res=>{
         console.log(res)
+        this.$bus.$emit("createTeam")
       })
     }
   }

@@ -43,10 +43,10 @@
       <el-dropdown trigger="click">
         <div class="person-news">
         <span class="iconfont icon-xiaoxi"></span>
-        <div class="notice-num" v-show="isNotice">{{noticeNum}}</div></div>
+        <div class="notice-num" v-show="infoNum">{{infoNum}}</div></div>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item @click.native="jumpNoticeInfo"><i class="el-icon-bell"></i> 我的消息<span class="notice" v-show="isNotice">{{noticeNum}}</span></el-dropdown-item>
-          <el-dropdown-item><i class="el-icon-plus"></i> 申请通知</el-dropdown-item>
+          <el-dropdown-item @click.native="jumpNoticeInfo"><i class="el-icon-bell"></i> 我的消息<span class="notice" v-show="noticeNum">{{noticeNum}}</span></el-dropdown-item>
+          <el-dropdown-item @click.native="jumpApplyInfo"><i class="el-icon-plus"></i> 申请通知<span class="notice" v-show="applyNum">{{applyNum}}</span></el-dropdown-item>
           <el-dropdown-item><i class="el-icon-warning-outline"></i> 系统通知</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -57,7 +57,7 @@
 
 <script>
 import { getUserInfo } from "@/api/user";
-import {readNoticeInfo} from "@/api/notice"
+import {readNoticeInfo,readApplyInfo} from "@/api/notice"
 export default {
   created() {
     getUserInfo()
@@ -75,9 +75,11 @@ export default {
     return {
       showLogin: false,
       userInfo: {},
-      isNotice: false,
+      infoNum:0,
       noticeNum: 0,
-      ids:[]
+      applyNum:0,
+      ids:[],
+      aids:[]
     };
   },
   mounted() {
@@ -88,22 +90,29 @@ export default {
   updated() {},
   sockets: {
     reply(value) {
-      this.isNotice = true;
       this.noticeNum++;
-      console.log(value);
+      this.infoNum++;
     },
     login(res) {
-      console.log(res)
-      if (res.count) {
-        this.isNotice = true;
-        this.noticeNum = res.count;
-        for(let item of res.rows){
+      this.noticeNum = res.noticeInfo.count
+      this.applyNum = res.applyInfo.count
+      this.infoNum = this.noticeNum+this.applyNum;
+      if (this.noticeNum) {
+        for(let item of res.noticeInfo.rows){
           this.ids.push(item.id)
         }
-      }else{
-        this.isNotice = false;
+      }else if(this.applyNum){
+        for(let item of res.applyInfo.rows){
+          this.aids.push(item.id)
+        }
       }
+
     },
+    apply(res){
+      this.infoNum++;
+      this.applyNum++
+    },
+    
     disconnect() {
       console.log("断开链接");
     },
@@ -116,10 +125,19 @@ export default {
     this.$socket.close();
   },
   methods: {
+    jumpApplyInfo(){
+      readApplyInfo({aids:this.aids}).then(res=>{
+        if(res.code===200){
+          this.infoNum -= this.applyNum
+          this.applyNum = 0
+        }
+      })
+      this.$router.push("/user/apply")
+    },
     jumpNoticeInfo(){
       readNoticeInfo({ids:this.ids}).then(res=>{
         if(res.code===200){
-          this.isNotice = false
+          this.infoNum -= this.noticeNum
           this.noticeNum = 0
         }
       })

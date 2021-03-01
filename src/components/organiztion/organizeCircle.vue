@@ -17,14 +17,13 @@
                 <div class="team-des">
                   <div class="team-top">
                     <div class="team-name">{{item.team_name}}</div>
-                    <el-button size="mini" type="primary">申请加入</el-button>
+                    <el-button size="mini" type="primary" @click="apply(item)">申请加入</el-button>
                   </div>
                   <div class="team-summary">
                     <div class="team-user">{{item.team_name}}</div>
                     <span>创建于</span>
                     <div class="team-time"><time-diff :date="item.createdAt"></time-diff>;</div>
                     <div class="team-num">{{item.total}}人加入</div>
-                    
                   </div>
                   <div class="describe">{{item.describe}}</div>
                 </div>
@@ -54,8 +53,18 @@ export default {
       this.teamInfo = res.data
     })
   },
+  sockets:{
+    error(res){
+    this.$message.warning(res)
+  },
+  },
   methods:{
-
+    apply(item){
+      let data = item
+      data.noticeType = "申请"
+      data.sponsor = this.$storage.get("uid")
+      this.$socket.emit("apply",data)
+    }
   },
   components: {
     organizeNav,

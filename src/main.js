@@ -10,20 +10,22 @@ import WebStorageCache from "web-storage-cache";
 import "./common/css/font.css"
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
-// import { Message } from 'element-ui'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/googlecode.css' // 样式文件
+
 Vue.directive('highlight', function (el) {
   let blocks = el.querySelectorAll('pre code')
   blocks.forEach((block) => {
     hljs.highlightBlock(block)
   })
 })
+
 import VueSocketio from 'vue-socket.io'
 import ClientSocketIO  from "socket.io-client"
 const socketOptions = {
   autoConnect: false,       // 自动连接     这里为我项目需求  需要在指定情况下才连接socket
 }
+
 Vue.use(new VueSocketio({
   debug:true,
   connection:ClientSocketIO.connect(`${process.env.VUE_APP_BASE_API}`,{
@@ -33,14 +35,10 @@ Vue.use(new VueSocketio({
     autoConnect:false
   }
 })) // 第二个参数为服务端地址
-// 挂载到$message上
-// Vue.prototype.$message = Message
+
 Vue.prototype.$bus = new Vue()
 // use
 Vue.use(mavonEditor)
-// import Darkmode from 'darkmode-js';
-// const darkmode = new Darkmode();
-// darkmode.showWidget();
 
 Vue.config.productionTip = false
 Vue.prototype.$storage = new WebStorageCache()

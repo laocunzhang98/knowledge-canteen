@@ -53,3 +53,18 @@ export function getTeamList(){
     method:"GET",
   })
 }
+
+export function updateTeamInfo(data){
+  return request({
+    url:"/organize/updateinfo",
+    method:"POST",
+    data
+  })
+}
+export function JoinTeam(data){
+  return request({
+    url:"/organize/join",
+    method:"POST",
+    data
+  })
+}

@@ -52,6 +52,10 @@ const routes = [
         {
           path:"article",
           component:()=>import("@/components/user/components/userArticle")
+        },
+        {
+          path:"apply",
+          component:()=>import("@/views/applyView")
         }
       ]
       },
@@ -89,6 +93,7 @@ const routes = [
           path:"setting",
           component:()=>import("../components/organiztion/organizeSetting.vue"),
           name:"orgsetting",
+          redirect:"/organize/:id/setting/basic",
           children:[{
             path:"basic",
             component:()=>import("../components/organiztion/components/orgSetting.vue")
