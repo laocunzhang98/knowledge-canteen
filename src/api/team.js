@@ -76,4 +76,10 @@ export function getOrgMembers(params){
     params
   })
 }
-
+export function modifyMemberLevle(data){
+  return request({
+    url:"/organize/modifylevel",
+    method:"POST",
+    data
+  })
+}
