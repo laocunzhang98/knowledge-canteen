@@ -56,6 +56,10 @@ const routes = [
         {
           path:"apply",
           component:()=>import("@/views/applyView")
+        },
+        {
+          path:"favor",
+          component:()=>import("@/components/user/components/userFavor")
         }
       ]
       },

@@ -32,22 +32,21 @@
     </div>
     <div class="option" v-show="(isEdit||result.uid==uid)&&isUser">
       <el-dropdown>
-      <div @click.stop>
-        <img src="../../../assets/header/op.png" alt />
-      </div>
-      <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item @click.native="edit">编辑</el-dropdown-item>
-        <el-dropdown-item @click.native="del">删除</el-dropdown-item>
-      </el-dropdown-menu>
-    </el-dropdown>
+        <div @click.stop>
+          <img src="../../../assets/header/op.png" alt />
+        </div>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item @click.native="edit">编辑</el-dropdown-item>
+          <el-dropdown-item @click.native="del">删除</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
     </div>
-    
   </div>
 </template>
 
 <script>
 import TimeDiff from "@/utils/TimeDiff";
-import { Favor, getFavorList,DeleteArticle } from "@/api/classic";
+import { Favor, getFavorList, DeleteArticle } from "@/api/classic";
 export default {
   data() {
     return {
@@ -55,19 +54,19 @@ export default {
       favorImgActive: require("@/assets/home/favorActive.png"),
       articleList: [],
       favorShow: false,
-      isEdit:false,
-      isUser:true
+      isEdit: false,
+      isUser: true,
     };
   },
 
   mounted() {
-    if(this.$route.params.id){
-      this.isEdit = true
+    if (this.$route.params.id) {
+      this.isEdit = true;
     }
-    if(this.$route.params.userid){
-      this.isUser = false
-      if(this.$route.params.userid == this.$storage.get("uid")){
-        this.$router.push("/user")
+    if (this.$route.params.userid) {
+      this.isUser = false;
+      if (this.$route.params.userid == this.$storage.get("uid")) {
+        this.$router.push("/user");
       }
     }
     getFavorList().then((res) => {
@@ -86,28 +85,31 @@ export default {
     result: {
       type: Object,
     },
-    uid:{
-      type:Number
-    }
+    uid: {
+      type: Number,
+    },
   },
 
   methods: {
-    jumpUserHome(){
+    jumpUserHome() {
       this.$router.push({
-        path:`/users/${this.result.uid}/article`
-      })
-    },
-    edit(){
-      this.$router.push({
-        path: "/edit",
-        query: { article_id: this.result.id,team_id:this.$route.params.id},
+        path: `/users/${this.result.uid}/article`,
       });
     },
-  
-    del(){
-      DeleteArticle({article_id:this.result.id,organize_id:this.$route.params.id}).then(res=>{
-        // this.$router.go(0)
-      })
+    edit() {
+      this.$router.push({
+        path: "/edit",
+        query: { article_id: this.result.id, team_id: this.$route.params.id },
+      });
+    },
+
+    del() {
+      DeleteArticle({
+        article_id: this.result.id,
+        organize_id: this.$route.params.id,
+      }).then((res) => {
+        this.$router.go(0);
+      });
     },
     favor() {
       Favor({ article_id: this.result.id }).then((res) => {
@@ -118,30 +120,28 @@ export default {
       });
     },
     Aticledetail() {
-      let params = {}
+      let params = {};
       if (this.$route.params.id) {
-        params.id= this.result.id
-        params.organize_id = this.$route.params.id
-      } 
-      else {
-        params.id = this.result.id
+        params.id = this.result.id;
+        params.organize_id = this.$route.params.id;
+      } else {
+        params.id = this.result.id;
       }
       this.$router.push({
-          name: "Article",
-          params
+        name: "Article",
+        params,
       });
-    }
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-
-::v-deep .el-dropdown-menu{
+::v-deep .el-dropdown-menu {
   margin-top: 0px !important;
   margin-left: 25px !important;
 }
-::v-deep .el-dropdown-menu__item{
+::v-deep .el-dropdown-menu__item {
   line-height: 16px;
   padding: 0 10px;
 }
@@ -171,8 +171,8 @@ export default {
       color: #b2bac2;
       font-size: 14px;
       display: flex;
-      .nickname{
-        &:hover{
+      .nickname {
+        &:hover {
           color: skyblue;
         }
       }

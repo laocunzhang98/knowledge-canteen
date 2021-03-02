@@ -56,6 +56,7 @@ export default {
       this.team_des = res.data.describe
     });
   },
+
   methods: {
     handleAvatarSuccess(res, file) {
       this.avatar = res.data

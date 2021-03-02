@@ -79,7 +79,8 @@ export default {
   },
   mounted(){
     
-    let path = this.$route.path.split("/").slice(-1)[0]
+    let path = this.$route.path.split("/").splice(3,1)
+    console.log(path)
     if(path=="home"){
       this.activeIndex = "1"
     }
@@ -102,7 +103,6 @@ export default {
         case "5":
           this.$router.push(`/organize/${this.$route.params.id}/setting`)
         default:
-          
           break;
       }
     },
