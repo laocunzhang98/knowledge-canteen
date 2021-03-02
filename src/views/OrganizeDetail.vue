@@ -6,7 +6,7 @@
         <el-col :span="12">
           <div class="team">
             <div class="team-avatar">
-              <img src="../assets/home/tuandui.png" alt />
+              <img :src="orgInfo.avatar" alt />
             </div>
             <div class="team-info">
               <div class="team-name">{{orgInfo.team_name}}</div>
@@ -90,6 +90,9 @@ export default {
     if(path=="setting"){
       this.activeIndex = "5"
     }
+    if(path=="members"){
+      this.activeIndex = "3"
+    }
   },
   methods: {
     menuSelect(val) {
@@ -99,6 +102,9 @@ export default {
           break;
         case "2":
           this.$router.push(`/organize/${this.$route.params.id}/yun`)
+          break;
+        case "3":
+          this.$router.push(`/organize/${this.$route.params.id}/members`)
           break;
         case "5":
           this.$router.push(`/organize/${this.$route.params.id}/setting`)

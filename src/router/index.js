@@ -106,6 +106,10 @@ const routes = [
             path:"basic",
             component:()=>import("../components/organiztion/components/orgSetting.vue")
           }]
+        },
+        {
+          path:"members",
+          component:()=>import("../components/organiztion/organizeMember.vue")
         }
       ]
       },

@@ -166,7 +166,7 @@ export default {
     }
     this.$bus.$on("catetype", (type) => {
       this.catetype = type;
-      getCateFile({ type: JSON.stringify(type) }).then((res) => {
+      getCateFile({ type: JSON.stringify(type),organize_id:this.$route.params.id||0}).then((res) => {
         this.tableData = res.data;
       });
     });
