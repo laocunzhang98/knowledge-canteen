@@ -42,7 +42,7 @@
           </el-table-column>
           <el-table-column label="操作" min-width="20%">
             <template slot-scope="scope">
-              <el-button type="danger" size="mini">移除</el-button>
+              <el-button type="danger" size="mini" @click="removeMember(scope.row.member_id)">移除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -52,21 +52,43 @@
 </template>
 
 <script>
-import { getOrgMembers,modifyMemberLevle } from "@/api/team";
+import { getOrgMembers,modifyMemberLevle,removeMember } from "@/api/team";
 
 export default {
   mounted() {
-    getOrgMembers({ organize_id: this.$route.params.id }).then((res) => {
-      console.log(res.data);
-      this.tableData = res.data.rows;
-    });
+    this.initMembers()
   },
   data() {
     return {
       tableData: [],
+      organize_id:0
     };
   },
   methods: {
+    removeMember(id){
+      console.log(id)
+      this.$confirm('此操作将该成员移除改圈子, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          removeMember({organize_id:this.$route.params.id,member_id:id}).then(res=>{
+            console.log(res)
+            this.initMembers()
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '取消移除'
+          });          
+        });
+    },
+    initMembers(){
+      getOrgMembers({ organize_id: this.$route.params.id }).then((res) => {
+        console.log(res.data);
+        this.tableData = res.data.rows;
+      });
+    },
     MangerLevel(level,uid){
       let data = {
         level:level,
@@ -74,7 +96,7 @@ export default {
         organize_id:this.$route.params.id
       }
       modifyMemberLevle(data).then(res=>{
-        console.log(res)
+        this.initMembers()
       })
     },
     handleRole() {

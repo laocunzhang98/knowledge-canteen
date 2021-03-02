@@ -83,3 +83,12 @@ export function modifyMemberLevle(data){
     data
   })
 }
+
+export function removeMember(data){
+  return request({
+    url:"/organize/remove",
+    method:"DELETE",
+    data
+  })
+}
+
