@@ -60,6 +60,10 @@ const routes = [
         {
           path:"favor",
           component:()=>import("@/components/user/components/userFavor")
+        },
+        {
+          path:"follow",
+          component:()=>import("@/components/user/components/userFollow")
         }
       ]
       },
@@ -122,6 +126,14 @@ const routes = [
           {
             path:"article",
             component:()=>import("@/components/user/components/userArticle")
+          },
+          {
+            path:"favor",
+            component:()=>import("@/components/user/components/userFavor")
+          },
+          {
+            path:"follow",
+            component:()=>import("@/components/user/components/userFollow")
           }
         ]
       }

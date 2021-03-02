@@ -4,7 +4,7 @@
       <el-menu :default-active="activeIndex" mode="horizontal" @select="handleSelect">
         <el-menu-item index="1" @click.native="jumpArticle">文章</el-menu-item>
         <el-menu-item index="2" @click.native="jumpFavor">赞</el-menu-item>
-        <el-menu-item index="3">关注</el-menu-item>
+        <el-menu-item index="3" @click.native="jumpFollow">关注</el-menu-item>
         <el-menu-item index="4">圈子</el-menu-item>
         <el-menu-item index="5" @click.native="jumpNotice" v-show="isShow">消息通知</el-menu-item>
         <el-menu-item index="6" @click.native="jumpApply" v-show="isShow">申请通知</el-menu-item>
@@ -43,14 +43,29 @@ export default {
     if(path=="favor"){
       this.activeIndex = "2"
     }
+    if(path=="follow"){
+      this.activeIndex = "3"
+    }
     if(path=="apply"){
       this.activeIndex = "6"
     }
     console.log(path)
   },
   methods: {
+    jumpFollow(){
+      if(this.isShow){
+        this.$router.push("/user/follow")
+      }else{
+         this.$router.push(`/users/${this.$route.params.userid}/follow`)
+      }
+    },
     jumpFavor(){
-      this.$router.push("/user/favor")
+      if(this.isShow){
+        this.$router.push("/user/favor")
+      }
+      else{
+        this.$router.push(`/users/${this.$route.params.userid}/favor`)
+      }
     },
     jumpApply(){
       this.$router.push("/user/apply")

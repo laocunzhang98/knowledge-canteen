@@ -33,33 +33,29 @@
 import {getuserArticleNum,getUserInfo} from "@/api/user"
 export default {
   mounted(){
-    getuserArticleNum().then(res=>{
-        console.log(res)
-        if(res.code==200){
-          this.all_favs = res.data[0].all_favs
-          this.all_reads = res.data[0].all_reads
-          
-        }
-      })
-    getUserInfo().then(res=>{
-      this.follow_nums = res.data.follow_nums
-      this.fans_nums = res.data.fans_nums
-    })
-
+    let params = {}
+    if(this.$route.params.userid){
+      params.id = this.$route.params.userid
+    }
+    this.initAchieve(params)
   },
   props:{
 
   },
-  watch:{
-    // articleUid(){
-    //   getuserArticleNum({id:this.articleUid}).then(res=>{
-    //     console.log(res)
-    //     if(res.code==200){
-    //       this.all_favs = res.data[0].all_favs
-    //       this.all_reads = res.data[0].all_reads
-    //     }
-    //   })
-    // }
+  methods:{
+    initAchieve(params){
+      getuserArticleNum(params).then(res=>{
+        console.log(res)
+        if(res.code==200){
+          this.all_favs = res.data[0].all_favs
+          this.all_reads = res.data[0].all_reads
+        }
+      })
+      getUserInfo(params).then(res=>{
+        this.follow_nums = res.data.follow_nums
+        this.fans_nums = res.data.fans_nums
+      })
+    }
   },
   data(){
     return {
