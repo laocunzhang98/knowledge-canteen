@@ -28,7 +28,7 @@ export default {
   created() {
     let params = {}
     if(this.$route.params.userid){
-      params.id = this.$route.params.userid
+      params.uid = this.$route.params.userid
     }
     this.initFollow(params)
   },

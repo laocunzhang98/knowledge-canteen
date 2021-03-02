@@ -330,7 +330,6 @@ export default {
       this.dialogVisible = true;
     },
     async changeData(event, id) {
-      // console.log(event.target.value);
       console.log(id);
       let filevalue = event.target.value;
       let files = event.target.files;
@@ -347,7 +346,6 @@ export default {
           filename: files[0].webkitRelativePath.split("/")[0], //文件夹只存储在数据库
           organize_id: this.$route.params.id || 0,
         };
-        console.log(files[0]);
         await createFolder(data).then(async (res) => {
           let self = this;
           console.log(res);

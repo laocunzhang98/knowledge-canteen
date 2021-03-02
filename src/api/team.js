@@ -68,3 +68,12 @@ export function JoinTeam(data){
     data
   })
 }
+
+export function getOrgMembers(params){
+  return request({
+    url:"/organize/members",
+    method:"GET",
+    params
+  })
+}
+
