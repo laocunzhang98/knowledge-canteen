@@ -92,3 +92,25 @@ export function removeMember(data){
   })
 }
 
+
+export function LeaveOrg(data){
+  return request({
+    url:"/organize/leave",
+    method:"POST",
+    data
+  })
+}
+export function dissolutionOrg(data){
+  return request({
+    url:"/organize/dissolution",
+    method:"POST",
+    data
+  })
+}
+export function modifyOrgOpen(data){
+  return request({
+    url:"/organize/open",
+    method:"POST",
+    data
+  })
+}

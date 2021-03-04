@@ -30,8 +30,6 @@
 
         <div class="pub">
           <el-button type="primary" @click="prepub">发布文章</el-button>
-          <!-- @click="pub" -->
-
           <el-dialog title="发布文章" :visible.sync="dialogFormVisible" center>
             <div class="other-info">
               <div class="classify">
@@ -112,6 +110,10 @@ export default {
         this.label = res.data.label;
         this.categoryItem = res.data.classify_name;
         this.organize_id = res.data.organize_id
+        this.public = res.data.public
+        if(this.public){
+          this.checked = true
+        }
       });
     }
     getLimitOrg().then((res) => {

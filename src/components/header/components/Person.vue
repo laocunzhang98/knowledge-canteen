@@ -16,17 +16,17 @@
           </div>
         </el-dropdown-item>
         <el-dropdown-item>
-          <div>
+          <div @click="JumpUserInfo">
             <i class="el-icon-s-flag"></i> 我的圈子
           </div>
         </el-dropdown-item>
         <el-dropdown-item>
-          <div>
+          <div @click="JumpUserFavor">
             <i class="el-icon-ice-cream-round"></i> 我赞过的
           </div>
         </el-dropdown-item>
         <el-dropdown-item>
-          <div>
+          <div @click="JumpUserFollow">
             <i class="el-icon-s-check"></i> 我关注的
           </div>
         </el-dropdown-item>
@@ -125,6 +125,12 @@ export default {
     this.$socket.close();
   },
   methods: {
+    JumpUserFavor(){
+      this.$router.push("/user/favor")
+    },
+    JumpUserFollow(){
+      this.$router.push("/user/follow")
+    },
     jumpApplyInfo(){
       readApplyInfo({aids:this.aids}).then(res=>{
         if(res.code===200){

@@ -4,7 +4,7 @@
       <el-row>
         <el-col :span="5"></el-col>
         <el-col :span="12">
-          <div class="header">
+          <div class="header" @click="goperson">
             <i class="el-icon-arrow-left"></i> 返回个人主页
           </div>
         </el-col>
@@ -89,6 +89,9 @@ export default {
     })
   },
   methods: {
+    goperson(){
+      this.$router.push("/user")
+    },
     updateUserInfo(item){
       editUserInfo(item).then(res=>{
         console.log(res)

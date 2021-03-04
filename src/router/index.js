@@ -105,7 +105,17 @@ const routes = [
           children:[{
             path:"basic",
             component:()=>import("../components/organiztion/components/orgSetting.vue")
-          }]
+          },
+          {
+            path:"advanced",
+            component:()=>import("../components/organiztion/components/seniorSetting.vue")
+          },
+          {
+            path:"cost",
+            component:()=>import("../components/organiztion/components/costCenter.vue")
+          },
+         
+        ]
         },
         {
           path:"members",

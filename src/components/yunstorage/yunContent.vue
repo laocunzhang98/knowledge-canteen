@@ -206,7 +206,6 @@ export default {
         });
       });
     },
-
     handleSelectAll(selection) {
       console.log(selection);
       this.isSelect = true;

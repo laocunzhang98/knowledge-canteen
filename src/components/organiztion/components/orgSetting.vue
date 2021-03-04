@@ -49,7 +49,6 @@ export default {
     };
   },
   created() {
-    console.log(this.$route.params);
     getTeamInfo({ team_id: this.$route.params.id }).then((res) => {
       this.avatar = res.data.avatar
       this.team_name = res.data.team_name

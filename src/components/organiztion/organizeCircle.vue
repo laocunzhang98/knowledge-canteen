@@ -82,7 +82,6 @@ export default {
   .hot-title {
     padding: 20px 25px;
     border-radius: 15px;
-
     background: url("../../assets/header/org.jpg") no-repeat;
     background-size: 100% 100%;
     font-size: 24px;

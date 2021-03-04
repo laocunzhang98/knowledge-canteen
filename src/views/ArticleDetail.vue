@@ -105,7 +105,6 @@ export default {
   created() {
     let that = this;
       getArticleDetail(this.$route.params.id).then((res) => {
-        // console.log(res);
         this.content = res.data.content;
         this.title = res.data.title;
         this.imageUrl = res.data.image;
