@@ -106,13 +106,12 @@ export default {
           this.aids.push(item.id)
         }
       }
-
     },
-    apply(res){
+    apply(value){
+      console.log(value)
       this.infoNum++;
       this.applyNum++
     },
-    
     disconnect() {
       console.log("断开链接");
     },
@@ -121,8 +120,7 @@ export default {
     },
   },
   beforeDestroy() {
-    // this.$socket.emit("disconnect")
-    this.$socket.close();
+    // this.$socket.close();
   },
   methods: {
     JumpUserFavor(){

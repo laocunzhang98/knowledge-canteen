@@ -15,6 +15,25 @@
             <el-button type="warning" size="small" @click="handleMoveFile">
               <i class="el-icon-sort"></i> 移动到
             </el-button>
+            <div class="move">
+              <el-dialog
+              title="移动到"
+              :visible.sync="dialogVisible1"
+              width="width"
+              >
+              <div>
+                <el-tree
+                  :data="data"
+                  :props="defaultProps"
+                  @node-click="nodeClick">
+                </el-tree>
+              </div>
+              <div slot="footer">
+                <el-button @click="dialogVisible1 = false">取 消</el-button>
+                <el-button type="primary" @click="CurrentMove">确 定</el-button>
+              </div>
+            </el-dialog>
+            </div>
           </div>
           <div style="margin-right: 20px;" v-show="isSelect">
             <el-button type="danger" size="small" @click="handleDeleteFiles(ids)">
@@ -100,24 +119,14 @@
             </template>
           </el-table-column>
           <el-table-column prop="prop" label="操作" min-width="20%">
-            <template slot-scope="scope">
+            <!-- <template slot-scope="scope">
               <span class="option">
                 <img src="../../assets/header/op.png" alt style="height:10px" />
               </span>
-              <span v-show="isMove&&scope.row.mimetype==='dir'">
-                <el-button type="primary" size="mini">移入</el-button>
-              </span>
-            </template>
+            </template> -->
           </el-table-column>
         </el-table>
       </div>
-      <el-dialog title="文件下载" :visible.sync="dialogVisible1">
-        <div></div>
-        <div slot="footer">
-          <el-button @click="dialogVisible1 = false">取 消</el-button>
-          <el-button type="primary">下 载</el-button>
-        </div>
-      </el-dialog>
     </el-card>
   </div>
 </template>
@@ -132,6 +141,8 @@ import {
   getFolderId,
   getCateFile,
   deleteFile,
+  getAllCate,
+  moveFile
 } from "@/api/uploads";
 export default {
   data() {
@@ -152,17 +163,23 @@ export default {
       tableData: [],
       isSelect: false, // 判断是否选中文件
       isMove: false, //判断是否移动文件
+      defaultProps: {
+        children: 'children',
+        label: 'origin_name'
+      },
+      data:[],
+      moveId:[],
+      currentId:0
     };
   },
   mounted() {
     if (this.$route.params.id) {
-      getFileList({organize_id:this.$route.params.id||0}).then((res) => {
-        this.tableData = res.data;
-      });
+      let params = {
+        organize_id:this.$route.params.id||0
+      }
+      this.initFileList(params)
     } else {
-      getFileList().then((res) => {
-        this.tableData = res.data;
-      });
+      this.initFileList()
     }
     this.$bus.$on("catetype", (type) => {
       this.catetype = type;
@@ -187,10 +204,51 @@ export default {
       }
     },
   },
-
   methods: {
+    initFileList(params={}){
+      getFileList(params).then((res) => {
+        this.tableData = res.data;
+      });
+    },
+    CurrentMove(){
+      let data = {
+        moveId:this.moveId,
+        currentId:this.currentid
+      }
+      moveFile(data).then(res=>{
+        this.dialogVisible1 = false
+        this.$router.go(0)
+      })
+    },
+    nodeClick(val){
+      console.log(val)
+      this.currentid = val.id
+    },
+    getFileCate(){
+      if(this.$route.params.id){
+        let params = {
+          organize_id:this.$route.params.id,
+          ids:JSON.stringify(this.moveId)
+        }
+        getAllCate(params).then(res=>{
+          this.data = res.data
+        })
+      }else{
+        let params = {
+          ids:JSON.stringify(this.moveId)
+        }
+        getAllCate(params).then(res=>{
+          console.log(res)
+          this.data = res.data
+        })
+      }
+    },
+    toggleSelection(){
+
+    },
     handleMoveFile() {
-      this.isMove = true;
+      this.dialogVisible1 = true
+      this.getFileCate()
     },
     handleDeleteFiles(ids) {
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
@@ -198,7 +256,7 @@ export default {
         cancelButtonText: "取消",
         type: "warning",
       }).then(() => {
-        deleteFile({ ids: ids }).then((res) => {
+        deleteFile({ ids: ids,organize_id:this.$route.params.id }).then((res) => {
           getFileList({organize_id:this.$route.params.id||0}).then((res) => {
             this.tableData = res.data;
             this.isSelect = false;
@@ -228,15 +286,21 @@ export default {
         this.isMove = false;
         this.isSelect = false;
       }
-      // console.log(selection)
+      this.moveId = []
+      for(let item of selection){
+        console.log(item.id)
+        this.moveId.push(item.id)
+      }
+      console.log(this.moveId)
     },
     async handleFileSuccess(res, files) {
-      console.log(res);
+      this.isSelect = false
+      this.isMove = false
       let data = {
         origin_name: files.name,
         filename: res.data.filename,
         mimetype: files.raw.type.split("/").pop(),
-        size: files.raw.size,
+        size: res.data.size,
         parent_fileid: this.currentid,
         organize_id: this.$route.params.id || 0,
       };
@@ -247,7 +311,7 @@ export default {
       );
     },
     handlePreview(file) {
-      console.log(file);
+      
     },
     handleExceed(files, fileList) {
       this.$message.warning(
@@ -257,6 +321,8 @@ export default {
       );
     },
     Jumpcata(id) {
+      this.isMove = false
+      this.isSelect = false
       this.currentid = id;
       getFileList({ id: id,organize_id:this.$route.params.id||0}).then((res) => {
         this.tableData = res.data;
@@ -282,6 +348,8 @@ export default {
       return currentdate;
     },
     selectDir(id, type, origin_path, filename, ofilename) {
+      this.isMove = false
+      this.isSelect = false
       if (type === "dir") {
         this.currentid = id;
         let params = {
@@ -296,7 +364,6 @@ export default {
           this.cataLog = this.cataLog.concat(res.data);
         });
       } else {
-        // this.dialogVisible1=true
         let url = `${process.env.VUE_APP_BASE_API}/files/${origin_path}/${ofilename}`;
         fetch(url)
           .then((res) => res.blob())
@@ -326,10 +393,12 @@ export default {
       });
     },
     createPath() {
+      this.isMove = false
       this.dialogVisible = true;
     },
     async changeData(event, id) {
-      console.log(id);
+      this.isMove = false
+      this.isSelect = false
       let filevalue = event.target.value;
       let files = event.target.files;
 
@@ -500,6 +569,19 @@ export default {
       display: flex;
       .commit {
         margin-right: 20px;
+      }
+      .move{
+        .el-dialog__wrapper{
+          .el-dialog__body div{
+              overflow: scroll;
+              height: 100%;
+              overflow-x: hidden;
+              overflow-y: hidden;
+              .el-tree{
+                overflow-y: scroll;
+              }
+          }
+        }
       }
     }
   }

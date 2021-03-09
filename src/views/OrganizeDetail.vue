@@ -93,6 +93,9 @@ export default {
     if(path=="members"){
       this.activeIndex = "3"
     }
+    if(path=="statistics"){
+      this.activeIndex = "4"
+    }
   },
   methods: {
     menuSelect(val) {
@@ -106,8 +109,12 @@ export default {
         case "3":
           this.$router.push(`/organize/${this.$route.params.id}/members`)
           break;
+        case "4":
+          this.$router.push(`/organize/${this.$route.params.id}/statistics`)
+          break;
         case "5":
-          this.$router.push(`/organize/${this.$route.params.id}/setting`)
+          this.$router.push({path:`/organize/${this.$route.params.id}/setting`})
+          break;
         default:
           break;
       }

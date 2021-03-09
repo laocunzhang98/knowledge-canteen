@@ -52,3 +52,17 @@ export function deleteFile(data){
     data
   })
 }
+export function getAllCate(params){
+  return request({
+    url:"/download/allcate",
+    method:"GET",
+    params
+  })
+}
+export function moveFile(data){
+  return request({
+    url:"/download/movefile",
+    method:"POST",
+    data
+  })
+}

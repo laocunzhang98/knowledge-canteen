@@ -7,9 +7,12 @@ function resolve(dir) {
 const name = "知识大食堂"
 
 module.exports = {
-  publicPath: "/",
+  publicPath: process.env.NODE_ENV === "production" ? "/permission/" : "/",
   outputDir: "dist",
   assetsDir: "static",
+  filenameHashing:true, // false 来关闭文件名哈希
+  lintOnSave: false, // 关闭eslint
+  productionSourceMap: false,
   devServer: {
     proxy: {  
       '/api':{

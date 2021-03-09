@@ -30,6 +30,7 @@ export default {
     },
   },
   mounted(){
+    console.log(this.$route.query)
     let path = this.$route.path.split("/").slice(-1)[0]
     if(path=="basic"){
       this.activeIndex = "1"

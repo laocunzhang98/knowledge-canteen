@@ -1,5 +1,6 @@
 <template>
   <div class="home" >
+    
     <div class="centerall">
       <div class="center">
         <div class="labels"><labels></labels></div>

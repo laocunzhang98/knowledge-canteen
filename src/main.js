@@ -12,6 +12,8 @@ import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/googlecode.css' // 样式文件
+import echarts from 'echarts'
+Vue.prototype.$echarts = echarts
 
 Vue.directive('highlight', function (el) {
   let blocks = el.querySelectorAll('pre code')

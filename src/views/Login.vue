@@ -44,9 +44,7 @@ export default {
         console.log(res.code)
         if(res.code===200){
           console.log(this.$route)
-          console.log(res)
           localStorage.setItem('token',res.data)
-          console.log(localStorage.getItem('token'))
           let path ="/home"
           if (this.$route.query.redirect) {
               path = this.$route.query.redirect   // 跳到之前的页面

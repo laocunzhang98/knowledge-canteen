@@ -114,8 +114,12 @@ const routes = [
             path:"cost",
             component:()=>import("../components/organiztion/components/costCenter.vue")
           },
-         
+          
         ]
+        },
+        {
+          path:"statistics",
+          component:()=>import("../components/organiztion/components/Contribution.vue")
         },
         {
           path:"members",
@@ -179,7 +183,6 @@ const routes = [
     path:"*",
     redirect:"/404"
   }
-
 ]
 
 const router = new VueRouter({
