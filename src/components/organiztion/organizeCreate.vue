@@ -129,7 +129,16 @@ export default {
     .create{
       margin-top: 20px;
       cursor: pointer;
-      color: skyblue;
+      font-weight: bold;
+      background: linear-gradient(45deg, #009688, yellowgreen, pink, #03a9f4, #9c27b0, #8bc34a);
+      -webkit-background-clip:text;
+      color: transparent;
+      animation: huerotate 5s infinite;
     }
   }
+@keyframes huerotate {
+  100% {
+      filter: hue-rotate(360deg);
+  }
+}
 </style>

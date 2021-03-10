@@ -7,7 +7,9 @@
       </el-col>
       <el-col :span="16" :xs="24">
         <div class="hot-circle">
-          <div class="hot-title">欢迎来到饭友圈,寻找和你志同道合的饭友吧！</div>
+          <div class="hot-box">
+            <div class="hot-title">欢迎来到饭友圈,寻找和你志同道合的饭友吧！</div>
+          </div>
           <div class="card-box" v-for="(item,index) in teamInfo" :key="index">
             <el-card>
               <div class="team-info">
@@ -75,17 +77,33 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@keyframes huerotate {
+  100% {
+      filter: hue-rotate(360deg);
+  }
+}
 .hot-circle {
   margin-top: 20px;
   padding: 0 15px;
   background-color: rgba(255, 255, 255, 0.2);
-  .hot-title {
-    padding: 20px 25px;
-    border-radius: 15px;
-    background: url("../../assets/header/org.jpg") no-repeat;
+  
+  .hot-box{
+    background-size: cover;
+    background: url("../../assets/header/org.jpg") no-repeat center center;
     background-size: 100% 100%;
-    font-size: 24px;
+    .hot-title {
+      padding: 20px 25px;
+      border-radius: 15px;
+      // background: url("../../assets/header/org.jpg") no-repeat;
+      background: linear-gradient(45deg, #009688, yellowgreen, pink, #03a9f4, #9c27b0, #8bc34a);
+      font-weight: bold;
+      -webkit-background-clip:text;
+      animation: huerotate 5s infinite;
+      color: transparent;
+      font-size: 24px;
+    }
   }
+
   .card-box {
     margin-top: 20px;
     .team-info {
