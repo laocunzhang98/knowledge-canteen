@@ -100,6 +100,7 @@ export default {
       -webkit-background-clip:text;
       animation: huerotate 5s infinite;
       color: transparent;
+      text-align: center;
       font-size: 24px;
     }
   }

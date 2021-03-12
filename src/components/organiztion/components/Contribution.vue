@@ -2,16 +2,16 @@
   <div>
     <div class="first">
       <el-row :gutter="10">
-        <el-col :span="5" class>
+        <el-col :span="4" :xs="0" class>
           <el-card class="member">
             <div class="m-total">
               <span>成员总数</span>
-              <div class="num">1</div>
+              <div class="num">{{memberCount}}</div>
             </div>
-            <div class="manger">管理员 0</div>
+            <div class="manger">管理员 {{managerCount}}</div>
           </el-card>
         </el-col>
-        <el-col :span="10">
+        <el-col :span="10" :xs="12">
           <el-card class="member">
             <el-col :span="6">
               <div class="m-total">
@@ -24,7 +24,7 @@
             </el-col>
           </el-card>
         </el-col>
-        <el-col :span="10">
+        <el-col :span="10" :xs="12">
           <el-card class="member">
             <el-col :span="6">
               <div class="m-total">
@@ -57,7 +57,23 @@
 </template>
 
 <script>
+import {getManagerMember,getOrgMembers} from "@/api/team"
 export default {
+  data() {
+    return {
+      memberCount:0,
+      managerCount:0
+
+    }
+  },
+  created(){
+    getManagerMember({organize_id:this.$route.params.id}).then(res=>{
+      this.managerCount =  res.data.count
+    })
+    getOrgMembers({organize_id:this.$route.params.id}).then(res=>{
+      this.memberCount =  res.data.count
+    })
+  },
   methods: {
     myEcharts() {
       // 基于准备好的dom，初始化echarts实例
@@ -67,7 +83,7 @@ export default {
       var option = {
         legend: {
           orient: "vertical",
-          right: "right",
+          right: "10%",
           data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"],
         },
         tooltip: {
@@ -100,7 +116,7 @@ export default {
                 name: "袜子",
               },
             ],
-            center: ["30%", "45%"],
+            center: ["25%", "45%"],
             radius: ["40%", "70%"],
             label: {
               show: false,
@@ -131,7 +147,7 @@ export default {
       var option = {
         legend: {
           orient: "vertical",
-          right: "right",
+          right: "10%",
           data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"],
         },
         tooltip: {
@@ -186,6 +202,11 @@ export default {
 
       // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
+      setTimeout(function (){
+        window.onresize = function () {
+          myChart.resize();
+        }
+    },200)
     },
     myEcharts1() {
       // 基于准备好的dom，初始化echarts实例

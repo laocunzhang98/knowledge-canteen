@@ -3,7 +3,7 @@
     <div class="organize-title">
       <el-row>
         <el-col :span="6"></el-col>
-        <el-col :span="12">
+        <el-col :span="12" >
           <div class="team">
             <div class="team-avatar">
               <img :src="orgInfo.avatar" alt />
@@ -33,18 +33,18 @@
     </div>
     <div class="organize-content">
       <el-row>
-        <el-col :span="2">
+        <el-col :span="2" :xs="0">
           <div></div>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="4" :xs="0">
           <organize-nav></organize-nav>
         </el-col>
-        <el-col :span="13">
+        <el-col :span="13" :xs="24">
           <div>
             <router-view :key="key"></router-view>
           </div>
         </el-col>
-        <el-col :span="5"></el-col>
+        <el-col :span="5" :xs="0"></el-col>
       </el-row>
     </div>
   </div>

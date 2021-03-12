@@ -114,3 +114,10 @@ export function modifyOrgOpen(data){
     data
   })
 }
+export function getManagerMember(params){
+  return request({
+    url:"/organize/manager",
+    method:"GET",
+    params
+  })
+}

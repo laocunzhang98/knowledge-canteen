@@ -6,10 +6,12 @@
           <article-card :result="item"></article-card>
         </el-card>
       </li>
-      <!-- <li v-for="(item,index) in count" class="list-item" :key="index">{{item}}</li> -->
     </ul>
+    <div v-show="display" class="default">
+      <img src="../../../assets/header/文章内容缺省页.png" alt="">
+    </div>
     <p v-if="loading" style="text-align:center">加载中...</p>
-    <p v-if="noMore" style="text-align:center">没有更多了...</p>
+    <p v-if="noMore&&!display" style="text-align:center">没有更多了...</p>
   </div>
 </template>
 
@@ -32,26 +34,22 @@ export default {
   },
   mounted() {
     if(!this.$route.params.id){
-      getArticleList({public:1})
-      .then((res) => {
-        this.result = res.data.data;
-        this.countSize = res.data.countSize
-      })
+      this.InitGetArticleList({public:1})
     }
     else{
       getOrgArticleList({organize_id:this.$route.params.id}).then(res=>{
+        console.log(res)
         this.result = res.data.data;
         this.countSize = res.data.countSize
+        if(this.countSize){
+          this.display = false
+        }
       })
     }
     this.$bus.$on("word",(word)=>{
       this.word = word
-      getArticleList({"word":this.word})
-      .then((res) => {
-        console.log(res)
-        this.result = res.data.data;
-        this.countSize = res.data.countSize
-      })
+      this.display = true
+      this.InitGetArticleList({word:this.word})
     })
 
   },
@@ -73,11 +71,23 @@ export default {
       result: [],
       page:0,
       count:10,
-      word:""
+      word:"",
+      display:true
     };
   },
 
   methods: {
+    InitGetArticleList(data = {}){
+      getArticleList(data)
+      .then((res) => {
+        console.log(res)
+        this.result = res.data.data;
+        this.countSize = res.data.countSize
+        if(this.countSize){
+          this.display = false
+        }
+      })
+    },
     load() {
       // this.loading = true;
       this.page += 1
@@ -112,5 +122,13 @@ export default {
     box-sizing: border-box;
     height: 150px;
     width: 100%;
+  }
+  .default{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+
   }
 </style>
