@@ -64,6 +64,10 @@ const routes = [
         {
           path:"follow",
           component:()=>import("@/components/user/components/userFollow")
+        },
+        {
+          path:"sysapply",
+          component:()=>import("@/components/user/components/sysApply")
         }
       ]
       },

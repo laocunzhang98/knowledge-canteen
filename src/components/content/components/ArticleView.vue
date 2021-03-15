@@ -3,7 +3,7 @@
     <ul class="list" >
       <li v-for="(item,index) in result" class="list-item" :key="index">
         <el-card class="box-card" >
-          <article-card :result="item"></article-card>
+          <article-card :result="item" :favorList="favorList"></article-card>
         </el-card>
       </li>
     </ul>
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { getArticleList,getOrgArticleList } from "../../../api/classic";
+import { getArticleList,getOrgArticleList,getFavorList} from "../../../api/classic";
 import ArticleCard from "./ArticleCard"
 import { throttle } from "@/utils/util";
 export default {
@@ -31,6 +31,9 @@ export default {
           that.load()
         }   
     },200)
+    getFavorList().then(res=>{
+      this.favorList = res.data
+    })
   },
   mounted() {
     if(!this.$route.params.id){
@@ -72,7 +75,8 @@ export default {
       page:0,
       count:10,
       word:"",
-      display:true
+      display:true,
+      favorList:[]
     };
   },
 

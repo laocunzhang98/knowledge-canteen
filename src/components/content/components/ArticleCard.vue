@@ -69,14 +69,17 @@ export default {
         this.$router.push("/user");
       }
     }
-    getFavorList().then((res) => {
-      if (res.code == 200) {
-        this.articleList = res.data;
-        if (this.articleList.indexOf(this.result.id) != -1) {
-          this.favorShow = true;
-        }
-      }
-    });
+    // if (this.favorList.indexOf(this.result.id) != -1) {
+    //   this.favorShow = true;
+    // }
+    // getFavorList().then((res) => {
+    //   if (res.code == 200) {
+    //     this.articleList = res.data;
+    //     if (this.articleList.indexOf(this.result.id) != -1) {
+    //       this.favorShow = true;
+    //     }
+    //   }
+    // });
   },
   components: {
     TimeDiff,
@@ -88,8 +91,20 @@ export default {
     uid: {
       type: Number,
     },
+    favorList:{
+      type:Array,
+    }
   },
-
+  watch:{
+    favorList:{
+      immediate: true, 
+      handler(val){
+        if (val.indexOf(this.result.id) != -1) {
+          this.favorShow = true;
+        }
+      }
+    }
+  },
   methods: {
     jumpUserHome() {
       this.$router.push({

@@ -16,11 +16,11 @@
             <el-col :span="6">
               <div class="m-total">
                 <span>文章总数</span>
-                <div class="num">1</div>
+                <div class="num">{{fileTotal}}</div>
               </div>
             </el-col>
             <el-col :span="18">
-              <div id="abar" style="width:250px;height:130px;"></div>
+              <div id="abar" style="height:130px;"></div>
             </el-col>
           </el-card>
         </el-col>
@@ -29,11 +29,11 @@
             <el-col :span="6">
               <div class="m-total">
                 <span>文件总数</span>
-                <div class="num">1</div>
+                <div class="num">{{fileTotal}}</div>
               </div>
             </el-col>
             <el-col :span="18">
-              <div id="files" style="width:250px;height:130px;"></div>
+              <div id="files" style="height:130px;"></div>
             </el-col>
           </el-card>
         </el-col>
@@ -43,12 +43,12 @@
       <el-row :gutter="10">
         <el-col :span="12">
           <el-card class="contribution">
-            <div id="contribution" style="height:200px;width:450px"></div>
+            <div id="contribution" style="height:200px;"></div>
           </el-card>
         </el-col>
         <el-col :span="12">
           <el-card class="contribution">
-            <div id="contributions" style="height:200px;width:450px"></div>
+            <div id="contributions" style="height:200px;"></div>
           </el-card>
         </el-col>
       </el-row>
@@ -57,22 +57,58 @@
 </template>
 
 <script>
-import {getManagerMember,getOrgMembers} from "@/api/team"
+import {
+  getManagerMember,
+  getOrgMembers,
+  getOrgArtClassify,
+  getOrgFileType,
+  getFileCount,
+} from "@/api/team";
 export default {
   data() {
     return {
-      memberCount:0,
-      managerCount:0
-
-    }
+      memberCount: 0,
+      managerCount: 0,
+      artClassify: [], // 文章分类
+      artData: [],
+      filetype: [], // 文件类型
+      fileData: [],
+      fileTotal:0
+    };
   },
-  created(){
-    getManagerMember({organize_id:this.$route.params.id}).then(res=>{
-      this.managerCount =  res.data.count
+  created() {
+    let params = { organize_id: this.$route.params.id };
+    getManagerMember(params).then((res) => {
+      this.managerCount = res.data.count;
+    });
+    getOrgMembers(params).then((res) => {
+      this.memberCount = res.data.count;
+    });
+    getOrgArtClassify(params).then((res) => {
+      this.artData = res.data;
+      this.artClassify = [];
+      for (let classify of res.data) {
+        this.artClassify.push(classify.name);
+      }
+    });
+    getOrgFileType(params).then((res) => {
+      this.fileData = res.data;
+      this.filetype = [];
+      for (let mimetype of res.data) {
+        this.filetype.push(mimetype.name);
+      }
+    });
+    getFileCount(params).then(res=>{
+      this.fileTotal = res.data
     })
-    getOrgMembers({organize_id:this.$route.params.id}).then(res=>{
-      this.memberCount =  res.data.count
-    })
+  },
+  watch: {
+    artData() {
+      this.myEcharts();
+    },
+    fileData() {
+      this.myEcharts2();
+    },
   },
   methods: {
     myEcharts() {
@@ -83,8 +119,9 @@ export default {
       var option = {
         legend: {
           orient: "vertical",
-          right: "10%",
-          data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"],
+          width: "auto",
+          right: "5%",
+          data: this.artClassify,
         },
         tooltip: {
           trigger: "item",
@@ -94,28 +131,7 @@ export default {
             type: "pie",
             name: "文章类型",
             avoidLabelOverlap: false,
-            data: [
-              {
-                value: 335,
-                name: "衬衫",
-              },
-              {
-                value: 310,
-                name: "羊毛衫",
-              },
-              {
-                value: 234,
-                name: "雪纺衫",
-              },
-              {
-                value: 135,
-                name: "裤子",
-              },
-              {
-                value: 1548,
-                name: "袜子",
-              },
-            ],
+            data: this.artData,
             center: ["25%", "45%"],
             radius: ["40%", "70%"],
             label: {
@@ -135,20 +151,18 @@ export default {
           },
         ],
       };
-
       // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
     myEcharts2() {
       // 基于准备好的dom，初始化echarts实例
       var myChart = this.$echarts.init(document.getElementById("files"));
-
-      // 指定图表的配置项和数据
       var option = {
         legend: {
           orient: "vertical",
-          right: "10%",
-          data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"],
+          width: "auto",
+          right: "-8%",
+          data: this.filetype,
         },
         tooltip: {
           trigger: "item",
@@ -158,29 +172,8 @@ export default {
             type: "pie",
             name: "文章类型",
             avoidLabelOverlap: false,
-            data: [
-              {
-                value: 335,
-                name: "衬衫",
-              },
-              {
-                value: 310,
-                name: "羊毛衫",
-              },
-              {
-                value: 234,
-                name: "雪纺衫",
-              },
-              {
-                value: 135,
-                name: "裤子",
-              },
-              {
-                value: 1548,
-                name: "袜子",
-              },
-            ],
-            center: ["30%", "45%"],
+            data: this.fileData,
+            center: ["25%", "45%"],
             radius: ["40%", "70%"],
             label: {
               show: false,
@@ -199,14 +192,8 @@ export default {
           },
         ],
       };
-
       // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
-      setTimeout(function (){
-        window.onresize = function () {
-          myChart.resize();
-        }
-    },200)
     },
     myEcharts1() {
       // 基于准备好的dom，初始化echarts实例
@@ -239,7 +226,9 @@ export default {
       myChart.setOption(option);
     },
     myEcharts3() {
-      var myChart = this.$echarts.init(document.getElementById("contributions"));
+      var myChart = this.$echarts.init(
+        document.getElementById("contributions")
+      );
       let option = {
         xAxis: {
           type: "category",
@@ -278,8 +267,6 @@ export default {
     },
   },
   mounted() {
-    this.myEcharts();
-    this.myEcharts1();
     this.myEcharts2();
     this.myEcharts3();
   },
@@ -290,7 +277,7 @@ export default {
 .first {
   margin-top: 20px;
   .member {
-    height: 140px;
+    height: 160px;
     padding: 10px;
     .m-total {
       font-weight: 600;

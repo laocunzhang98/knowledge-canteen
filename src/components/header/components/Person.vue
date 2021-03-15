@@ -47,7 +47,7 @@
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item @click.native="jumpNoticeInfo"><i class="el-icon-bell"></i> 我的消息<span class="notice" v-show="noticeNum">{{noticeNum}}</span></el-dropdown-item>
           <el-dropdown-item @click.native="jumpApplyInfo"><i class="el-icon-plus"></i> 申请通知<span class="notice" v-show="applyNum">{{applyNum}}</span></el-dropdown-item>
-          <el-dropdown-item><i class="el-icon-warning-outline"></i> 系统通知</el-dropdown-item>
+          <el-dropdown-item @click.native="jumpSysApplyInfo"><i class="el-icon-warning-outline"></i> 系统通知<span class="notice" v-show="sysApplyNum">{{sysApplyNum}}</span></el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
   </div>
@@ -56,7 +56,7 @@
 
 <script>
 import { getUserInfo } from "@/api/user";
-import {readNoticeInfo,readApplyInfo} from "@/api/notice"
+import {readNoticeInfo,readApplyInfo,readSysApplyInfo} from "@/api/notice"
 export default {
   created() {
     getUserInfo()
@@ -77,8 +77,10 @@ export default {
       infoNum:0,
       noticeNum: 0,
       applyNum:0,
+      sysApplyNum:0,
       ids:[],
-      aids:[]
+      aids:[],
+      sids:[]
     };
   },
   mounted() {
@@ -95,7 +97,8 @@ export default {
     login(res) {
       this.noticeNum = res.noticeInfo.count
       this.applyNum = res.applyInfo.count
-      this.infoNum = this.noticeNum+this.applyNum;
+      this.sysApplyNum = res.sysApplyInfo.count
+      this.infoNum = this.noticeNum+this.applyNum+this.sysApplyNum;
       if (this.noticeNum) {
         for(let item of res.noticeInfo.rows){
           this.ids.push(item.id)
@@ -103,6 +106,11 @@ export default {
       }else if(this.applyNum){
         for(let item of res.applyInfo.rows){
           this.aids.push(item.id)
+        }
+      }
+      else if(this.sysApplyNum){
+        for(let item of res.sysApplyInfo.rows){
+          this.sids.push(item.id)
         }
       }
     },
@@ -145,6 +153,16 @@ export default {
         }
       })
       this.$router.push("/user/notice")
+    },
+    jumpSysApplyInfo(){
+      readSysApplyInfo({ids:this.sids}).then(res=>{
+        if(res.code===200){
+          this.infoNum -= this.sysApplyNum
+          this.sysApplyNum = 0
+        }
+      })
+      console.log(1111)
+      this.$router.push("/user/sysapply")
     },
     addedit() {
       this.$router.push("/edit");

@@ -121,3 +121,27 @@ export function getManagerMember(params){
     params
   })
 }
+
+
+export function getOrgArtClassify(params){
+  return request({
+    url:"/classic/classify",
+    method:"GET",
+    params
+  })
+}
+
+export function getOrgFileType(params){
+  return request({
+    url:"/download/mimetype",
+    method:"GET",
+    params
+  })
+}
+export function getFileCount(params){
+  return request({
+    url:"/download/filetotal",
+    method:"GET",
+    params
+  })
+}

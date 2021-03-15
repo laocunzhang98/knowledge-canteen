@@ -8,6 +8,7 @@
         <el-menu-item index="4">圈子</el-menu-item>
         <el-menu-item index="5" @click.native="jumpNotice" v-show="isShow">消息通知</el-menu-item>
         <el-menu-item index="6" @click.native="jumpApply" v-show="isShow">申请通知</el-menu-item>
+        <el-menu-item index="7" @click.native="jumpSysApply" v-show="isShow">系统通知</el-menu-item>
       </el-menu>
     </div>
     <el-card class="box-card">
@@ -49,6 +50,9 @@ export default {
     if(path=="apply"){
       this.activeIndex = "6"
     }
+    if(path=="sysapply"){
+      this.activeIndex = "7"
+    }
     console.log(path)
   },
   methods: {
@@ -72,6 +76,10 @@ export default {
     },
     jumpNotice(){
       this.$router.push("/user/notice")
+    },
+    jumpSysApply(){
+      console.log(2222)
+      this.$router.push("/user/sysapply")
     },
     jumpArticle(){
       if(this.isShow){

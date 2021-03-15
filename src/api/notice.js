@@ -34,3 +34,18 @@ export function refuseApply(data){
     data
   })
 }
+
+export function readSysApplyInfo(data){
+  return request({
+    url:"/notice/readsysapply",
+    method:"POST",
+    data
+  })
+}
+
+export function getSysApplyInfo(){
+  return request({
+    url:"/notice/sysinfo",
+    method:"GET",
+  })
+}
