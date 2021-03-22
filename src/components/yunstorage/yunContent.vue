@@ -299,7 +299,7 @@ export default {
       let data = {
         origin_name: files.name,
         filename: res.data.filename,
-        mimetype: files.raw.type.split("/").pop(),
+        mimetype: files.raw.type.split("/").pop() || files.name.split(".").pop(),
         size: res.data.size,
         parent_fileid: this.currentid,
         organize_id: this.$route.params.id || 0,
@@ -457,7 +457,7 @@ export default {
               let data = {
                 origin_name: files[i].name,
                 filename: cres.data.filename,
-                mimetype: files[i].type.split("/").pop(),
+                mimetype: files[i].type.split("/").pop()|| files.name.split(".").pop(),
                 size: files[i].size,
                 parent_fileid: this.zid,
                 organize_id: this.$route.params.id || 0,
@@ -476,7 +476,7 @@ export default {
       try {
         return require("../../assets/header/" + row.mimetype + ".png");
       } catch (error) {
-        
+        return require("../../assets/header/default.png");
       }
     },
   },

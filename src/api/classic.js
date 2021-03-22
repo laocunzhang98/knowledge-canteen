@@ -87,3 +87,10 @@ export function DeleteArticle(data){
     data
   })
 }
+export function getArticleCount(params){
+  return request({
+    url:"/classic/count",
+    method:"GET",
+    params
+  })
+}

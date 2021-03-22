@@ -16,7 +16,7 @@
             <el-col :span="6">
               <div class="m-total">
                 <span>文章总数</span>
-                <div class="num">{{fileTotal}}</div>
+                <div class="num">{{artTotal}}</div>
               </div>
             </el-col>
             <el-col :span="18">
@@ -64,6 +64,8 @@ import {
   getOrgFileType,
   getFileCount,
 } from "@/api/team";
+import   {getArticleCount}
+ from '@/api/classic';
 export default {
   data() {
     return {
@@ -73,7 +75,8 @@ export default {
       artData: [],
       filetype: [], // 文件类型
       fileData: [],
-      fileTotal:0
+      fileTotal:0,
+      artTotal:0
     };
   },
   created() {
@@ -91,6 +94,9 @@ export default {
         this.artClassify.push(classify.name);
       }
     });
+    getArticleCount(params).then(res=>{
+      this.artTotal = res.data
+    })
     getOrgFileType(params).then((res) => {
       this.fileData = res.data;
       this.filetype = [];
@@ -120,7 +126,7 @@ export default {
         legend: {
           orient: "vertical",
           width: "auto",
-          right: "5%",
+          right: "0%",
           data: this.artClassify,
         },
         tooltip: {
