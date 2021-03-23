@@ -4,6 +4,7 @@
       <div slot="header">团队设置</div>
       <div>
         <div class="basic">
+          <div class="team-id">团队账号: <span>{{$route.params.id}}</span></div>
           <div class="team-name">团队名称</div>
           <el-input v-model="team_name" placeholder></el-input>
           <div class="team-des">团队描述</div>
@@ -84,6 +85,7 @@ export default {
 .basic {
   font-size: 14px;
   .team-name {
+    margin-top: 10px;
   }
   .team-des {
     margin-top: 15px;

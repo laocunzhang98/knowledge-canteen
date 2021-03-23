@@ -47,14 +47,14 @@ export default {
     if(this.$route.path === '/home'){
       this.$storage.set("headerIndex", 0);
     }
-    if(this.$route.path === '/pins'){
+    // if(this.$route.path === '/pins'){
+    //   this.$storage.set("headerIndex", 1);
+    // }
+    if(this.$route.path === '/yunstorage'){
       this.$storage.set("headerIndex", 1);
     }
-    if(this.$route.path === '/yunstorage'){
-      this.$storage.set("headerIndex", 2);
-    }
     if(this.$route.path === '/organize'){
-      this.$storage.set("headerIndex", 4);
+      this.$storage.set("headerIndex", 3);
     }
     let index = this.$storage.get("headerIndex");
     this.focusLbael(index);
@@ -73,11 +73,13 @@ export default {
     goPage(index) {
       if (index === 0) {
         this.$router.push("/");
-      } else if (index === 1) {
-        this.$router.push("/pins");
-      } else if (index === 4) {
+      } 
+      // else if (index === 1) {
+      //   this.$router.push("/pins");
+      // } 
+      else if (index === 3) {
         this.$router.push("/organize");
-      }else if (index===2){
+      }else if (index===1){
         this.$router.push("/yunstorage");
       }
       
@@ -92,7 +94,7 @@ export default {
   data() {
     return {
       word: "",
-      labelList: ["全民食堂", "茶余饭后", "私房菜", "黑暗料理", "饭友圈"],
+      labelList: ["全民食堂", "私房菜", "黑暗料理", "饭友圈"],
     };
   },
 };
