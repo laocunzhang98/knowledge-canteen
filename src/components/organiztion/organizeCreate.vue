@@ -78,7 +78,7 @@ export default {
         return 
       }
       console.log(this.isopen)
-      createdTeam({team_name:this.teamName,isopen:this.isopen,type:this.type}).then(res=>{
+      createdTeam({team_name:this.teamName,isopen:this.isopen,type:this.classify}).then(res=>{
         console.log(res)
         this.$bus.$emit("createTeam")
       })
