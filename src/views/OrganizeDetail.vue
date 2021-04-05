@@ -124,9 +124,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .organize-box {
   .organize-title {
-    height: 100px;
+    height: 110px;
     background-color: #fff;
     border-top: 1px solid rgba(0, 0, 0, 0.2);
     .team {
