@@ -304,7 +304,9 @@ export default {
         parent_fileid: this.currentid,
         organize_id: this.$route.params.id || 0,
       };
-      console.log(data);
+      if(files.raw.type.length==0){
+        data.mimetype = files.name.split(".").pop()
+      }
       await createFolder(data).then((res) => {});
       await getFileList({ id: this.currentid,organize_id:this.$route.params.id||0}).then(
         (res) => (this.tableData = res.data)
