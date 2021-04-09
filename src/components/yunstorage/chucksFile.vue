@@ -56,6 +56,18 @@
               </el-button>
             </el-upload>
           </div>
+          <div>
+            <el-button size="small" class="input-file">
+            <i class="el-icon-upload"></i> 上传文件
+            <input
+              type="file"
+              id="file"
+              name="file1"
+              @change.stop="((val)=>{changeData1(val,currentid)})"
+              ref="file1"
+            />
+          </el-button>
+          </div>
           <el-button size="small" class="input-file">
             <i class="el-icon-upload"></i> 上传文件夹
             <input
@@ -235,9 +247,9 @@ export default {
       await Promise.all(requestList); // 并发切片
     },
     // 上传文件分片
-    async handleUpload() {
-      if (!this.container.file) return;
-      const fileChunkList = this.createFileChunk(this.container.file);
+    async handleUpload(file) {
+      if (!file) return;
+      const fileChunkList = this.createFileChunk(file);
       this.filedata = fileChunkList.map(({ file },index) => ({
         chunk: file,
         hash: this.container.file.name + "-" + index // 文件名 + 数组下标
@@ -250,6 +262,7 @@ export default {
         this.tableData = res.data;
       });
     },
+    // 移动文件
     CurrentMove(){
       let data = {
         moveId:this.moveId,
@@ -438,6 +451,14 @@ export default {
     createPath() {
       this.isMove = false
       this.dialogVisible = true;
+    },
+    async changeData1(event,id){
+      console.log(event.target.files[0])
+      this.filedata = this.createFileChunk(event.target.files[0])
+      this.filedata.map((chunk)=>{
+        console.log(chunk)
+      })
+      console.log(this.filedata)
     },
     async changeData(event, id) {
       this.isMove = false

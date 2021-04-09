@@ -86,6 +86,11 @@ const routes = [
         name:"Yunstorage"
       },
       {
+        path:"/chunkfile",
+        name:"chunkfile",
+        component:()=>import("../components/yunstorage/chucksFile.vue")
+      },
+      {
         path:"/post/:id",
         component:()=>import("../views/ArticleDetail.vue"),
         name:"Article"
