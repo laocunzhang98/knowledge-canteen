@@ -16,23 +16,15 @@
               <i class="el-icon-sort"></i> 移动到
             </el-button>
             <div class="move">
-              <el-dialog
-              title="移动到"
-              :visible.sync="dialogVisible1"
-              width="width"
-              >
-              <div>
-                <el-tree
-                  :data="data"
-                  :props="defaultProps"
-                  @node-click="nodeClick">
-                </el-tree>
-              </div>
-              <div slot="footer">
-                <el-button @click="dialogVisible1 = false">取 消</el-button>
-                <el-button type="primary" @click="CurrentMove">确 定</el-button>
-              </div>
-            </el-dialog>
+              <el-dialog title="移动到" :visible.sync="dialogVisible1" width="width">
+                <div>
+                  <el-tree :data="data" :props="defaultProps" @node-click="nodeClick"></el-tree>
+                </div>
+                <div slot="footer">
+                  <el-button @click="dialogVisible1 = false">取 消</el-button>
+                  <el-button type="primary" @click="CurrentMove">确 定</el-button>
+                </div>
+              </el-dialog>
             </div>
           </div>
           <div style="margin-right: 20px;" v-show="isSelect">
@@ -58,15 +50,15 @@
           </div>
           <div>
             <el-button size="small" class="input-file">
-            <i class="el-icon-upload"></i> 上传文件
-            <input
-              type="file"
-              id="file"
-              name="file1"
-              @change.stop="((val)=>{changeData1(val,currentid)})"
-              ref="file1"
-            />
-          </el-button>
+              <i class="el-icon-upload"></i> 上传文件
+              <input
+                type="file"
+                id="file"
+                name="file1"
+                @change.stop="((val)=>{handleUpload(val,currentid)})"
+                ref="file1"
+              />
+            </el-button>
           </div>
           <el-button size="small" class="input-file">
             <i class="el-icon-upload"></i> 上传文件夹
@@ -134,7 +126,7 @@
               <span class="option">
                 <img src="../../assets/header/op.png" alt style="height:10px" />
               </span>
-            </template> -->
+            </template>-->
           </el-table-column>
         </el-table>
       </div>
@@ -144,6 +136,7 @@
 
 <script>
 import { Base64 } from "js-base64";
+import qs from "qs";
 import {
   uploadFile,
   createFolder,
@@ -153,7 +146,8 @@ import {
   getCateFile,
   deleteFile,
   getAllCate,
-  moveFile
+  moveFile,
+  uploadChunkFile,
 } from "@/api/uploads";
 export default {
   data() {
@@ -175,27 +169,30 @@ export default {
       isSelect: false, // 判断是否选中文件
       isMove: false, //判断是否移动文件
       defaultProps: {
-        children: 'children',
-        label: 'origin_name'
+        children: "children",
+        label: "origin_name",
       },
-      data:[],
-      moveId:[],
-      currentId:0, 
-      filedata:[] // 文件分片
+      data: [],
+      moveId: [],
+      currentId: 0,
+      filedata: [], // 文件分片
     };
   },
   mounted() {
     if (this.$route.params.id) {
       let params = {
-        organize_id:this.$route.params.id||0
-      }
-      this.initFileList(params)
+        organize_id: this.$route.params.id || 0,
+      };
+      this.initFileList(params);
     } else {
-      this.initFileList()
+      this.initFileList();
     }
     this.$bus.$on("catetype", (type) => {
       this.catetype = type;
-      getCateFile({ type: JSON.stringify(type),organize_id:this.$route.params.id||0}).then((res) => {
+      getCateFile({
+        type: JSON.stringify(type),
+        organize_id: this.$route.params.id || 0,
+      }).then((res) => {
         this.tableData = res.data;
       });
     });
@@ -218,7 +215,7 @@ export default {
   },
   methods: {
     // 生成文件碎片
-    createFileChunk(file, length = 10) {
+    createFileChunk(file, length = 2) {
       const fileChunkList = [];
       const chunkSize = Math.ceil(file.size / length);
       let cur = 0;
@@ -231,77 +228,81 @@ export default {
     // 上传切片
     async uploadChunks() {
       const requestList = this.filedata
-        .map(({ chunk }) => {
+        .map((item) => {
           const formData = new FormData();
-          formData.append("chunk", chunk);
-					formData.append("hash", hash);
-          formData.append("filename", this.container.file.name);
-          return { formData };
+          formData.append("chunk", item.chunk);
+          formData.append("hash", item.hash);
+          // formData.append(
+          //   "filename",
+          //   item.hash.replace(/(-\d{1,100})(?!\d)/, "")
+          // );
+          return  formData ;
         })
-        .map(async ({ formData }) =>
-          this.request({
-            url: "http://localhost:3000",
-            data: formData
+        .map(async ( formData ) => {
+          console.log(formData.get("chunk"));
+          await uploadChunkFile(formData).then(res=>{
+            console.log(res);
           })
-        );
-      await Promise.all(requestList); // 并发切片
+        });
+      // console.log(requestList)
+      // await Promise.all(requestList); // 并发切片
     },
     // 上传文件分片
-    async handleUpload(file) {
+    async handleUpload(event, id) {
+      let file = event.target.files[0];
       if (!file) return;
       const fileChunkList = this.createFileChunk(file);
-      this.filedata = fileChunkList.map(({ file },index) => ({
+      this.filedata = fileChunkList.map(({ file }, index) => ({
         chunk: file,
-        hash: this.container.file.name + "-" + index // 文件名 + 数组下标
-       }));
+        hash: `${index}-${Date.now()}`, // 文件名 + 数组下标
+      }));
+      console.log(this.filedata);
       await this.uploadChunks();
     },
     // 初始化文件列表
-    initFileList(params={}){
+    initFileList(params = {}) {
       getFileList(params).then((res) => {
         this.tableData = res.data;
       });
     },
     // 移动文件
-    CurrentMove(){
+    CurrentMove() {
       let data = {
-        moveId:this.moveId,
-        currentId:this.currentid
-      }
-      moveFile(data).then(res=>{
-        this.dialogVisible1 = false
-        this.$router.go(0)
-      })
+        moveId: this.moveId,
+        currentId: this.currentid,
+      };
+      moveFile(data).then((res) => {
+        this.dialogVisible1 = false;
+        this.$router.go(0);
+      });
     },
-    nodeClick(val){
-      console.log(val)
-      this.currentid = val.id
+    nodeClick(val) {
+      console.log(val);
+      this.currentid = val.id;
     },
-    getFileCate(){
-      if(this.$route.params.id){
+    getFileCate() {
+      if (this.$route.params.id) {
         let params = {
-          organize_id:this.$route.params.id,
-          ids:JSON.stringify(this.moveId)
-        }
-        getAllCate(params).then(res=>{
-          this.data = res.data
-        })
-      }else{
+          organize_id: this.$route.params.id,
+          ids: JSON.stringify(this.moveId),
+        };
+        getAllCate(params).then((res) => {
+          this.data = res.data;
+        });
+      } else {
         let params = {
-          ids:JSON.stringify(this.moveId)
-        }
-        getAllCate(params).then(res=>{
-          console.log(res)
-          this.data = res.data
-        })
+          ids: JSON.stringify(this.moveId),
+        };
+        getAllCate(params).then((res) => {
+          console.log(res);
+          this.data = res.data;
+        });
       }
     },
-    toggleSelection(){
-
-    },
+    toggleSelection() {},
     handleMoveFile() {
-      this.dialogVisible1 = true
-      this.getFileCate()
+      this.dialogVisible1 = true;
+      this.getFileCate();
     },
     // 删除文件
     handleDeleteFiles(ids) {
@@ -310,12 +311,16 @@ export default {
         cancelButtonText: "取消",
         type: "warning",
       }).then(() => {
-        deleteFile({ ids: ids,organize_id:this.$route.params.id }).then((res) => {
-          getFileList({organize_id:this.$route.params.id||0}).then((res) => {
-            this.tableData = res.data;
-            this.isSelect = false;
-          });
-        });
+        deleteFile({ ids: ids, organize_id: this.$route.params.id }).then(
+          (res) => {
+            getFileList({ organize_id: this.$route.params.id || 0 }).then(
+              (res) => {
+                this.tableData = res.data;
+                this.isSelect = false;
+              }
+            );
+          }
+        );
       });
     },
     handleSelectAll(selection) {
@@ -340,30 +345,32 @@ export default {
         this.isMove = false;
         this.isSelect = false;
       }
-      this.moveId = []
-      for(let item of selection){
-        console.log(item.id)
-        this.moveId.push(item.id)
+      this.moveId = [];
+      for (let item of selection) {
+        console.log(item.id);
+        this.moveId.push(item.id);
       }
-      console.log(this.moveId)
+      console.log(this.moveId);
     },
     // 文件上传成功
     async handleFileSuccess(res, files) {
-      this.isSelect = false
-      this.isMove = false
+      this.isSelect = false;
+      this.isMove = false;
       let data = {
         origin_name: files.name,
         filename: res.data.filename,
-        mimetype: files.raw.type.split("/").pop() || files.name.split(".").pop(),
+        mimetype:
+          files.raw.type.split("/").pop() || files.name.split(".").pop(),
         size: res.data.size,
         parent_fileid: this.currentid,
         organize_id: this.$route.params.id || 0,
       };
       console.log(data);
       await createFolder(data).then((res) => {});
-      await getFileList({ id: this.currentid,organize_id:this.$route.params.id||0}).then(
-        (res) => (this.tableData = res.data)
-      );
+      await getFileList({
+        id: this.currentid,
+        organize_id: this.$route.params.id || 0,
+      }).then((res) => (this.tableData = res.data));
     },
     handleExceed(files, fileList) {
       this.$message.warning(
@@ -374,12 +381,14 @@ export default {
     },
     // 文件导航
     Jumpcata(id) {
-      this.isMove = false
-      this.isSelect = false
+      this.isMove = false;
+      this.isSelect = false;
       this.currentid = id;
-      getFileList({ id: id,organize_id:this.$route.params.id||0}).then((res) => {
-        this.tableData = res.data;
-      });
+      getFileList({ id: id, organize_id: this.$route.params.id || 0 }).then(
+        (res) => {
+          this.tableData = res.data;
+        }
+      );
       getCataLog({ parent_fileid: id }).then((res) => {
         this.cataLog = [{ origin_name: "...", id: 0 }];
         this.cataLog = this.cataLog.concat(res.data);
@@ -403,13 +412,13 @@ export default {
     },
     // 进入文件夹
     selectDir(id, type, origin_path, filename, ofilename) {
-      this.isMove = false
-      this.isSelect = false
+      this.isMove = false;
+      this.isSelect = false;
       if (type === "dir") {
         this.currentid = id;
         let params = {
           id: id,
-          organize_id:this.$route.params.id||0
+          organize_id: this.$route.params.id || 0,
         };
         getFileList(params).then((res) => {
           this.tableData = res.data;
@@ -444,25 +453,20 @@ export default {
       await createFolder(data).then((res) => {
         console.log(res);
       });
-      await getFileList({ id: id,organize_id:this.$route.params.id||0}).then((res) => {
+      await getFileList({
+        id: id,
+        organize_id: this.$route.params.id || 0,
+      }).then((res) => {
         this.tableData = res.data;
       });
     },
     createPath() {
-      this.isMove = false
+      this.isMove = false;
       this.dialogVisible = true;
     },
-    async changeData1(event,id){
-      console.log(event.target.files[0])
-      this.filedata = this.createFileChunk(event.target.files[0])
-      this.filedata.map((chunk)=>{
-        console.log(chunk)
-      })
-      console.log(this.filedata)
-    },
     async changeData(event, id) {
-      this.isMove = false
-      this.isSelect = false
+      this.isMove = false;
+      this.isSelect = false;
       let filevalue = event.target.value;
       let files = event.target.files;
 
@@ -480,7 +484,10 @@ export default {
         };
         await createFolder(data).then(async (res) => {
           let self = this;
-          await getFileList({ id: this.currentid,organize_id:this.$route.params.id||0}).then((res) => {
+          await getFileList({
+            id: this.currentid,
+            organize_id: this.$route.params.id || 0,
+          }).then((res) => {
             this.tableData = res.data;
           });
           let tempList = []; // 临时存储已经创建的文件
@@ -489,7 +496,10 @@ export default {
             formdata.append("file", files[i]);
             await uploadFile(formdata).then(async (cres) => {
               // 每上传一个文件 刷新一次
-              await getFileList({ id: this.currentid,organize_id:this.$route.params.id||0}).then((res) => {
+              await getFileList({
+                id: this.currentid,
+                organize_id: this.$route.params.id || 0,
+              }).then((res) => {
                 this.tableData = res.data;
               });
               this.zid = res.data.id;
@@ -527,7 +537,8 @@ export default {
               let data = {
                 origin_name: files[i].name,
                 filename: cres.data.filename,
-                mimetype: files[i].type.split("/").pop()|| files.name.split(".").pop(),
+                mimetype:
+                  files[i].type.split("/").pop() || files.name.split(".").pop(),
                 size: files[i].size,
                 parent_fileid: this.zid,
                 organize_id: this.$route.params.id || 0,
@@ -536,7 +547,10 @@ export default {
             });
             console.log(files[i]);
           }
-          await getFileList({ id: this.currentid,organize_id:this.$route.params.id||0}).then((res) => {
+          await getFileList({
+            id: this.currentid,
+            organize_id: this.$route.params.id || 0,
+          }).then((res) => {
             this.tableData = res.data;
           });
         });
@@ -551,11 +565,6 @@ export default {
     },
   },
   watch: {
-    // tableData(){
-    //    this.$nextTick(function() {
-    //     this.$refs.tableData.toggleRowSelection(this.tableData[0])
-    //   })
-    // }
   },
 };
 </script>
@@ -640,16 +649,16 @@ export default {
       .commit {
         margin-right: 20px;
       }
-      .move{
-        .el-dialog__wrapper{
-          .el-dialog__body div{
-              overflow: scroll;
-              height: 100%;
-              overflow-x: hidden;
-              overflow-y: hidden;
-              .el-tree{
-                overflow-y: scroll;
-              }
+      .move {
+        .el-dialog__wrapper {
+          .el-dialog__body div {
+            overflow: scroll;
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: hidden;
+            .el-tree {
+              overflow-y: scroll;
+            }
           }
         }
       }

@@ -13,7 +13,11 @@ import 'mavon-editor/dist/css/index.css'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/googlecode.css' // 样式文件
 import echarts from 'echarts'
+
+import axios from "axios"
+
 Vue.prototype.$echarts = echarts
+Vue.prototype.$axios = axios
 
 Vue.directive('highlight', function (el) {
   let blocks = el.querySelectorAll('pre code')

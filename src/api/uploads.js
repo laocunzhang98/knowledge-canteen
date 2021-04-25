@@ -66,3 +66,12 @@ export function moveFile(data){
     data
   })
 }
+
+// 分片上传文件
+export function uploadChunkFile(data){
+  return request({
+    url:"/uploads/filechucks",
+    method:"POST",
+    data
+  })
+}
