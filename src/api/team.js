@@ -145,3 +145,18 @@ export function getFileCount(params){
     params
   })
 }
+
+export function getOrgLatelyFile(params){
+  return request({
+    url:"/download/orglately",
+    method:"GET",
+    params
+  })
+}
+export function getOrgLatelyArt(params){
+  return request({
+    url:"/classic/orglately",
+    method:"GET",
+    params
+  })
+}
