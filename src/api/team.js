@@ -160,3 +160,12 @@ export function getOrgLatelyArt(params){
     params
   })
 }
+
+
+export function getOrgLogList(params){
+  return request({
+    url:"/log/list",
+    method:"GET",
+    params
+  })
+}

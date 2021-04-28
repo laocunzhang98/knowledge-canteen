@@ -7,7 +7,7 @@
           <el-menu-item index="1" @click.native="setBasic">基本设置</el-menu-item>
           <el-menu-item index="2" @click.native="setSenior">高级设置</el-menu-item>
           <el-menu-item index="3" @click.native="setCost">费用中心</el-menu-item>
-          <el-menu-item index="4">安全日志</el-menu-item>
+          <el-menu-item index="4" @click.native="setLog">安全日志</el-menu-item>
         </el-menu>
       </div>
       <div class="setting-detail">
@@ -41,6 +41,9 @@ export default {
     if(path=="cost"){
       this.activeIndex = "3"
     }
+    if(path=="log"){
+      this.activeIndex = "4"
+    }
   },
   methods: {
     setBasic() {
@@ -52,6 +55,9 @@ export default {
     setCost() {
       this.$router.push(`/organize/${this.$route.params.id}/setting/cost`);
     },
+    setLog(){
+      this.$router.push(`/organize/${this.$route.params.id}/setting/log`)
+    }
   },
 };
 </script>

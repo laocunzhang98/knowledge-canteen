@@ -123,7 +123,10 @@ const routes = [
             path:"cost",
             component:()=>import("../components/organiztion/components/costCenter.vue")
           },
-          
+          {
+            path:"log",
+            component:()=>import("../components/organiztion/components/Orglog.vue")
+          }
         ]
         },
         {

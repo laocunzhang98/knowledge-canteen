@@ -203,14 +203,27 @@ export default {
       let nav = [];
       let tempArr = [];
       let index1 = -1;
+      let flag = 0
+       
       content = content.replace(/.*(?:\n)/g, function (match, m1, m2) {
         index1 = 1 + index1;
         let b = match.replace("\n", "");
+        if(b==="```"){
+          flag +=1
+          if(flag==2){
+            flag = 0
+          }
+        }
+        if(flag===1){
+            return
+        }
+        console.log(b)
         let a = match.replace("\n", "_" + index1 + "\n");
         a.replace(/(^#+)[^#][^\n]*?(?:\n)/, function (match, m1, m2) {
           let title = match.replace("\n", "");
           title = title.replace(/^#+ /, "").replace(/^\s*/, "");
           let level = m1.length;
+          
           tempArr.push({
             title: title.replace(/\([^)]*?\)/, "").replace(/_(?<=_)\w+$/, ""),
             id: title
@@ -222,7 +235,7 @@ export default {
           });
         });
       });
-      console.log(tempArr);
+      // console.log(tempArr);
       // 只处理一级二级标题，以及添加与id对应的index值
       nav = tempArr.filter((item) => item.level <= 2);
       let index = 0;

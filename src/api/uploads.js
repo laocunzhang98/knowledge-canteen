@@ -4,7 +4,7 @@ export function uploadFile(data){
   return request({
     url:"/uploads/addfile",
     method:"POST",
-    data
+    data,
   })
 }
 export async function createFolder(data){

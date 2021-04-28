@@ -264,6 +264,7 @@ export default {
       console.log(val)
       this.currentid = val.id
     },
+    // 获取文件层级
     getFileCate(){
       if(this.$route.params.id){
         let params = {
@@ -468,6 +469,7 @@ export default {
           for (let i = 0; i < files.length; i++) {
             let formdata = new FormData();
             formdata.append("file", files[i]);
+            formdata.append("organize_id",this.$route.params.id || 0)
             await uploadFile(formdata).then(async (cres) => {
               // 每上传一个文件 刷新一次
               await getFileList({ id: this.currentid,organize_id:this.$route.params.id||0}).then((res) => {
