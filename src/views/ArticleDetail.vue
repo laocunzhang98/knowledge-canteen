@@ -208,6 +208,7 @@ export default {
       content = content.replace(/.*(?:\n)/g, function (match, m1, m2) {
         index1 = 1 + index1;
         let b = match.replace("\n", "");
+        // 模板内部# 错误 导致目录错乱
         if(b==="```"){
           flag +=1
           if(flag==2){

@@ -169,3 +169,11 @@ export function getOrgLogList(params){
     params
   })
 }
+
+export function getTeamIntroduce(params){
+  return request({
+    url:"/organize/introduce",
+    method:"GET",
+    params
+  })
+}

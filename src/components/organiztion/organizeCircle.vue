@@ -18,7 +18,7 @@
                 </div>
                 <div class="team-des">
                   <div class="team-top">
-                    <div class="team-name">{{item.team_name}}</div>
+                    <div class="team-name" @click="getTeamInfo(item.team_id)">{{item.team_name}}</div>
                     <el-button size="mini" type="primary" @click="apply(item)">申请加入</el-button>
                   </div>
                   <div class="team-summary">
@@ -31,6 +31,10 @@
                 </div>
               </div>
             </el-card>
+            
+          </div>
+          <div>
+            <organize-introduce :teamInfoDialog="teamInfoDialog" :orgId="team_id" @dialogShow="dialogShow"></organize-introduce>
           </div>
         </div>
       </el-col>
@@ -38,16 +42,18 @@
   </div>
 </template>
 
-
 <script>
-import organizeCreate from "@/components/organiztion/organizeCreate";
+import organizeCreate from "@/components/organiztion/organizeCreate"
+import organizeIntroduce from '@/components/organiztion/organizeIntroduce'
 import organizeNav from "./organizeNav";
 import { getTeamList } from "@/api/team"
 import TimeDiff from '@/utils/TimeDiff'
 export default {
   data(){
     return {
-      teamInfo:[]
+      teamInfo:[],
+      teamInfoDialog:false,
+      team_id:""
     }
   },
   mounted(){
@@ -66,12 +72,21 @@ export default {
       data.noticeType = "申请"
       data.sponsor = this.$storage.get("uid")
       this.$socket.emit("apply",data)
+    },
+    // 获取团队详细信息
+    getTeamInfo(id){
+      this.team_id = id
+      this.teamInfoDialog = true
+    },
+    dialogShow(value){
+      this.teamInfoDialog = value
     }
   },
   components: {
     organizeNav,
     organizeCreate,
-    TimeDiff
+    TimeDiff,
+    organizeIntroduce
   },
 };
 </script>
@@ -125,6 +140,10 @@ export default {
           align-items: center;
           .team-name{
             font-size: 16px;
+            cursor: pointer;
+            &:hover{
+              color: blue;
+            }
           }
         }
         .team-summary {

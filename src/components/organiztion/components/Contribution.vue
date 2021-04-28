@@ -16,7 +16,7 @@
             <el-col :span="6">
               <div class="m-total">
                 <span>文章总数</span>
-                <div class="num">{{artTotal}}</div>
+                <div class="num">{{artTotal || 0}}</div>
               </div>
             </el-col>
             <el-col :span="18">
@@ -29,7 +29,7 @@
             <el-col :span="6">
               <div class="m-total">
                 <span>文件总数</span>
-                <div class="num">{{fileTotal}}</div>
+                <div class="num">{{fileTotal || 0}}</div>
               </div>
             </el-col>
             <el-col :span="18">

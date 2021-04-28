@@ -1,7 +1,10 @@
 <template>
   <div class="create-box">
-    <div class="title">快快创建自己圈子,知识共享吧！</div>
-    <div class="create" @click="dialogVisible=true">立即创建</div>
+    <div class="title">快快找到自己圈子,知识共享吧！</div>
+    <div style="margin-top:20px">
+      <span class="create" @click="dialogVisible=true">立即创建</span>
+      <span class="create" @click="dialogVisible=true">条件查找</span>
+    </div>
     <el-dialog
       title="创建团队"
       :visible.sync="dialogVisible"
@@ -127,7 +130,7 @@ export default {
     }
     
     .create{
-      margin-top: 20px;
+      padding: 0 20px;
       cursor: pointer;
       font-weight: bold;
       background: linear-gradient(45deg, #009688, yellowgreen, pink, #03a9f4, #9c27b0, #8bc34a);
