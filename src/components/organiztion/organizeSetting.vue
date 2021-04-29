@@ -85,7 +85,7 @@ export default {
   margin-top: 20px;
   display: flex;
   .setting-menu {
-    flex: 0 0 25%;
+    flex: 0 0 20%;
   }
   .setting-detail {
     margin-left: 20px;

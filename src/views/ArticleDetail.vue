@@ -147,7 +147,7 @@ export default {
         return;
       }
       let scrollTop = this.$refs.helpDocs.scrollTop;
-      console.log(this.$refs.helpDocs.scrollTop);
+      // console.log(this.$refs.helpDocs.scrollTop);
       let firstLevelIndex = this.getLevelActiveIndex(
         scrollTop,
         this.docsFirstLevels
@@ -161,7 +161,7 @@ export default {
       this.childrenCurrentClick(secondLevelIndex);
     },
     pageJump(id) {
-      console.log(id);
+      // console.log(id);
       this.titleClickScroll = true;
       this.$refs.helpDocs.scrollTop =
         document.getElementById(id).offsetTop + 80;
@@ -218,7 +218,6 @@ export default {
         if(flag===1){
             return
         }
-        console.log(b)
         let a = match.replace("\n", "_" + index1 + "\n");
         a.replace(/(^#+)[^#][^\n]*?(?:\n)/, function (match, m1, m2) {
           let title = match.replace("\n", "");

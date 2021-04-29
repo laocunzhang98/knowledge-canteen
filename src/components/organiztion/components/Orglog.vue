@@ -10,7 +10,7 @@
             label="操作"
             width="320px">
             <template slot-scope="scope">
-              <span></span>{{scope.row.log.info}} <span class="title">{{scope.row.art && scope.row.art.title}}</span>
+              <span>{{scope.row.target&&scope.row.target.nickname}}</span>{{scope.row.log.info}} <span class="title">{{scope.row.art && scope.row.art.title}}</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -25,6 +25,15 @@
           </el-table-column>
         </el-table>
       </div>
+       <div class="pagination">
+         <el-pagination
+          layout="prev, pager, next"
+          hide-on-single-page
+          prev-text
+          background
+          :total="50">
+          </el-pagination>
+       </div>
     </el-card>
   </div>
 </template>
@@ -40,7 +49,7 @@ export default {
   },
   filters:{
     getFormatDate(date){
-      return getFormatDate(date)
+      return getFormatDate(date,true)
     }
   },
   created(){
@@ -58,5 +67,10 @@ export default {
   .title{
     color: skyblue;
     cursor: pointer;
+  }
+  .pagination{
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
   }
 </style>

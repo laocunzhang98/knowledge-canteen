@@ -2,7 +2,7 @@ import Vue from 'vue';
 import {
   Input, Button, Row, Col, Tabs, TabPane, Menu, Submenu, MenuItemGroup, MenuItem, Dropdown, DropdownMenu, DropdownItem
   ,Card,InfiniteScroll,Upload,Dialog,Calendar,DatePicker,Table,TableColumn,Tag,Form,FormItem,Select,Option,Backtop,Icon,Progress,MessageBox,Message
-,Radio,Checkbox,Tree,Rate,RadioButton} from 'element-ui';
+,Radio,Checkbox,Tree,Rate,RadioButton,Pagination} from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.prototype.$confirm = MessageBox.confirm
 Vue.prototype.$message = Message
@@ -41,5 +41,6 @@ Vue.use(Checkbox)
 Vue.use(Tree)
 Vue.use(Rate)
 Vue.use(RadioButton)
+Vue.use(Pagination)
 // Vue.use(MessageBox)
 Vue.use(InfiniteScroll)
