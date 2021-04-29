@@ -3,7 +3,7 @@
     <div class="title">快快找到自己圈子,知识共享吧！</div>
     <div style="margin-top:20px">
       <span class="create" @click="dialogVisible=true">立即创建</span>
-      <span class="create" @click="dialogVisible=true">条件查找</span>
+      <span class="create" @click="SearchTeam">条件查找</span>
     </div>
     <el-dialog
       title="创建团队"
@@ -36,21 +36,24 @@
         <el-button type="primary" @click="newTeam">确 定</el-button>
       </div>
     </el-dialog>
+    <organize-search :teamSearchDialog="teamSearchDialog" @searchDialog="searchDialog"></organize-search>
   </div>
 </template>
 
 <script>
 import {createdTeam} from "@/api/team"
 import {getCategoryList} from "@/api/classic"
+import organizeSearch from '@/components/organiztion/organizeSearch'
 export default {
   data() {
     return {
       dialogVisible:false,
       teamName:"",
       checkbox:false,
-      isopen:1,
-      options:[],
-      classify:''
+      isopen:1, //是否公开
+      options:[],// 圈子类型
+      classify:'',// 分类
+      teamSearchDialog:false
     }
   },
   mounted() {
@@ -58,7 +61,16 @@ export default {
       this.options = res.data
     })
   },
+  components:{
+    organizeSearch
+  },
   methods:{
+    searchDialog(value){
+      this.teamSearchDialog = value
+    },
+    SearchTeam(){
+      this.teamSearchDialog= true
+    },
     SelectType(val){
       this.classify = val
     },

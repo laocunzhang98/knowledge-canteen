@@ -3,7 +3,7 @@
     <el-dialog
       title="团队详细信息"
       :visible.sync="dialogVisible"
-      width="width"
+      width="500px"
       >
       <div class="team-info">
         <div class="avatar"><img :src="team_info.avatar" alt=""></div>
@@ -17,8 +17,7 @@
         <div class="active">团队活跃度:<el-rate v-model="rate" :disabled="true"></el-rate></div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="dialogVisible = false">申请加入</el-button>
       </span>
     </el-dialog>
   </div>

@@ -8,10 +8,10 @@ Vue.prototype.$confirm = MessageBox.confirm
 Vue.prototype.$message = Message
 // import vue from '../main';
 
-Vue.use(Input);
-Vue.use(Button);
-Vue.use(Row);
-Vue.use(Col);
+Vue.use(Input)
+Vue.use(Button)
+Vue.use(Row)
+Vue.use(Col)
 Vue.use(Tabs)
 Vue.use(TabPane)
 Vue.use(Menu)

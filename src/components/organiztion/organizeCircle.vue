@@ -31,10 +31,10 @@
                 </div>
               </div>
             </el-card>
-            
           </div>
           <div>
             <organize-introduce :teamInfoDialog="teamInfoDialog" :orgId="team_id" @dialogShow="dialogShow"></organize-introduce>
+            
           </div>
         </div>
       </el-col>
@@ -45,6 +45,7 @@
 <script>
 import organizeCreate from "@/components/organiztion/organizeCreate"
 import organizeIntroduce from '@/components/organiztion/organizeIntroduce'
+import organizeSearch from '@/components/organiztion/organizeSearch'
 import organizeNav from "./organizeNav";
 import { getTeamList } from "@/api/team"
 import TimeDiff from '@/utils/TimeDiff'
@@ -53,7 +54,8 @@ export default {
     return {
       teamInfo:[],
       teamInfoDialog:false,
-      team_id:""
+      teamSearchDialog:false,
+      team_id:"",
     }
   },
   mounted(){
@@ -86,7 +88,8 @@ export default {
     organizeNav,
     organizeCreate,
     TimeDiff,
-    organizeIntroduce
+    organizeIntroduce,
+    organizeSearch
   },
 };
 </script>

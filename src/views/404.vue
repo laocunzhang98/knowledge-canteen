@@ -13,7 +13,7 @@
         </div>
         <div class="bullshit__headline">{{ message }}</div>
         <div class="bullshit__info">Please check that the URL you entered is correct, or click the button below to return to the homepage.</div>
-        <a href="http://10.1.10.75:8080/home" class="bullshit__return-home">Back to home</a>
+        <span class="bullshit__return-home" @click="gohome">Back to home</span>
       </div>
     </div>
   </div>
@@ -26,6 +26,11 @@ export default {
   computed: {
     message() {
       return 'The webmaster said that you can not enter this page...'
+    }
+  },
+  methods:{
+    gohome(){
+      this.$router.push("/home")
     }
   }
 }

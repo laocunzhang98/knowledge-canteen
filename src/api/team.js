@@ -47,10 +47,11 @@ export function getTeamLevel(params){
   })
 }
 
-export function getTeamList(){
+export function getTeamList(params){
   return request({
     url:"/organize/orglist",
     method:"GET",
+    params
   })
 }
 
